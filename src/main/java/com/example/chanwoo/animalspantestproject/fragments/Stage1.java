@@ -136,10 +136,13 @@ public class Stage1 extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Fix: only the stimuli appears/disappears, leave the buttons visible
+     */
     public void setViewsVisible(int visibility) {
         ivStage1Stimuli.setVisibility(visibility);
-        ivUpdoswn.setVisibility(visibility);
-        ivRightup.setVisibility(visibility);
+//        ivUpdoswn.setVisibility(visibility);
+//        ivRightup.setVisibility(visibility);
     }
 
     /**

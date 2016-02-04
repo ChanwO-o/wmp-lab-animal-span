@@ -3,10 +3,12 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
     <dimen name="font_size_tiny">10sp</dimen>
     <dimen name="font_size_medium">25sp</dimen>
     <dimen name="font_size_large">50sp</dimen>
     <dimen name="font_size_huge">80sp</dimen>
+
     <dimen name="gap_tiny">10dp</dimen>
     <dimen name="gap_medium">25dp</dimen>
     <dimen name="gap_large">50dp</dimen>

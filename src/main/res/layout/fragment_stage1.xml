@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:contentDescription="@string/desc"
-            android:padding="3dp" />
+            android:padding="@dimen/gap_tiny" />
 
     </LinearLayout>
 
