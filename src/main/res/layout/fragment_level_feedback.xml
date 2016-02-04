@@ -1,0 +1,37 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/flLevelFeedback"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.chanwoo.animalspantestproject.fragments.LevelFeedback">
+
+    <TextView
+        android:id="@+id/tvTrialsLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/ivFeedback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:contentDescription="@string/desc" />
+
+    <ImageView
+        android:id="@+id/ivLevelFeedbackNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:contentDescription="@string/desc"
+        android:src="@drawable/next" />
+
+    <ImageView
+        android:id="@+id/ivDemoQuit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:contentDescription="@string/desc"
+        android:src="@drawable/exitdemo" />
+
+</FrameLayout>

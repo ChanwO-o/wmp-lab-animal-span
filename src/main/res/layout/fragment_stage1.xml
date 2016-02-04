@@ -1,0 +1,64 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.chanwoo.animalspantestproject.fragments.Stage1">
+
+    <TextView
+        android:id="@+id/tvStimuliListStage1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stimuli list"
+        android:textColor="@color/white" />
+
+    <!--<TextView-->
+    <!--android:id="@+id/tvSlowResponsePrompt"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+    <!--android:text="@string/slow_response_prompt"-->
+    <!--android:textColor="@color/red"-->
+    <!--android:layout_gravity="center_horizontal|top" />-->
+
+    <TextView
+        android:id="@+id/tvStage1Timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="Timer" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="50dp">
+
+        <ImageView
+            android:id="@+id/ivStage1Stimuli"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="@string/desc"
+            android:padding="3dp" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivUpdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:contentDescription="@string/desc"
+        android:src="@drawable/updown" />
+
+    <ImageView
+        android:id="@+id/ivRightup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:contentDescription="@string/desc"
+        android:src="@drawable/rightup" />
+
+</FrameLayout>
