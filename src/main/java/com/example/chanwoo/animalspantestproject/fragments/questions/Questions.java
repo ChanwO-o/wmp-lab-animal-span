@@ -1,4 +1,4 @@
-package com.example.chanwoo.animalspantestproject.fragments;
+package com.example.chanwoo.animalspantestproject.fragments.questions;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.chanwoo.animalspantestproject.R;
+import com.example.chanwoo.animalspantestproject.fragments.MainActivityFragment;
 
 public class Questions extends Fragment {
 

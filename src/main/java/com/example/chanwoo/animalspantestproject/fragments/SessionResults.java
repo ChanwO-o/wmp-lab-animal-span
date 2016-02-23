@@ -2,8 +2,6 @@ package com.example.chanwoo.animalspantestproject.fragments;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,10 +12,7 @@ import android.widget.TextView;
 
 import com.example.chanwoo.animalspantestproject.LevelManager;
 import com.example.chanwoo.animalspantestproject.R;
-import com.example.chanwoo.animalspantestproject.StimuliManager;
-
-import java.io.File;
-import java.io.FileWriter;
+import com.example.chanwoo.animalspantestproject.fragments.questions.Questions;
 
 
 public class SessionResults extends Fragment {

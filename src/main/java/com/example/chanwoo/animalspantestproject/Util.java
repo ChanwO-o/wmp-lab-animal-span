@@ -2,11 +2,14 @@ package com.example.chanwoo.animalspantestproject;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
+import java.util.jar.Attributes;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -14,6 +17,7 @@ import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.MediaPlayer;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 
@@ -21,7 +25,7 @@ public final class Util {
 
     private static final String LOG_TAG = "Util";
 
-    private final static String[] csvFields = new String[] {
+    private final static String[] csvFields = new String[]{
             "Subject ID",
             "Date",
             "Time",
@@ -37,7 +41,7 @@ public final class Util {
             "Theme",
             "Practice",
             "Answer"
-    };
+};
 
     static void dimSystemBar(Activity activity) {
         final View window = activity.getWindow().getDecorView();
@@ -74,54 +78,38 @@ public final class Util {
         }
     }
 
-    public static void writeCsvFile(Context context) {
-        File csvFolder = new File(context.getFilesDir() + "/csvdata");
-        csvFolder.setReadable(true, false);
-        Log.d("csvFolder loc", csvFolder.getPath());
+    public static void writeCsvFile() {
+//        File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File root = android.os.Environment.getExternalStorageDirectory();
+        File csvFolder = new File (root.getAbsolutePath() + "/wmplab/csvdata"); // create folder to save all csv files
         if (!csvFolder.exists())
-            Log.d("csvFolder", "folder created = " + csvFolder.mkdir()); // create folder to save all csv files
-
-
-        final String DATE = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
-        final String TIME = new SimpleDateFormat("HHmmss").format(Calendar.getInstance().getTime());
+            Log.d("csvFolder", "folder created: " + csvFolder.mkdirs()); // create folder to save all csv files
+        FileOutputStream os = null;
+        final String DATE = new SimpleDateFormat("yyyyMMdd", Locale.US).format(Calendar.getInstance().getTime());
+        final String TIME = new SimpleDateFormat("HHmmss", Locale.US).format(Calendar.getInstance().getTime());
         final String filename = LevelManager.getInstance().subject + "_" +
-                                LevelManager.getInstance().session + "_" +
-                                DATE + "_" + TIME + "_" + ".csv";
+                LevelManager.getInstance().session + "_" +
+                DATE + "_" + TIME + "_" + ".csv";
 
-        File dataFile = new File(csvFolder, filename);
-        dataFile.setReadable(true, false);
-
-        FileWriter fileWriter = null;
         try {
-            fileWriter = new FileWriter(dataFile);
+            File csvFile = new File(csvFolder, filename);
+            Log.d("path", csvFile.getAbsolutePath());
+            os = new FileOutputStream(csvFile);
             // write fields
             for (String s : csvFields) {
-                fileWriter.write(s);
-                fileWriter.write(", ");
+                os.write(s.getBytes());
+                os.write(", ".getBytes());
             }
-
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (os != null)
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
         }
-//        fileWriter.write("Subject ID,Date,Time,Trial,Sequence Length,Task,Upside down,Stimulus Color,Reaction Time,Accuracy,Time Error,Coins,Theme,Practice,Answer");
-
-
-
-
-
-
-
-
-
-//        File path = new File(context.getFilesDir(), )
-//
-//        OutputStreamWriter out;
-//        try {
-//            File f = new File(path.getPath() + "/csvdata/myfile.txt");
-//            out = new OutputStreamWriter(context.openFileOutput(f.getPath(), context.MODE_PRIVATE));
-//            out.write("test");
-//            out.close();
-//        }
     }
 
     /**

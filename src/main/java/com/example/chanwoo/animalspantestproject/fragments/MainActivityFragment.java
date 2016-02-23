@@ -93,7 +93,7 @@ public class MainActivityFragment extends Fragment implements View.OnTouchListen
                 ft.commit();
             }
         });
-        Util.writeCsvFile(getActivity());
+        Util.writeCsvFile();
         return view;
     }
 
