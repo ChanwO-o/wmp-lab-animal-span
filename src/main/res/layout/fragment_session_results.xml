@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/final_slide"
     android:orientation="vertical"
-    tools:context=".fragments.SessionResults">
+    tools:context="edu.uci.wmp.animalspan.fragments.SessionResults">
 
     <TextView
         android:id="@+id/tvResuts"

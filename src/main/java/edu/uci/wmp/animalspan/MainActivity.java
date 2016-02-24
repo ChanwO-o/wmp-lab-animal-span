@@ -1,16 +1,12 @@
-package com.example.chanwoo.animalspantestproject;
+package edu.uci.wmp.animalspan;
 
-import android.app.ActionBar;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 
-import com.example.chanwoo.animalspantestproject.fragments.MainActivityFragment;
-import com.example.chanwoo.animalspantestproject.fragments.Stage1;
-import com.example.chanwoo.animalspantestproject.fragments.Stage2;
+import com.uci.wmp.animalspan.R;
+
+import edu.uci.wmp.animalspan.fragments.MainActivityFragment;
 
 
 public class MainActivity extends AppCompatActivity {

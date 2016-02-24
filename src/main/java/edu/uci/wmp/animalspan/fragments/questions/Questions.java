@@ -1,9 +1,7 @@
-package com.example.chanwoo.animalspantestproject.fragments.questions;
+package edu.uci.wmp.animalspan.fragments.questions;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.chanwoo.animalspantestproject.R;
-import com.example.chanwoo.animalspantestproject.fragments.MainActivityFragment;
+import com.uci.wmp.animalspan.R;
+import edu.uci.wmp.animalspan.fragments.MainActivityFragment;
 
 public class Questions extends Fragment {
 

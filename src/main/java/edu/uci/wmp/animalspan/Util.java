@@ -1,23 +1,17 @@
-package com.example.chanwoo.animalspantestproject;
+package edu.uci.wmp.animalspan;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.jar.Attributes;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.MediaPlayer;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 

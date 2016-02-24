@@ -1,4 +1,4 @@
-package com.example.chanwoo.animalspantestproject.fragments;
+package edu.uci.wmp.animalspan.fragments;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.chanwoo.animalspantestproject.LevelManager;
-import com.example.chanwoo.animalspantestproject.R;
-import com.example.chanwoo.animalspantestproject.fragments.questions.Questions;
+import edu.uci.wmp.animalspan.LevelManager;
+import com.uci.wmp.animalspan.R;
+import edu.uci.wmp.animalspan.fragments.questions.Questions;
 
 
 public class SessionResults extends Fragment {

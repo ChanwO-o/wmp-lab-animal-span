@@ -1,4 +1,4 @@
-package com.example.chanwoo.animalspantestproject.fragments;
+package edu.uci.wmp.animalspan.fragments;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -13,12 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.chanwoo.animalspantestproject.LevelManager;
-import com.example.chanwoo.animalspantestproject.R;
-import com.example.chanwoo.animalspantestproject.StimuliManager;
+import edu.uci.wmp.animalspan.LevelManager;
+import com.uci.wmp.animalspan.R;
+import edu.uci.wmp.animalspan.StimuliManager;
 
 import java.io.IOException;
 

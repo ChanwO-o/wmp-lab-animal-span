@@ -3,7 +3,7 @@
     android:id="@+id/flGetReady"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.chanwoo.animalspantestproject.fragments.GetReady">
+    tools:context="edu.uci.wmp.animalspan.fragments.GetReady">
 
     <TextView
         android:id="@+id/tvGetReady"

@@ -1,9 +1,8 @@
-package com.example.chanwoo.animalspantestproject.fragments;
+package edu.uci.wmp.animalspan.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -17,9 +16,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.chanwoo.animalspantestproject.LevelManager;
-import com.example.chanwoo.animalspantestproject.R;
-import com.example.chanwoo.animalspantestproject.Util;
+import edu.uci.wmp.animalspan.LevelManager;
+import com.uci.wmp.animalspan.R;
+import edu.uci.wmp.animalspan.Util;
 
 /**
  * A placeholder fragment containing a simple view.

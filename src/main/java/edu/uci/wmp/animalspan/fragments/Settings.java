@@ -1,11 +1,9 @@
-package com.example.chanwoo.animalspantestproject.fragments;
+package edu.uci.wmp.animalspan.fragments;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -20,8 +18,8 @@ import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.example.chanwoo.animalspantestproject.LevelManager;
-import com.example.chanwoo.animalspantestproject.R;
+import edu.uci.wmp.animalspan.LevelManager;
+import com.uci.wmp.animalspan.R;
 
 import java.lang.reflect.Field;
 

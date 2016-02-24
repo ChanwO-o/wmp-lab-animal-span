@@ -3,7 +3,7 @@
     android:id="@+id/flLevelFeedback"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.chanwoo.animalspantestproject.fragments.LevelFeedback">
+    tools:context="edu.uci.wmp.animalspan.fragments.LevelFeedback">
 
     <TextView
         android:id="@+id/tvTrialsLeft"
