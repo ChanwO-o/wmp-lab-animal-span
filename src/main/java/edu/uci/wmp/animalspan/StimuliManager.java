@@ -30,7 +30,7 @@ public class StimuliManager {
     public static final int TARGET_LABEL = 100;
     public static final int SEMANTIC_LABEL = 200;
     public static final int PERCEPTUAL_LABEL = 300;
-    public static final int DISTRACTOR_LABEL = 400;
+    public static final int DISTRACTOR_LABEL = 0;       // changed from 400 to 0, watch out for future unexpected errors
     public static final int MIN_CHOICE_STIMULI_SIZE = 100;
     public static final int CHOICE_STIMULI_SIZE_MULTIPLIER = 25;
 
@@ -87,6 +87,22 @@ public class StimuliManager {
 
     public static String getImagePath(String folder, int filename) {
         return "stimuli/" + folder + filename + ".png";
+    }
+
+    public static String getImagePath(int labeledFileName) {
+        int folderLabel = labeledFileName / 100;
+        switch (folderLabel) {
+            case TARGET_LABEL:
+                return "stimuli/" + TARGET + labeledFileName % 100 + ".png";
+            case SEMANTIC_LABEL:
+                return "stimuli/" + SEMANTIC + labeledFileName % 100 + ".png";
+            case PERCEPTUAL_LABEL:
+                return "stimuli/" + PERCEPTUAL + labeledFileName % 100 + ".png";
+            case DISTRACTOR_LABEL:
+                return "stimuli/" + DISTRACTOR + labeledFileName % 100 + ".png";
+            default:
+                return "error";
+        }
     }
 
     public static String listToString(List<Integer> l) {

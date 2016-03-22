@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import edu.uci.wmp.animalspan.CSVWriter;
 import edu.uci.wmp.animalspan.LevelManager;
 import com.uci.wmp.animalspan.R;
 import edu.uci.wmp.animalspan.StimuliManager;
@@ -32,7 +33,7 @@ public class Stage1 extends Fragment implements View.OnClickListener {
     private ImageView ivUpdoswn;
     private ImageView ivRightup;
 
-    int currentStimuliIndex; // index of current pic
+//    int currentStimuliIndex; // index of current pic
     boolean responded;
     long stimuliStartTime;
     long feedbackStartTime;
@@ -85,7 +86,7 @@ public class Stage1 extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentStimuliIndex = 0;
+        LevelManager.getInstance().currentStimuliIndex = 0;
         responded = false;
     }
 
@@ -123,13 +124,18 @@ public class Stage1 extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivUpdown:
-                if (!responded)
+                if (!responded) {
                     answer(StimuliManager.UPDOWN);
+                    CSVWriter.getInstance().collectData();
+                }
+
                 break;
 
             case R.id.ivRightup:
-                if (!responded)
+                if (!responded) {
                     answer(StimuliManager.RIGHTUP);
+                    CSVWriter.getInstance().collectData();
+                }
                 break;
         }
     }
@@ -147,8 +153,8 @@ public class Stage1 extends Fragment implements View.OnClickListener {
      * Checks for next stimuli, or proceed to Stage 2
      */
     public void nextStimuliOrProceed() {
-        if (currentStimuliIndex < LevelManager.getInstance().stimulisequence.size() - 1) { // go on to next stimuli
-            currentStimuliIndex++;
+        if (LevelManager.getInstance().currentStimuliIndex < LevelManager.getInstance().stimulisequence.size() - 1) { // go on to next stimuli
+            LevelManager.getInstance().currentStimuliIndex++;
             responded = false;
             ivStage1Stimuli.setBackgroundColor(Color.TRANSPARENT); // reset feedback
             stimuliStartTime = SystemClock.uptimeMillis();
@@ -184,9 +190,9 @@ public class Stage1 extends Fragment implements View.OnClickListener {
      */
     public void displayStimuli() {
         try {
-            Bitmap b = StimuliManager.getStimuli(getActivity(), LevelManager.getInstance().stimulisequence.get(currentStimuliIndex));
+            Bitmap b = StimuliManager.getStimuli(getActivity(), LevelManager.getInstance().stimulisequence.get(LevelManager.getInstance().currentStimuliIndex));
             ivStage1Stimuli.setImageBitmap(b);
-            if (LevelManager.getInstance().presentationstyle.get(currentStimuliIndex) == StimuliManager.UPDOWN)
+            if (LevelManager.getInstance().presentationstyle.get(LevelManager.getInstance().currentStimuliIndex) == StimuliManager.UPDOWN)
                 ivStage1Stimuli.setRotation(180);
             else
                 ivStage1Stimuli.setRotation(0);
@@ -200,7 +206,7 @@ public class Stage1 extends Fragment implements View.OnClickListener {
      * @param orientation user's choice on whether stimuli is upright or upside down
      */
     public void giveFeedback(int orientation) {
-        if (orientation == LevelManager.getInstance().presentationstyle.get(currentStimuliIndex)) {
+        if (orientation == LevelManager.getInstance().presentationstyle.get(LevelManager.getInstance().currentStimuliIndex)) {
             ivStage1Stimuli.setBackgroundColor(Color.GREEN); // correct
             LevelManager.getInstance().accuracyfirstpart.add(StimuliManager.CORRECT);
         }

@@ -1,6 +1,6 @@
 [Settings]
 showinfullscreen=1
-abortallowed=0
+abortallowed=1
 leveltrainingmode=trials
 levelLength=30
 numberofleveltrials=1

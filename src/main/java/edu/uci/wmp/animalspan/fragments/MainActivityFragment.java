@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import edu.uci.wmp.animalspan.CSVWriter;
 import edu.uci.wmp.animalspan.LevelManager;
 import com.uci.wmp.animalspan.R;
 import edu.uci.wmp.animalspan.Util;
@@ -72,6 +73,10 @@ public class MainActivityFragment extends Fragment implements View.OnTouchListen
                     LevelManager.getInstance().trainingmode = LevelManager.TRAININGMODE_LEVELS;
 
                 LevelManager.getInstance().sessionStartMills = SystemClock.uptimeMillis(); // record session starting time (used for trainingmode = "time")
+                LevelManager.getInstance().trial = 0; // @TODO: move this to LevelManager.startSession()
+
+                CSVWriter.getInstance().createCsvFile();
+
                 FragmentManager fm = getActivity().getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 GetReady getReady = new GetReady();
@@ -85,6 +90,7 @@ public class MainActivityFragment extends Fragment implements View.OnTouchListen
             public void onClick(View v) {
                 LevelManager.getInstance().trainingmode = LevelManager.TRAININGMODE_DEMO; // start demo mode with no limits to time or levels
                 LevelManager.getInstance().sessionStartMills = SystemClock.uptimeMillis();
+                LevelManager.getInstance().trial = 0; // @TODO: move this to LevelManager.startSession()
                 FragmentManager fm = getActivity().getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 GetReady getReady = new GetReady();
@@ -92,7 +98,6 @@ public class MainActivityFragment extends Fragment implements View.OnTouchListen
                 ft.commit();
             }
         });
-        Util.writeCsvFile();
         return view;
     }
 

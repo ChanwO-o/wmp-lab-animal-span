@@ -60,6 +60,7 @@ public class GetReady extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_get_ready, container, false);
         TextView tvGetReady = (TextView) view.findViewById(R.id.tvGetReady);
+        TextView tvTrialsLeft = (TextView) view.findViewById(R.id.tvTrialsLeft);
         ivReadyNext = (ImageView) view.findViewById(R.id.ivReadyGo);
 
         String readyPrompt = String.format("Get ready for level %d!", LevelManager.getInstance().level);
@@ -67,6 +68,12 @@ public class GetReady extends Fragment implements View.OnClickListener {
 
         ivReadyNext.setVisibility(View.GONE); // hide button for 1 second
         ivReadyNext.setOnClickListener(this);
+
+        LevelManager.getInstance().trial++; // one trial completed
+        Log.wtf("numtrials", "" + LevelManager.getInstance().numberoftrials);
+        Log.wtf("trial", "" + LevelManager.getInstance().trial);
+        String trials = "Trials left: " + (LevelManager.getInstance().numberoftrials - LevelManager.getInstance().trial);
+        tvTrialsLeft.setText(trials);
 
         handler.postDelayed(showButton, 0);
 

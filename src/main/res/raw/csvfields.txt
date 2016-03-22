@@ -1,0 +1,43 @@
+experiment
+subject
+session
+level
+trialnumber
+part
+stimulus
+stimulusclass(0=distractor;1=target;2=perceptual lure;3=semantic lure)
+presentation style (0=normally;1=upside-down)
+acc
+rt
+timestamp
+taskresolution
+showinfullscreen
+abortallowed
+trainingmode
+sessionLength
+numberoftrials
+start setsize
+start distractorsize
+numberofdistincttargets
+numberofperceptuallures
+numberofsemanticlures
+numberofdistinctdistractors
+keeptargetconstant
+randomlypickstimuli
+randomstimuliineverytrial
+sizeoffirststimuli
+timetoanswerfirstpart
+showbuttonpressfeedback
+topborder
+bottomborder
+sideborder
+gapbetweenimages
+stimulusside
+feedbacktopborder
+feedbackbottomborder
+feedbacksideborder
+feedbackstimulussize
+feedbackgapbetweenimages
+stimuliperline
+showchoicefeedback
+randomlydistribute

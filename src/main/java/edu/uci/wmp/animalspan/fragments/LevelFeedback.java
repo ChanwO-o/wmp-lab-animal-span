@@ -60,7 +60,7 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_level_feedback, container, false);
 
-        TextView tvTrialsLeft = (TextView) view.findViewById(R.id.tvTrialsLeft);
+//        TextView tvTrialsLeft = (TextView) view.findViewById(R.id.tvTrialsLeft); // moved this to GetReady
         ImageView ivFeedback = (ImageView) view.findViewById(R.id.ivFeedback);
         ivDemoQuit = (ImageView) view.findViewById(R.id.ivDemoQuit);
         ivLevelFeedbackNext = (ImageView) view.findViewById(R.id.ivLevelFeedbackNext);
@@ -93,9 +93,9 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
                 ivFeedback.setImageBitmap(StimuliManager.getFeedbackAsset(getActivity(), StimuliManager.INCORRECT));
         } catch ( IOException e) { e.printStackTrace(); }
 
-        LevelManager.getInstance().numberoftrials -= 1; // one trial completed
-        String trials = "Trials left: " + LevelManager.getInstance().numberoftrials;
-        tvTrialsLeft.setText(trials);
+//        LevelManager.getInstance().trial++; // one trial completed
+//        String trials = "Trials left: " + (LevelManager.getInstance().numberoftrials - LevelManager.getInstance().trial);
+//        tvTrialsLeft.setText(trials); // moved this chunk to GetReady
 
         handler.postDelayed(showButton, 0);
 
@@ -126,7 +126,7 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
         }
         else if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_LEVELS)) {
             Log.d("mode", "levels");
-            if (LevelManager.getInstance().numberoftrials == 0) {
+            if (LevelManager.getInstance().numberoftrials == LevelManager.getInstance().trial) {
                 Log.d("Results", "session over");
                 viewResults();
                 return; // remove this after implementing viewResults()

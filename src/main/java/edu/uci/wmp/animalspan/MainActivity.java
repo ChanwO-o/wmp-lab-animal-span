@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         setDisplaySettings();
-        initializeLevelManager();
+        initializeManagers();
 
 //        LevelManager.getInstance().loadLevel(LevelManager.getInstance().startlevel);
 
@@ -59,10 +59,11 @@ public class MainActivity extends AppCompatActivity {
         Util.dimSystemBar(this);
     }
 
-    public void initializeLevelManager() {
+    public void initializeManagers() {
         LevelManager.getInstance().reset();
         LevelManager.getInstance().setContext(this);
         LevelManager.getInstance().loadSavedLevel(); // sets level variable if there is a saved instance
         LevelManager.getInstance().setScreenDimensions();
+        CSVWriter.getInstance().setContext(this);
     }
 }

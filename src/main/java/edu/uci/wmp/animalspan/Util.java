@@ -1,8 +1,12 @@
 package edu.uci.wmp.animalspan;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -15,27 +19,11 @@ import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.View;
 
+import com.uci.wmp.animalspan.R;
+
 public final class Util {
 
     private static final String LOG_TAG = "Util";
-
-    private final static String[] csvFields = new String[]{
-            "Subject ID",
-            "Date",
-            "Time",
-            "Trial",
-            "Sequence Length",
-            "Task",
-            "Upside down",
-            "Stimulus Color",
-            "Reaction Time",
-            "Accuracy",
-            "Time Error",
-            "Coins",
-            "Theme",
-            "Practice",
-            "Answer"
-};
 
     static void dimSystemBar(Activity activity) {
         final View window = activity.getWindow().getDecorView();
@@ -72,44 +60,12 @@ public final class Util {
         }
     }
 
-    public static void writeCsvFile() {
-//        File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        File root = android.os.Environment.getExternalStorageDirectory();
-        File csvFolder = new File (root.getAbsolutePath() + "/wmplab/csvdata"); // create folder to save all csv files
-        if (!csvFolder.exists())
-            Log.d("csvFolder", "folder created: " + csvFolder.mkdirs()); // create folder to save all csv files
-        FileOutputStream os = null;
-        final String DATE = new SimpleDateFormat("yyyyMMdd", Locale.US).format(Calendar.getInstance().getTime());
-        final String TIME = new SimpleDateFormat("HHmmss", Locale.US).format(Calendar.getInstance().getTime());
-        final String filename = LevelManager.getInstance().subject + "_" +
-                LevelManager.getInstance().session + "_" +
-                DATE + "_" + TIME + "_" + ".csv";
-
-        try {
-            File csvFile = new File(csvFolder, filename);
-            Log.d("path", csvFile.getAbsolutePath());
-            os = new FileOutputStream(csvFile);
-            // write fields
-            for (String s : csvFields) {
-                os.write(s.getBytes());
-                os.write(", ".getBytes());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (os != null)
-                try {
-                    os.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-        }
-    }
-
     /**
      * Create final strings on this class for fragmentName parameter
      */
     static void loadFragment(String fragmentName) {
-
+        //TODO: Implement loadFragment()
     }
+
+
 }

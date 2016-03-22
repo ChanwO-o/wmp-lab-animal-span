@@ -1,4 +1,4 @@
-package com.example.chanwoo.animalspantestproject;
+package com.uci.wmp.animalspan;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

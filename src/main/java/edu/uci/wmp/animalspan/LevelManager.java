@@ -28,8 +28,7 @@ import java.util.Random;
 public class LevelManager implements Serializable {
 
     private static final LevelManager INSTANCE = new LevelManager();
-    Context context;
-    Random random;
+
     public static final int MIN_LEVEL = 1;                  // lowest level available
     public static final int MAX_LEVEL = 30;                 // highest level available
     public static final String TRAININGMODE_LEVELS = "levels";
@@ -37,10 +36,16 @@ public class LevelManager implements Serializable {
     public static final String TRAININGMODE_DEMO = "demo";
     public static final String SAVE_LEVEL_FILENAME = "save_level.txt";
 
+    private Context context;
+    private Random random;
+
     // initialize experiment wide variables (do not change this)
     public int subject = 1;
     public int session = 1;
     public int level = 1;
+    public int trial = 1;
+    public int part = 0;                                // 1 = Stage1, 2 = Stage2, 0 = neither
+    public int currentStimuliIndex = 0;                            // index of current pic, FOR STAGE 1 ONLY!
     public boolean testStarted = false;
     public long sessionStartMills = 0;                      // timer starting at beginning of session, used when mode = "time"
     public boolean questions = true;
@@ -89,7 +94,7 @@ public class LevelManager implements Serializable {
     public boolean randomstimuliineverytrial = true;  // randomly selects new stimuli in every trial
 
     // first part of experiment
-    public String sizeoffirststimuli = "50,50";        // size of the stimuli shown in the first part (in percent of window height)
+    public String sizeoffirststimuli = "50/50";        // size of the stimuli shown in the first part (in percent of window height)
     public int timetoanswerfirstpart = 2;              // define how much time do participants have to decide how the stimulus is presented
     public boolean showbuttonpressfeedback = false;    // enable/disable feedback for accuracy of button presses
 
@@ -114,6 +119,7 @@ public class LevelManager implements Serializable {
     public LevelManager() {
         random = new Random();
         level = startlevel;
+        trial = 0;
         reset();
     }
 
@@ -122,6 +128,7 @@ public class LevelManager implements Serializable {
         setScreenDimensions();
         random = new Random();
         level = startlevel;
+        trial = 0;
         reset();
     }
 
@@ -153,6 +160,17 @@ public class LevelManager implements Serializable {
         responsesfirstpart = new ArrayList<>();
         rtfirstpart = new ArrayList<>();
         accuracyfirstpart = new ArrayList<>();
+    }
+
+    /**
+     * Setup LevelManager for new session (initialize lists, variables, etc.)
+     */
+    public void startSession() {
+        // @TODO: implement so that only this method needs to be called at the beginning of a session, and clean up other LevelManager crap from other classes
+    }
+
+    public void startTrial() {
+        // @TODO: implement so that only this method needs to be called at the beginning of a session, and clean up other LevelManager crap from other classes
     }
 
 //    public void clearForNextLevel() { // continue
