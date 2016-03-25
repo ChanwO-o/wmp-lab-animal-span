@@ -27,6 +27,7 @@ public class Stage1 extends Fragment implements View.OnClickListener {
     final int FEEDBACK_TIME = 1000;
     final int HIDE_TIME = 250;
     final double STIMULI_SIZE_PERCENTAGE = 0.35; // 35% of width
+    final int NULL = -1;
 
     private TextView tvTimer;
     private ImageView ivStage1Stimuli;
@@ -37,6 +38,7 @@ public class Stage1 extends Fragment implements View.OnClickListener {
     boolean responded;
     long stimuliStartTime;
     long feedbackStartTime;
+    long responseTime;
 
     private Handler handler = new Handler();
 
@@ -48,17 +50,20 @@ public class Stage1 extends Fragment implements View.OnClickListener {
     private Runnable response = new Runnable() {
         @Override
         public void run() {
-            long timeInMills = SystemClock.uptimeMillis() - stimuliStartTime;
+            responseTime = SystemClock.uptimeMillis() - stimuliStartTime;
 
             // timer text
-            int seconds = (int) (timeInMills/1000);
-            int milliseconds = (int)(timeInMills % 1000);
+            int seconds = (int) (responseTime/1000);
+            int milliseconds = (int)(responseTime % 1000);
             String time = String.format("%02d", seconds) + ":" + String.format("%03d", milliseconds);
             tvTimer.setText(time);
 
             // user responds too slow
-            if (seconds >= LevelManager.getInstance().timetoanswerfirstpart && !responded)
+            if (seconds >= LevelManager.getInstance().timetoanswerfirstpart && !responded) {
                 answer(StimuliManager.NOANSWER);
+                LevelManager.getInstance().rtfirstpart.add((long) NULL);
+                CSVWriter.getInstance().collectData();
+            }
 
             // show feedback for FEEDBACK_TIME
             if (responded) {
@@ -86,6 +91,7 @@ public class Stage1 extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LevelManager.getInstance().part = LevelManager.STAGE1;
         LevelManager.getInstance().currentStimuliIndex = 0;
         responded = false;
     }
@@ -177,10 +183,15 @@ public class Stage1 extends Fragment implements View.OnClickListener {
      */
     public void answer(int orientation) {
         LevelManager.getInstance().responsesfirstpart.add(orientation); // append response to responses list
-        int responseTime = (int) (SystemClock.uptimeMillis() - stimuliStartTime);
         LevelManager.getInstance().rtfirstpart.add(responseTime); // append reaction time
+
+        if (orientation == LevelManager.getInstance().presentationstyle.get(LevelManager.getInstance().currentStimuliIndex)) // append accuracy
+            LevelManager.getInstance().accuracyfirstpart.add(StimuliManager.CORRECT);
+        else
+            LevelManager.getInstance().accuracyfirstpart.add(StimuliManager.INCORRECT);
+
         if (LevelManager.getInstance().showbuttonpressfeedback) // give feedback if showbuttonpressfeedback is true
-            giveFeedback(orientation);
+            giveFeedback();
         responded = true;
         feedbackStartTime = SystemClock.uptimeMillis(); // start_old displaying feedback
     }
@@ -203,16 +214,11 @@ public class Stage1 extends Fragment implements View.OnClickListener {
 
     /**
      * Draws a red or green border around stimuli
-     * @param orientation user's choice on whether stimuli is upright or upside down
      */
-    public void giveFeedback(int orientation) {
-        if (orientation == LevelManager.getInstance().presentationstyle.get(LevelManager.getInstance().currentStimuliIndex)) {
+    public void giveFeedback() {
+        if (LevelManager.getInstance().accuracyfirstpart.get(LevelManager.getInstance().currentStimuliIndex) == StimuliManager.CORRECT)
             ivStage1Stimuli.setBackgroundColor(Color.GREEN); // correct
-            LevelManager.getInstance().accuracyfirstpart.add(StimuliManager.CORRECT);
-        }
-        else {
+        else
             ivStage1Stimuli.setBackgroundColor(Color.RED); // incorrect
-            LevelManager.getInstance().accuracyfirstpart.add(StimuliManager.INCORRECT);
-        }
     }
 }

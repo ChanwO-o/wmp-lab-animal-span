@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -90,7 +91,8 @@ public class StimuliManager {
     }
 
     public static String getImagePath(int labeledFileName) {
-        int folderLabel = labeledFileName / 100;
+        int folderLabel = labeledFileName - (labeledFileName % 100);
+        Log.d("getImagePath()", "folderLabel " + folderLabel);
         switch (folderLabel) {
             case TARGET_LABEL:
                 return "stimuli/" + TARGET + labeledFileName % 100 + ".png";

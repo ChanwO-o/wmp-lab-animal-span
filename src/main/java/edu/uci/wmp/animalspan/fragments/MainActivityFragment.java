@@ -48,8 +48,8 @@ public class MainActivityFragment extends Fragment implements View.OnTouchListen
         bottomRight = new MyRect(LevelManager.getInstance().screen_width - RECT_WIDTH, LevelManager.getInstance().screen_height - RECT_HEIGHT, LevelManager.getInstance().screen_width, LevelManager.getInstance().screen_height + RECT_HEIGHT);
         rects = new MyRect[] {topLeft, topRight, bottomLeft, bottomRight};
 
-        for (MyRect r : rects)
-            r.logDimensions();
+//        for (MyRect r : rects)
+//            r.logDimensions();
     }
 
     @Override
@@ -112,8 +112,8 @@ public class MainActivityFragment extends Fragment implements View.OnTouchListen
         float x = event.getX(pointerIndex);
         float y = event.getY(pointerIndex);
 
-        Log.d("pointerId", pointerId + "");
-        Log.i("pointer coords", x + " " + y);
+//        Log.d("pointerId", pointerId + "");
+//        Log.i("pointer coords", x + " " + y);
 
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
@@ -150,11 +150,11 @@ public class MainActivityFragment extends Fragment implements View.OnTouchListen
         if (r != null) {
             if (pointerDirection == POINTER_DOWN) {
                 r.selected = true;
-                Log.w("touched", "down");
+//                Log.w("touched", "down");
             }
             else if (pointerDirection == POINTER_UP) {
                 r.selected = false;
-                Log.w("touched", "up");
+//                Log.w("touched", "up");
             }
             checkAllRects();
         }
@@ -190,7 +190,7 @@ public class MainActivityFragment extends Fragment implements View.OnTouchListen
         }
 
         public void logDimensions() {
-            Log.i("Dimensions", "l: " + left + "t: " + top + "r: " + right + "b: " + bottom);
+            Log.i("Dimensions", "l: " + left + " t: " + top + " r: " + right + " b: " + bottom);
         }
     }
 }

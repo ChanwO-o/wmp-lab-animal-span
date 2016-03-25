@@ -53,6 +53,7 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LevelManager.getInstance().part = LevelManager.STAGE0;
         levelFeedbackStartTime = SystemClock.uptimeMillis();
     }
 
@@ -103,14 +104,10 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
     }
 
     /**
-     * Check if answers in secondpartsequence corespond to correctstimulisequence (checking Targets only, ignore distractors etc.)
+     * Returns stage pass / no pass
      */
     public boolean check() {
-        for (int i = 0; i < LevelManager.getInstance().correctstimulisequence.size(); i++) {
-            if (LevelManager.getInstance().correctstimulisequence.get(i) != LevelManager.getInstance().secondpartsequence.get(i))
-                return false;
-        }
-        return true;
+        return !LevelManager.getInstance().accuracysecondpart.contains(StimuliManager.INCORRECT);
     }
 
     public void goToNextLevel() {

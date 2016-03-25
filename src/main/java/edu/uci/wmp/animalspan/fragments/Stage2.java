@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import edu.uci.wmp.animalspan.CSVWriter;
 import edu.uci.wmp.animalspan.LevelManager;
 import com.uci.wmp.animalspan.R;
 import edu.uci.wmp.animalspan.StimuliManager;
@@ -33,6 +35,7 @@ public class Stage2 extends Fragment {
     final int PAUSE_TIME = 1000;
 
     private Handler handler = new Handler();
+    long reactionStartTime;
     long pauseStartTime;
     boolean gamePaused;
 
@@ -54,6 +57,8 @@ public class Stage2 extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LevelManager.getInstance().part = LevelManager.STAGE2;
+        LevelManager.getInstance().currentStimuliIndex = 0;
         stimuliChoices = new ArrayList<>();
     }
 
@@ -69,6 +74,8 @@ public class Stage2 extends Fragment {
 
         addChoicesToSet();
         displayChoices();
+
+        reactionStartTime = SystemClock.uptimeMillis(); // first reaction timer starts when fragment is created
 
         return view;
     }
@@ -141,12 +148,25 @@ public class Stage2 extends Fragment {
             public void onClick(View v) {
                 if (!gamePaused) {
                     addResponseImage((int) ivStim.getTag());
+                    LevelManager.getInstance().rtsecondpart.add(SystemClock.uptimeMillis() - reactionStartTime); // add rt
+                    reactionStartTime = SystemClock.uptimeMillis(); // reset rt timer
+
+                    // add accuracy: checks if answers in secondpartsequence corespond to correctstimulisequence (which includes Targets only, ignoring distractors etc.)
+                    int cur = LevelManager.getInstance().currentStimuliIndex;
+                    if (LevelManager.getInstance().correctstimulisequence.get(cur).equals(LevelManager.getInstance().secondpartsequence.get(cur)))
+                        LevelManager.getInstance().accuracysecondpart.add(StimuliManager.CORRECT);
+                    else
+                        LevelManager.getInstance().accuracysecondpart.add(StimuliManager.INCORRECT);
+
+                    CSVWriter.getInstance().collectData();
+
                     // check if response is complete
                     if (LevelManager.getInstance().secondpartsequence.size() == LevelManager.getInstance().setsize) { // if number of choices matches target size
                         pauseStartTime = SystemClock.uptimeMillis();
                         gamePaused = true;
                         handler.postDelayed(pause, 0);
                     }
+                    LevelManager.getInstance().currentStimuliIndex++; // increment current index
                 }
             }
         });
@@ -189,11 +209,6 @@ public class Stage2 extends Fragment {
     }
 
     public void loadFeedbackScreen() {
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
         FragmentManager fm = getActivity().getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         LevelFeedback levelFeedback = new LevelFeedback();

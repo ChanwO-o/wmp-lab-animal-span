@@ -8,7 +8,6 @@ import com.uci.wmp.animalspan.R;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,9 +22,12 @@ public class CSVWriter {
     private static final String FOLDERPATH = "/wmplab/csvdata";
     private static final String COMMA = ", ";
     private static final String NEW_LINE = "\n ";
+    private static final String NULL = "na ";
     private static final String LAST_FIELD = "randomlydistribute";
     private static final String FORMAT_DATE = "yyyy_MM_dd";
     private static final String FORMAT_TIME = "HHmmss";
+    private static final String TIMESTAMP_DATE = "MM/dd/yyyy";
+    private static final String TIMESTAMP_TIME = "HH:mm:ss";
 
     private Context context;
     private File csvFile;
@@ -88,106 +90,103 @@ public class CSVWriter {
      * Reads fields from csvfields.txt, concatenate and return as one string
      */
     private String getFields() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         InputStream inputStream = context.getResources().openRawResource(R.raw.csvfields);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
         try {
             while ((line = reader.readLine()) != null) {
                 String field = line.trim();
-                result += field;
+                result.append(field);
                 if (!field.equals(LAST_FIELD)) // last field must not have a comma
-                    result += COMMA;
+                    result.append(COMMA);
             }
-            result += NEW_LINE; // new line
+            result.append(NEW_LINE); // new line
         } catch (IOException e) {
             Log.e("getFields()", "error reading fields");
             e.printStackTrace();
         }
-        return result;
+        return result.toString();
     }
 
     public void collectData() {
         int curInd = LevelManager.getInstance().currentStimuliIndex;
-        String data = "";
+        StringBuilder data = new StringBuilder();
 
-        data += "CST" + COMMA; // experiment
-        data += LevelManager.getInstance().subject + COMMA;
-        data += LevelManager.getInstance().session + COMMA;
-        data += LevelManager.getInstance().level + COMMA;
-        data += LevelManager.getInstance().trial + COMMA;
-        data += LevelManager.getInstance().part + COMMA;
+        data.append("CST").append(COMMA);                                                                               // experiment
+        data.append(LevelManager.getInstance().subject).append(COMMA);
+        data.append(LevelManager.getInstance().session).append(COMMA);
+        data.append(LevelManager.getInstance().level).append(COMMA);
+        data.append(LevelManager.getInstance().trial).append(COMMA);
+        data.append(LevelManager.getInstance().part).append(COMMA);
+        data.append(StimuliManager.getImagePath(LevelManager.getInstance().stimulisequence.get(curInd))).append(COMMA); // stimulus
+//        Log.w("stimulus path", StimuliManager.getImagePath(LevelManager.getInstance().stimulisequence.get(curInd)));
+        data.append(LevelManager.getInstance().stimulisequence.get(curInd) / 100).append(COMMA);                        // stimulus class
+        data.append(LevelManager.getInstance().presentationstyle.get(curInd)).append(COMMA);                            // presentation style
 
-        data += StimuliManager.getImagePath(LevelManager.getInstance().stimulisequence.get(curInd)) + COMMA; // stimulus
-        data += LevelManager.getInstance().stimulisequence.get(curInd) / 100 + COMMA; // stimulus class
-        data += LevelManager.getInstance().presentationstyle.get(curInd) + COMMA; // presentation style
-        data += LevelManager.getInstance().responsesfirstpart.get(curInd) + COMMA; // accuracy
-        data += 0 + COMMA; // reaction time (rt)
-        // timestamp
-        final String DATE = new SimpleDateFormat(FORMAT_DATE, Locale.US).format(Calendar.getInstance().getTime());
-        final String TIME = new SimpleDateFormat(FORMAT_TIME, Locale.US).format(Calendar.getInstance().getTime());
-        final String TIMESTAMP = LevelManager.getInstance().subject + "_" +
-                LevelManager.getInstance().session + "_" +
-                DATE + "_" + TIME + "_" + ".csv";
-        data += TIMESTAMP + COMMA;
+        if (LevelManager.getInstance().part == LevelManager.STAGE1)                                                     // 1. overall acc
+            data.append(LevelManager.getInstance().accuracyfirstpart.get(curInd)).append(COMMA); // accuracy stage1
+        else if (LevelManager.getInstance().part == LevelManager.STAGE2)
+            data.append(LevelManager.getInstance().accuracysecondpart.get(curInd)).append(COMMA); // accuracy stage2
 
-        // taskresolution
-        data += "[" + LevelManager.getInstance().screen_width + "; " + LevelManager.getInstance().screen_height + "]" + COMMA;
-        data += LevelManager.getInstance().showinfullscreen + COMMA;
-        data += LevelManager.getInstance().abortallowed + COMMA;
-        data += LevelManager.getInstance().trainingmode + COMMA;
-        data += LevelManager.getInstance().sessionLength + COMMA;
-        data += LevelManager.getInstance().numberoftrials + COMMA;
-        data += LevelManager.getInstance().setsize + COMMA;             // not sure
-        data += LevelManager.getInstance().distractorsize + COMMA;
-        data += LevelManager.getInstance().numberofdistincttargets + COMMA;
-        data += LevelManager.getInstance().numberofperceptuallures + COMMA;
-        data += LevelManager.getInstance().numberofsemanticlures + COMMA;
-        data += LevelManager.getInstance().numberofdistinctdistractors + COMMA;
-        data += LevelManager.getInstance().keeptargetconstant + COMMA;
-        data += LevelManager.getInstance().randomlypickstimuli + COMMA;
-        data += LevelManager.getInstance().randomstimuliineverytrial + COMMA;
-        data += LevelManager.getInstance().sizeoffirststimuli + COMMA;
-        data += LevelManager.getInstance().timetoanswerfirstpart + COMMA;
-        data += LevelManager.getInstance().showbuttonpressfeedback + COMMA;
-        data += LevelManager.getInstance().topborder + COMMA;
-        data += LevelManager.getInstance().bottomborder + COMMA;
-        data += LevelManager.getInstance().sideborder + COMMA;
-        data += LevelManager.getInstance().gapbetweenimages + COMMA;
-        data += LevelManager.getInstance().stimulusside + COMMA;
-        data += LevelManager.getInstance().feedbacktopborder + COMMA;
-        data += LevelManager.getInstance().feedbackbottomborder + COMMA;
-        data += LevelManager.getInstance().feedbacksideborder + COMMA;
-        data += LevelManager.getInstance().feedbackstimulussize + COMMA;
-        data += LevelManager.getInstance().feedbackgapbetweenimages + COMMA;
-        data += LevelManager.getInstance().stimuliperline + COMMA;
-        data += LevelManager.getInstance().showchoicefeedback + COMMA;
-        data += LevelManager.getInstance().randomlydistribute + COMMA;
+        if (LevelManager.getInstance().part == LevelManager.STAGE1)                                                     // 2. stage1 & stage2 individual acc (fills two columns)
+            data.append(LevelManager.getInstance().accuracyfirstpart.get(curInd)).append(COMMA).append(NULL).append(COMMA);
+        else if (LevelManager.getInstance().part == LevelManager.STAGE2)
+            data.append(NULL).append(COMMA).append(LevelManager.getInstance().accuracysecondpart.get(curInd)).append(COMMA);
 
-        data += NEW_LINE;
-        writeLine(data);
+        int seconds = 0, milliseconds = 0;                                                                              // reaction time (rt)
+        if (LevelManager.getInstance().part == LevelManager.STAGE1) {
+            seconds = (int) (LevelManager.getInstance().rtfirstpart.get(curInd) / 1000);
+            milliseconds = (int)(LevelManager.getInstance().rtfirstpart.get(curInd) % 1000);
+        }
+        else if (LevelManager.getInstance().part == LevelManager.STAGE2) {
+            seconds = (int) (LevelManager.getInstance().rtsecondpart.get(curInd) / 1000);
+            milliseconds = (int)(LevelManager.getInstance().rtsecondpart.get(curInd) % 1000);
+        }
+        data.append(seconds).append("s ").append(milliseconds).append(COMMA);
+
+        final String DATE = new SimpleDateFormat(TIMESTAMP_DATE, Locale.US).format(Calendar.getInstance().getTime());   // timestamp
+        final String TIME = new SimpleDateFormat(TIMESTAMP_TIME, Locale.US).format(Calendar.getInstance().getTime());
+        final String TIMESTAMP = DATE + " " + TIME;
+        data.append(TIMESTAMP).append(COMMA);
+
+        data.append("[").append(LevelManager.getInstance().screen_width).append("; ")
+                .append(LevelManager.getInstance().screen_height).append("]").append(COMMA);                            // taskresolution
+
+        data.append(LevelManager.getInstance().showinfullscreen).append(COMMA);
+        data.append(LevelManager.getInstance().abortallowed).append(COMMA);
+        data.append(LevelManager.getInstance().trainingmode).append(COMMA);
+        data.append(LevelManager.getInstance().sessionLength).append(COMMA);
+        data.append(LevelManager.getInstance().numberoftrials).append(COMMA);
+        data.append(LevelManager.getInstance().setsize).append(COMMA);             // not sure
+        data.append(LevelManager.getInstance().distractorsize).append(COMMA);
+        data.append(LevelManager.getInstance().numberofdistincttargets).append(COMMA);
+        data.append(LevelManager.getInstance().numberofperceptuallures).append(COMMA);
+        data.append(LevelManager.getInstance().numberofsemanticlures).append(COMMA);
+        data.append(LevelManager.getInstance().numberofdistinctdistractors).append(COMMA);
+        data.append(LevelManager.getInstance().keeptargetconstant).append(COMMA);
+        data.append(LevelManager.getInstance().randomlypickstimuli).append(COMMA);
+        data.append(LevelManager.getInstance().randomstimuliineverytrial).append(COMMA);
+        data.append(LevelManager.getInstance().sizeoffirststimuli).append(COMMA);
+        data.append(LevelManager.getInstance().timetoanswerfirstpart).append(COMMA);
+        data.append(LevelManager.getInstance().showbuttonpressfeedback).append(COMMA);
+        data.append(LevelManager.getInstance().topborder).append(COMMA);
+        data.append(LevelManager.getInstance().bottomborder).append(COMMA);
+        data.append(LevelManager.getInstance().sideborder).append(COMMA);
+        data.append(LevelManager.getInstance().gapbetweenimages).append(COMMA);
+        data.append(LevelManager.getInstance().stimulusside).append(COMMA);
+        data.append(LevelManager.getInstance().feedbacktopborder).append(COMMA);
+        data.append(LevelManager.getInstance().feedbackbottomborder).append(COMMA);
+        data.append(LevelManager.getInstance().feedbacksideborder).append(COMMA);
+        data.append(LevelManager.getInstance().feedbackstimulussize).append(COMMA);
+        data.append(LevelManager.getInstance().feedbackgapbetweenimages).append(COMMA);
+        data.append(LevelManager.getInstance().stimuliperline).append(COMMA);
+        data.append(LevelManager.getInstance().showchoicefeedback).append(COMMA);
+        data.append(LevelManager.getInstance().randomlydistribute).append(COMMA);
+
+        data.append(NEW_LINE);
+        writeLine(data.toString());
     }
-
-//    private static void experiment(FileOutputStream os) throws IOException {
-//        os.write(("CST" + COMMA).getBytes());
-//    }
-//
-//    private static void subject(FileOutputStream os) throws IOException {
-//        os.write((LevelManager.getInstance().subject + COMMA).getBytes());
-//    }
-//
-//    private static void session(FileOutputStream os) throws IOException {
-//        os.write((LevelManager.getInstance().session + COMMA).getBytes());
-//    }
-//
-//    private static void level(FileOutputStream os) throws IOException {
-//        os.write((LevelManager.getInstance().level + COMMA).getBytes());
-//    }
-//
-//    private static void trialnumber(FileOutputStream os) throws IOException {
-//        os.write((LevelManager.getInstance().trial + COMMA).getBytes());
-//    }
-
 
     public static CSVWriter getInstance() {
         return INSTANCE;

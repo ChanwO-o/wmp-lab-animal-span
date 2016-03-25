@@ -31,6 +31,9 @@ public class LevelManager implements Serializable {
 
     public static final int MIN_LEVEL = 1;                  // lowest level available
     public static final int MAX_LEVEL = 30;                 // highest level available
+    public static final int STAGE1 = 1;                     // stage 1
+    public static final int STAGE2 = 2;                     // stage 2
+    public static final int STAGE0 = 0;                     // neither
     public static final String TRAININGMODE_LEVELS = "levels";
     public static final String TRAININGMODE_TIME = "time";
     public static final String TRAININGMODE_DEMO = "demo";
@@ -43,8 +46,8 @@ public class LevelManager implements Serializable {
     public int subject = 1;
     public int session = 1;
     public int level = 1;
-    public int trial = 1;
-    public int part = 0;                                // 1 = Stage1, 2 = Stage2, 0 = neither
+    public int trial = 0;
+    public int part = STAGE0;                                // 1 = Stage1, 2 = Stage2, 0 = neither
     public int currentStimuliIndex = 0;                            // index of current pic, FOR STAGE 1 ONLY!
     public boolean testStarted = false;
     public long sessionStartMills = 0;                      // timer starting at beginning of session, used when mode = "time"
@@ -58,8 +61,10 @@ public class LevelManager implements Serializable {
 
     public List<Integer> responsesfirstpart;           // keep track of responses in first part
     public List<Integer> secondpartsequence;           // keep track of the response in the second part
-    public List<Integer> rtfirstpart;                  // keep track of reaction times in first part
+    public List<Long> rtfirstpart;                  // keep track of reaction times in first part
+    public List<Long> rtsecondpart;                 // keep track of reaction times in second part
     public List<Integer> accuracyfirstpart;            // keep track of correct answers in first part
+    public List<Integer> accuracysecondpart;           // keep track of correct answers in second part
 
     // -------------------------------------------------------------------------------------------
     // define default experiment parameters
@@ -120,6 +125,7 @@ public class LevelManager implements Serializable {
         random = new Random();
         level = startlevel;
         trial = 0;
+        part = STAGE0;
         reset();
     }
 
@@ -129,6 +135,7 @@ public class LevelManager implements Serializable {
         random = new Random();
         level = startlevel;
         trial = 0;
+        part = STAGE0;
         reset();
     }
 
@@ -159,7 +166,9 @@ public class LevelManager implements Serializable {
         secondpartsequence = new ArrayList<>();
         responsesfirstpart = new ArrayList<>();
         rtfirstpart = new ArrayList<>();
+        rtsecondpart = new ArrayList<>();
         accuracyfirstpart = new ArrayList<>();
+        accuracysecondpart = new ArrayList<>();
     }
 
     /**
@@ -172,18 +181,6 @@ public class LevelManager implements Serializable {
     public void startTrial() {
         // @TODO: implement so that only this method needs to be called at the beginning of a session, and clean up other LevelManager crap from other classes
     }
-
-//    public void clearForNextLevel() { // continue
-//        stimulisequence = new ArrayList<>();
-//        distincttargets = new ArrayList<>();
-//        distinctdistractors = new ArrayList<>();
-//        correctstimulisequence = new ArrayList<>();
-//        presentationstyle = new ArrayList<>();
-//        secondpartsequence = new ArrayList<>();
-//        responsesfirstpart = new ArrayList<>();
-//        rtfirstpart = new ArrayList<>();
-//        accuracyfirstpart = new ArrayList<>();
-//    }
 
     public void loadLevel(int level) {
         try {

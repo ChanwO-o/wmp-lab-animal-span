@@ -70,8 +70,8 @@ public class GetReady extends Fragment implements View.OnClickListener {
         ivReadyNext.setOnClickListener(this);
 
         LevelManager.getInstance().trial++; // one trial completed
-        Log.wtf("numtrials", "" + LevelManager.getInstance().numberoftrials);
-        Log.wtf("trial", "" + LevelManager.getInstance().trial);
+        Log.wtf("numberoftrials", "" + LevelManager.getInstance().numberoftrials);
+        Log.wtf("current trial", "" + LevelManager.getInstance().trial);
         String trials = "Trials left: " + (LevelManager.getInstance().numberoftrials - LevelManager.getInstance().trial);
         tvTrialsLeft.setText(trials);
 
