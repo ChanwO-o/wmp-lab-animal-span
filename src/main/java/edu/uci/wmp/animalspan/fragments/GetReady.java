@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import edu.uci.wmp.animalspan.LevelManager;
+import edu.uci.wmp.animalspan.Util;
+
 import com.uci.wmp.animalspan.R;
 
 public class GetReady extends Fragment implements View.OnClickListener {
@@ -60,7 +62,7 @@ public class GetReady extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_get_ready, container, false);
         TextView tvGetReady = (TextView) view.findViewById(R.id.tvGetReady);
-        TextView tvTrialsLeft = (TextView) view.findViewById(R.id.tvTrialsLeft);
+//        TextView tvTrialsLeft = (TextView) view.findViewById(R.id.tvTrialsLeft);
         ivReadyNext = (ImageView) view.findViewById(R.id.ivReadyGo);
 
         String readyPrompt = String.format("Get ready for level %d!", LevelManager.getInstance().level);
@@ -73,7 +75,7 @@ public class GetReady extends Fragment implements View.OnClickListener {
         Log.wtf("numberoftrials", "" + LevelManager.getInstance().numberoftrials);
         Log.wtf("current trial", "" + LevelManager.getInstance().trial);
         String trials = "Trials left: " + (LevelManager.getInstance().numberoftrials - LevelManager.getInstance().trial);
-        tvTrialsLeft.setText(trials);
+//        tvTrialsLeft.setText(trials);
 
         handler.postDelayed(showButton, 0);
 
@@ -82,10 +84,6 @@ public class GetReady extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        FragmentManager fm = getActivity().getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        Stage1 stage1 = new Stage1();
-        ft.replace(R.id.fragment_container, stage1);
-        ft.commit();
+        Util.loadFragment(getActivity(), new Stage1());
     }
 }

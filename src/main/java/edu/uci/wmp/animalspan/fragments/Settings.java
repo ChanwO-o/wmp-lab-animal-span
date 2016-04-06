@@ -19,6 +19,8 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import edu.uci.wmp.animalspan.LevelManager;
+import edu.uci.wmp.animalspan.Util;
+
 import com.uci.wmp.animalspan.R;
 
 import java.lang.reflect.Field;
@@ -114,11 +116,7 @@ public class Settings extends Fragment {
 
                     LevelManager.getInstance().questions = swQuestions.isChecked(); // set questions
 
-                    FragmentManager fm = getActivity().getFragmentManager();
-                    FragmentTransaction ft = fm.beginTransaction();
-                    MainActivityFragment mainActivityFragment = new MainActivityFragment();
-                    ft.replace(R.id.fragment_container, mainActivityFragment);
-                    ft.commit();
+                    Util.loadFragment(getActivity(), new MainActivityFragment());
                 } catch (Exception e) {
                     Toast.makeText(getActivity(), "Invalid inputs: Subject & session numbers must be integers", Toast.LENGTH_SHORT).show();
                 }

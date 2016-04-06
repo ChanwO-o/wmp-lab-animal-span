@@ -18,6 +18,7 @@ import android.widget.TextView;
 import edu.uci.wmp.animalspan.LevelManager;
 import com.uci.wmp.animalspan.R;
 import edu.uci.wmp.animalspan.StimuliManager;
+import edu.uci.wmp.animalspan.Util;
 
 import java.io.IOException;
 
@@ -131,11 +132,7 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
 
         }
         calculateNextLevel();
-        FragmentManager fm = getActivity().getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        GetReady getReady = new GetReady();
-        ft.replace(R.id.fragment_container, getReady);
-        ft.commit();
+        Util.loadFragment(getActivity(), new GetReady());
     }
 
     /**
@@ -154,11 +151,7 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
     }
 
     public void viewResults() {
-        FragmentManager fm = getActivity().getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        SessionResults sessionResults = new SessionResults();
-        ft.replace(R.id.fragment_container, sessionResults);
-        ft.commit();
+        Util.loadFragment(getActivity(), new SessionResults());
     }
 
     @Override
@@ -169,11 +162,7 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.ivDemoQuit:
-                FragmentManager fm = getActivity().getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                MainActivityFragment mainActivityFragment = new MainActivityFragment();
-                ft.replace(R.id.fragment_container, mainActivityFragment);
-                ft.commit();
+                Util.loadFragment(getActivity(), new MainActivityFragment());
                 break;
         }
     }

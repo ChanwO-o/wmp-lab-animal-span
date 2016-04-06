@@ -1,7 +1,5 @@
 package edu.uci.wmp.animalspan.fragments;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,6 +17,7 @@ import edu.uci.wmp.animalspan.CSVWriter;
 import edu.uci.wmp.animalspan.LevelManager;
 import com.uci.wmp.animalspan.R;
 import edu.uci.wmp.animalspan.StimuliManager;
+import edu.uci.wmp.animalspan.Util;
 
 import java.io.IOException;
 
@@ -31,10 +30,7 @@ public class Stage1 extends Fragment implements View.OnClickListener {
 
     private TextView tvTimer;
     private ImageView ivStage1Stimuli;
-    private ImageView ivUpdoswn;
-    private ImageView ivRightup;
 
-//    int currentStimuliIndex; // index of current pic
     boolean responded;
     long stimuliStartTime;
     long feedbackStartTime;
@@ -101,11 +97,11 @@ public class Stage1 extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_stage1, container, false);
 
-        TextView tvStimuliList = (TextView) view.findViewById(R.id.tvStimuliListStage1);
+//        TextView tvStimuliList = (TextView) view.findViewById(R.id.tvStimuliListStage1);
         tvTimer = (TextView) view.findViewById(R.id.tvStage1Timer);
         ivStage1Stimuli = (ImageView) view.findViewById(R.id.ivStage1Stimuli);
-        ivUpdoswn = (ImageView) view.findViewById(R.id.ivUpdown);
-        ivRightup = (ImageView) view.findViewById(R.id.ivRightup);
+        ImageView ivUpdoswn = (ImageView) view.findViewById(R.id.ivUpdown);
+        ImageView ivRightup = (ImageView) view.findViewById(R.id.ivRightup);
 
         /*Double percentage = Double.valueOf(LevelManager.getInstance().sizeoffirststimuli.split(",")[1]) / 100; // percentage of screen height
         int imageSize = Double.valueOf(LevelManager.getInstance().screen_width * percentage).intValue(); // 50% of screen width ("50,50") */
@@ -117,7 +113,7 @@ public class Stage1 extends Fragment implements View.OnClickListener {
         ivUpdoswn.setOnClickListener(this);
         ivRightup.setOnClickListener(this);
 
-        tvStimuliList.setText(StimuliManager.listToString(LevelManager.getInstance().stimulisequence));
+//        tvStimuliList.setText(StimuliManager.listToString(LevelManager.getInstance().stimulisequence));
         stimuliStartTime = SystemClock.uptimeMillis();
 
         handler.postDelayed(response, 0); // start_old loop
@@ -151,8 +147,6 @@ public class Stage1 extends Fragment implements View.OnClickListener {
      */
     public void setViewsVisible(int visibility) {
         ivStage1Stimuli.setVisibility(visibility);
-//        ivUpdoswn.setVisibility(visibility);
-//        ivRightup.setVisibility(visibility);
     }
 
     /**
@@ -169,11 +163,7 @@ public class Stage1 extends Fragment implements View.OnClickListener {
             setViewsVisible(View.VISIBLE); // put this line here than inside the runnable to prevent views popping up suddenly when proceeding to Stage2
         } else { // done with all stimuli
             handler.removeCallbacks(response); //finish
-            FragmentManager fm = getActivity().getFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            Stage2 stage2 = new Stage2();
-            ft.replace(R.id.fragment_container, stage2);
-            ft.commit();
+            Util.loadFragment(getActivity(), new Stage2());
         }
     }
 

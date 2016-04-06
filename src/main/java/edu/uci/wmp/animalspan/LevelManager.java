@@ -47,8 +47,8 @@ public class LevelManager implements Serializable {
     public int session = 1;
     public int level = 1;
     public int trial = 0;
-    public int part = STAGE0;                                // 1 = Stage1, 2 = Stage2, 0 = neither
-    public int currentStimuliIndex = 0;                            // index of current pic, FOR STAGE 1 ONLY!
+    public int part = STAGE0;                               // 1 = Stage1, 2 = Stage2, 0 = neither
+    public int currentStimuliIndex = 0;                     // index of current pic
     public boolean testStarted = false;
     public long sessionStartMills = 0;                      // timer starting at beginning of session, used when mode = "time"
     public boolean questions = true;

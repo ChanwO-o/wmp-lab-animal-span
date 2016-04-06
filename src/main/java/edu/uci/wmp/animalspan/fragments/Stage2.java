@@ -18,6 +18,7 @@ import edu.uci.wmp.animalspan.CSVWriter;
 import edu.uci.wmp.animalspan.LevelManager;
 import com.uci.wmp.animalspan.R;
 import edu.uci.wmp.animalspan.StimuliManager;
+import edu.uci.wmp.animalspan.Util;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -209,10 +210,6 @@ public class Stage2 extends Fragment {
     }
 
     public void loadFeedbackScreen() {
-        FragmentManager fm = getActivity().getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        LevelFeedback levelFeedback = new LevelFeedback();
-        ft.replace(R.id.fragment_container, levelFeedback);
-        ft.commit();
+        Util.loadFragment(getActivity(), new LevelFeedback());
     }
 }

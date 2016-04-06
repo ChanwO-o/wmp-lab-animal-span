@@ -20,6 +20,7 @@ import edu.uci.wmp.animalspan.CSVWriter;
 import edu.uci.wmp.animalspan.LevelManager;
 import com.uci.wmp.animalspan.R;
 import edu.uci.wmp.animalspan.Util;
+import edu.uci.wmp.animalspan.fragments.questions.EffortQuestion;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -71,17 +72,10 @@ public class MainActivityFragment extends Fragment implements View.OnTouchListen
                 // if user played demo mode, trainingmode stays as demo. Change it to level mode
                 if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_DEMO))
                     LevelManager.getInstance().trainingmode = LevelManager.TRAININGMODE_LEVELS;
-
                 LevelManager.getInstance().sessionStartMills = SystemClock.uptimeMillis(); // record session starting time (used for trainingmode = "time")
                 LevelManager.getInstance().trial = 0; // @TODO: move this to LevelManager.startSession()
-
                 CSVWriter.getInstance().createCsvFile();
-
-                FragmentManager fm = getActivity().getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                GetReady getReady = new GetReady();
-                ft.replace(R.id.fragment_container, getReady);
-                ft.commit();
+                Util.loadFragment(getActivity(), new GetReady());
             }
         });
 
@@ -91,11 +85,8 @@ public class MainActivityFragment extends Fragment implements View.OnTouchListen
                 LevelManager.getInstance().trainingmode = LevelManager.TRAININGMODE_DEMO; // start demo mode with no limits to time or levels
                 LevelManager.getInstance().sessionStartMills = SystemClock.uptimeMillis();
                 LevelManager.getInstance().trial = 0; // @TODO: move this to LevelManager.startSession()
-                FragmentManager fm = getActivity().getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                GetReady getReady = new GetReady();
-                ft.replace(R.id.fragment_container, getReady);
-                ft.commit();
+                CSVWriter.getInstance().createCsvFile();
+                Util.loadFragment(getActivity(), new GetReady());
             }
         });
         return view;
@@ -170,11 +161,7 @@ public class MainActivityFragment extends Fragment implements View.OnTouchListen
         openSettings();
     }
     public void openSettings() {
-        FragmentManager fm = getActivity().getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        Settings settings = new Settings();
-        ft.replace(R.id.fragment_container, settings);
-        ft.commit();
+        Util.loadFragment(getActivity(), new Settings());
     }
 
     @SuppressLint("ParcelCreator")

@@ -1,7 +1,5 @@
 package edu.uci.wmp.animalspan.fragments;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,7 +10,9 @@ import android.widget.TextView;
 
 import edu.uci.wmp.animalspan.LevelManager;
 import com.uci.wmp.animalspan.R;
-import edu.uci.wmp.animalspan.fragments.questions.Questions;
+
+import edu.uci.wmp.animalspan.Util;
+import edu.uci.wmp.animalspan.fragments.questions.EffortQuestion;
 
 
 public class SessionResults extends Fragment {
@@ -54,41 +54,12 @@ public class SessionResults extends Fragment {
         ivBackToMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fm = getActivity().getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                if (LevelManager.getInstance().questions) {
-                    Questions questions = new Questions();
-                    ft.replace(R.id.fragment_container, questions);
-                } else {
-                    MainActivityFragment mainActivityFragment = new MainActivityFragment();
-                    ft.replace(R.id.fragment_container, mainActivityFragment);
-                }
-                ft.commit();
+                if (LevelManager.getInstance().questions)
+                    Util.loadFragment(getActivity(), new EffortQuestion());
+                else
+                    Util.loadFragment(getActivity(), new MainActivityFragment());
             }
         });
-
-        writeCSVFile();
         return view;
-    }
-
-    public void writeCSVFile() {
-//        String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
-//        String fileName = "AnalysisData.csv";
-//        String filePath = baseDir + File.separator + fileName;
-//        File f = new File(filePath );
-//        CSVWriter writer;
-//// File exist
-//        if(f.exists() && !f.isDirectory()){
-//            mFileWriter = new FileWriter(filePath , true);
-//            writer = new CSVWriter(mFileWriter);
-//        }
-//        else {
-//            writer = new CSVWriter(new FileWriter(filePath));
-//        }
-//        String[] data = {"Ship Name","Scientist Name", "...",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").formatter.format(date)});
-//
-//        writer.writeNext(data);
-//
-//        writer.close();
     }
 }

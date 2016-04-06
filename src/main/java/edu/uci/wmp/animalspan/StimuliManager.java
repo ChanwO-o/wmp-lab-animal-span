@@ -24,6 +24,7 @@ public class StimuliManager {
     public static final String PERCEPTUAL = "list3/";
     public static final String DISTRACTOR = "distractors/";
     public static final String MISC = "miscellaneous/";
+    public static final String FACE = "faces/";
     public static final int TARGET_STIMULI_CHOICES = 12;
     public static final int SEMANTIC_STIMULI_CHOICES = 12;
     public static final int PERCEPTUAL_STIMULI_CHOICES = 12;
@@ -32,6 +33,7 @@ public class StimuliManager {
     public static final int SEMANTIC_LABEL = 200;
     public static final int PERCEPTUAL_LABEL = 300;
     public static final int DISTRACTOR_LABEL = 0;       // changed from 400 to 0, watch out for future unexpected errors
+    public static final int FACE_LABEL = 900;
     public static final int MIN_CHOICE_STIMULI_SIZE = 100;
     public static final int CHOICE_STIMULI_SIZE_MULTIPLIER = 25;
 
@@ -60,18 +62,19 @@ public class StimuliManager {
         InputStream is = null;
         switch (folder) {
             case TARGET_LABEL:
-                is = assetManager.open(getImagePath(TARGET, filename));
+                is = assetManager.open(getImagePath(labeledFilename));
                 break;
             case SEMANTIC_LABEL:
-                is = assetManager.open(getImagePath(SEMANTIC, filename));
+                is = assetManager.open(getImagePath(labeledFilename));
                 break;
             case PERCEPTUAL_LABEL:
-                is = assetManager.open(getImagePath(PERCEPTUAL, filename));
+                is = assetManager.open(getImagePath(labeledFilename));
                 break;
             case DISTRACTOR_LABEL:
-                is = assetManager.open(getImagePath(DISTRACTOR, filename));
+                is = assetManager.open(getImagePath(labeledFilename));
                 break;
-
+            case FACE_LABEL:
+                is = assetManager.open(getImagePath(labeledFilename));
         }
         return BitmapFactory.decodeStream(is);
     }
@@ -102,6 +105,8 @@ public class StimuliManager {
                 return "stimuli/" + PERCEPTUAL + labeledFileName % 100 + ".png";
             case DISTRACTOR_LABEL:
                 return "stimuli/" + DISTRACTOR + labeledFileName % 100 + ".png";
+            case FACE_LABEL:
+                return "stimuli/" + MISC + FACE + labeledFileName % 100 + ".png";
             default:
                 return "error";
         }

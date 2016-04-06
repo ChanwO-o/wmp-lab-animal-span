@@ -12,6 +12,9 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
@@ -20,6 +23,8 @@ import android.util.Log;
 import android.view.View;
 
 import com.uci.wmp.animalspan.R;
+
+import edu.uci.wmp.animalspan.fragments.MainActivityFragment;
 
 public final class Util {
 
@@ -61,10 +66,13 @@ public final class Util {
     }
 
     /**
-     * Create final strings on this class for fragmentName parameter
+     * Replace main fragment container with fragment given in parameter
      */
-    static void loadFragment(String fragmentName) {
-        //TODO: Implement loadFragment()
+    public static void loadFragment(Activity activity, Fragment fragment) {
+        FragmentManager fm = activity.getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.fragment_container, fragment);
+        ft.commit();
     }
 
 
