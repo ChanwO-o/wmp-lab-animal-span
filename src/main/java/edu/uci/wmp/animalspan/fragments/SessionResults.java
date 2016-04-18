@@ -13,6 +13,7 @@ import com.uci.wmp.animalspan.R;
 
 import edu.uci.wmp.animalspan.Util;
 import edu.uci.wmp.animalspan.fragments.questions.EffortQuestion;
+import edu.uci.wmp.animalspan.fragments.questions.ReflectionQuestion;
 
 
 public class SessionResults extends Fragment {
@@ -55,7 +56,7 @@ public class SessionResults extends Fragment {
             @Override
             public void onClick(View v) {
                 if (LevelManager.getInstance().questions)
-                    Util.loadFragment(getActivity(), new EffortQuestion());
+                    Util.loadFragment(getActivity(), new ReflectionQuestion());
                 else
                     Util.loadFragment(getActivity(), new MainActivityFragment());
             }

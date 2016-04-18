@@ -62,7 +62,7 @@ public class StimuliManager {
         InputStream is = null;
         switch (folder) {
             case TARGET_LABEL:
-                is = assetManager.open(getImagePath(labeledFilename));
+                is = assetManager.open(getImagePath(labeledFilename)); // @TODO: switch statement is meaningless
                 break;
             case SEMANTIC_LABEL:
                 is = assetManager.open(getImagePath(labeledFilename));

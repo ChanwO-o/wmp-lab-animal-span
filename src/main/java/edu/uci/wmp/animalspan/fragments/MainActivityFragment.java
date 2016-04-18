@@ -21,6 +21,7 @@ import edu.uci.wmp.animalspan.LevelManager;
 import com.uci.wmp.animalspan.R;
 import edu.uci.wmp.animalspan.Util;
 import edu.uci.wmp.animalspan.fragments.questions.EffortQuestion;
+import edu.uci.wmp.animalspan.fragments.questions.ReflectionQuestion;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -86,7 +87,8 @@ public class MainActivityFragment extends Fragment implements View.OnTouchListen
                 LevelManager.getInstance().sessionStartMills = SystemClock.uptimeMillis();
                 LevelManager.getInstance().trial = 0; // @TODO: move this to LevelManager.startSession()
                 CSVWriter.getInstance().createCsvFile();
-                Util.loadFragment(getActivity(), new GetReady());
+//                Util.loadFragment(getActivity(), new GetReady());
+                Util.loadFragment(getActivity(), new ReflectionQuestion());
             }
         });
         return view;

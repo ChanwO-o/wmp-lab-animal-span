@@ -2,26 +2,36 @@ package edu.uci.wmp.animalspan.fragments.questions;
 
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.uci.wmp.animalspan.R;
 
+import edu.uci.wmp.animalspan.CSVWriter;
+import edu.uci.wmp.animalspan.LevelManager;
 import edu.uci.wmp.animalspan.Util;
+import edu.uci.wmp.animalspan.fragments.MainActivityFragment;
 
 public class EffortQuestion extends Fragment {
 
     int questionNum = 1;
     TextView question;
     SeekBar seekBar;
-    TextView tvProgress;
     RelativeLayout rlSeekBarLabels;
+    ImageView ivEffortFirst;
+    ImageView ivEffortSecond;
+    ImageView ivEffortThird;
     ImageView ivNext;
+
+    final double IMAGE_WIDTH_PERCENTAGE = 0.25;
+    final double IMAGE_HEIGHT_PERCENTAGE = 0.33;
 
     // second question setup
     final String SECONDQUESTION = "How hard did you try to do your best at the task?";
@@ -42,13 +52,12 @@ public class EffortQuestion extends Fragment {
 
         question = (TextView) view.findViewById(R.id.tvEffortQuestion);
         seekBar = (SeekBar) view.findViewById(R.id.seekBar);
-        tvProgress = (TextView) view.findViewById(R.id.tvProgress);
         rlSeekBarLabels = (RelativeLayout) view.findViewById(R.id.rlSeekBarLabels);
         ivNext = (ImageView) view.findViewById(R.id.ivEffortQuestionsDone);
 
-        // initial progress text (50 / 100)
-        String progressText = seekBar.getProgress() + "/" + seekBar.getMax();
-        tvProgress.setText(progressText);
+        ivEffortFirst = (ImageView) view.findViewById(R.id.ivEffortFirst);
+        ivEffortSecond = (ImageView) view.findViewById(R.id.ivEffortSecond);
+        ivEffortThird = (ImageView) view.findViewById(R.id.ivEffortThird);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int seekbarProgress = 0;
@@ -57,7 +66,7 @@ public class EffortQuestion extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 seekbarProgress = progress;
                 String progressText = seekbarProgress + "/" + seekBar.getMax();
-                tvProgress.setText(progressText);
+//                tvProgress.setText(progressText);
             }
 
             @Override
@@ -68,13 +77,28 @@ public class EffortQuestion extends Fragment {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
+
+        // scale images
+        int imageWidth = Double.valueOf(LevelManager.getInstance().screen_height * IMAGE_WIDTH_PERCENTAGE).intValue();
+        int imageHeight = Double.valueOf(LevelManager.getInstance().screen_height * IMAGE_HEIGHT_PERCENTAGE).intValue();
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(imageWidth, imageHeight);
+
+        ivEffortFirst.setLayoutParams(layoutParams);
+        ivEffortSecond.setLayoutParams(layoutParams);
+        ivEffortThird.setLayoutParams(layoutParams);
+
         ivNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                CSVWriter.getInstance().collectQuestionResponse(seekBar.getProgress());
                 if (questionNum == 1)
                     setUpNextQuestion();
-                else
-                    Util.loadFragment(getActivity(), new ReflectionQuestion());
+                else {
+                    // finished all questions, write from buffer to csv file
+                    CSVWriter.getInstance().writeQuestionResponses();
+                    Util.loadFragment(getActivity(), new MainActivityFragment());
+                }
+
             }
         });
 
@@ -86,6 +110,11 @@ public class EffortQuestion extends Fragment {
      */
     public void setUpNextQuestion() {
         question.setText(SECONDQUESTION);
+
+        ivEffortFirst.setImageResource(R.drawable.tryhard1);
+        ivEffortSecond.setVisibility(View.GONE);
+        ivEffortThird.setImageResource(R.drawable.tryhard2);
+
         for (int i = 0; i < SECONDQUESTIONLABELS.length; i++) {
             ((TextView) rlSeekBarLabels.getChildAt(i)).setText(SECONDQUESTIONLABELS[i]);
         }

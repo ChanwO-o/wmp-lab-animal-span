@@ -9,12 +9,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/gap_large"
+        android:layout_marginTop="@dimen/gap_mediumlarge"
         android:gravity="center_vertical"
-        android:text="@string/how_hard"
+        android:text="@string/enjoyed"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/white"
-        android:textSize="@dimen/font_size_large" />
+        android:textSize="@dimen/font_size_mediumlarge" />
 
     <LinearLayout
         android:id="@+id/llFaces"
@@ -23,7 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true">
-
 
     </LinearLayout>
 

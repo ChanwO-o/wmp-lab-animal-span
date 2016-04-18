@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 
 public class CSVWriter {
     public static final CSVWriter INSTANCE = new CSVWriter();
@@ -28,6 +29,8 @@ public class CSVWriter {
     private static final String FORMAT_TIME = "HHmmss";
     private static final String TIMESTAMP_DATE = "MM/dd/yyyy";
     private static final String TIMESTAMP_TIME = "HH:mm:ss";
+
+    private StringBuilder questionResponses = new StringBuilder();
 
     private Context context;
     private File csvFile;
@@ -186,6 +189,15 @@ public class CSVWriter {
 
         data.append(NEW_LINE);
         writeLine(data.toString());
+    }
+
+    public void collectQuestionResponse(int o) {
+        questionResponses.append(o).append(COMMA);
+    }
+
+    public void writeQuestionResponses() {
+        questionResponses.append(NEW_LINE);
+        writeLine(questionResponses.toString());
     }
 
     public static CSVWriter getInstance() {
