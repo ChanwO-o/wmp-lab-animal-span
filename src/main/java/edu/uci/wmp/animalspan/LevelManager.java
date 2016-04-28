@@ -34,7 +34,7 @@ public class LevelManager implements Serializable {
     public static final int STAGE1 = 1;                     // stage 1
     public static final int STAGE2 = 2;                     // stage 2
     public static final int STAGE0 = 0;                     // neither
-    public static final String TRAININGMODE_LEVELS = "levels";
+    public static final String TRAININGMODE_ROUNDS = "rounds";
     public static final String TRAININGMODE_TIME = "time";
     public static final String TRAININGMODE_DEMO = "demo";
     public static final String SAVE_LEVEL_FILENAME = "save_level.txt";
@@ -46,7 +46,7 @@ public class LevelManager implements Serializable {
     public int subject = 1;
     public int session = 1;
     public int level = 1;
-    public int trial = 0;
+    public int trial = 0;                                   // == rounds
     public int part = STAGE0;                               // 1 = Stage1, 2 = Stage2, 0 = neither
     public int currentStimuliIndex = 0;                     // index of current pic
     public boolean testStarted = false;
@@ -72,13 +72,13 @@ public class LevelManager implements Serializable {
     // general settings
     public int screen_width = 1280; // taskresolutionwidth = 1024;         // define resolution for which game is optimized
     public int screen_height = 736; // getTaskresolutionheight = 768;
-    public boolean showinfullscreen = true;        // define whether you want to show this fullscreen or not
-    public boolean abortallowed = false;            // define whether pressing escape or q aborts the program
+//    public boolean showinfullscreen = true;        // define whether you want to show this fullscreen or not
+//    public boolean abortallowed = false;           // define whether pressing escape or q aborts the program
 
     // training parameters (this does NOT go into level file)
-    public String trainingmode = LevelManager.TRAININGMODE_LEVELS;        // time: ends session after a certain amount of time; levels: ends session after a certain amount of levels
+    public String trainingmode = LevelManager.TRAININGMODE_ROUNDS;        // time: ends session after a certain amount of time; rounds: ends session after a certain amount of rounds
     public int sessionLength = 300;               // This is the length of the session in seconds (default: 300s)
-    public int numberoftrials = 10;                // define how long a training session takes in number of levels
+    public int numberoftrials = 10;               // define how long a training session takes in number of levels
     public int startlevel = 1;                    // define with which level to start_old  *** changed var name level -> startlevel ***
 
     // default level parameters
@@ -189,7 +189,7 @@ public class LevelManager implements Serializable {
 
             String line;
             while ((line = br.readLine()) != null) {
-//                Log.d("loadLevel()", line);
+                Log.d("loadLevel()", line);
                 processLine(line);
             }
         } catch (InvalidLevelException e) {
@@ -265,24 +265,18 @@ public class LevelManager implements Serializable {
         return new BufferedReader(new InputStreamReader(in));
     }
 
-//    public StringBuilder getLevelDetails() throws IOException {
-//        StringBuilder result = new StringBuilder();
-//        BufferedReader br = openFileAsReader();
-//        String line = null;
-//
-//        while ((line = br.readLine()) != null) {
-//            Log.d("getLevelDetails()", "Writing");
-//            result.append(line);
-//        }
-//        return result;
-//    }
-
     /**
      * Set value of variable through reflection
      * @param varName name of variable to modify
      * @throws NoSuchFieldException
      */
     public void setLevelVariable(String varName, String newValue) throws NoSuchFieldException, IllegalAccessException {
+
+        // TODO: Ask Martin details on whether allowfullscreen and abortallowed will be written in future level files
+        if (varName.equals("showinfullscreen") || varName.equals("abortallowed")) {
+            Log.wtf("setLevelVariable()", "not using variable in LM");
+            return;
+        }
 
         Field var = this.getClass().getDeclaredField(varName);
 

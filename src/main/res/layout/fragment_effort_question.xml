@@ -51,7 +51,8 @@
         android:layout_height="wrap_content"
         android:minHeight="@dimen/seekbar_thick"
         android:maxHeight="@dimen/seekbar_thick"
-        android:layout_below="@+id/llEffortImages"
+        android:layout_below="@+id/tvEffortQuestion"
+        android:layout_marginTop="@dimen/gap_huge"
         android:layout_centerHorizontal="true"
         android:max="100"
         android:paddingLeft="@dimen/seekbar_padding_width"
@@ -65,12 +66,14 @@
         android:layout_width="@dimen/seekbar_label_width"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/llEffortImages">
+        android:layout_below="@+id/tvEffortQuestion"
+        android:layout_marginTop="@dimen/gap_huge">
 
         <TextView
             android:id="@+id/tvSeekBarFirst"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/seekbar_label_margin_height"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:text="@string/too_easy"
@@ -81,7 +84,8 @@
             android:id="@+id/tvSeekBarSecond"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/seekbar_label_margin_height"
+            android:layout_centerHorizontal="true"
             android:text="@string/just_right"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/white" />
@@ -90,6 +94,7 @@
             android:id="@+id/tvSeekBarThird"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/seekbar_label_margin_height"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:text="@string/too_hard"

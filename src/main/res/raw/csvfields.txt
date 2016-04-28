@@ -13,11 +13,9 @@ acc2
 rt
 timestamp
 taskresolution
-showinfullscreen
-abortallowed
 trainingmode
 sessionLength
-numberoftrials
+numberofrounds
 start setsize
 start distractorsize
 numberofdistincttargets

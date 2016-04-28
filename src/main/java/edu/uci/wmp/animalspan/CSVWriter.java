@@ -123,7 +123,6 @@ public class CSVWriter {
         data.append(LevelManager.getInstance().trial).append(COMMA);
         data.append(LevelManager.getInstance().part).append(COMMA);
         data.append(StimuliManager.getImagePath(LevelManager.getInstance().stimulisequence.get(curInd))).append(COMMA); // stimulus
-//        Log.w("stimulus path", StimuliManager.getImagePath(LevelManager.getInstance().stimulisequence.get(curInd)));
         data.append(LevelManager.getInstance().stimulisequence.get(curInd) / 100).append(COMMA);                        // stimulus class
         data.append(LevelManager.getInstance().presentationstyle.get(curInd)).append(COMMA);                            // presentation style
 
@@ -137,30 +136,26 @@ public class CSVWriter {
         else if (LevelManager.getInstance().part == LevelManager.STAGE2)
             data.append(NULL).append(COMMA).append(LevelManager.getInstance().accuracysecondpart.get(curInd)).append(COMMA);
 
-        int seconds = 0, milliseconds = 0;                                                                              // reaction time (rt)
-        if (LevelManager.getInstance().part == LevelManager.STAGE1) {
-            seconds = (int) (LevelManager.getInstance().rtfirstpart.get(curInd) / 1000);
-            milliseconds = (int)(LevelManager.getInstance().rtfirstpart.get(curInd) % 1000);
-        }
-        else if (LevelManager.getInstance().part == LevelManager.STAGE2) {
-            seconds = (int) (LevelManager.getInstance().rtsecondpart.get(curInd) / 1000);
-            milliseconds = (int)(LevelManager.getInstance().rtsecondpart.get(curInd) % 1000);
-        }
-        data.append(seconds).append("s ").append(milliseconds).append(COMMA);
+        double seconds = 0;                                                                                             // reaction time (rt)
+        if (LevelManager.getInstance().part == LevelManager.STAGE1)
+            seconds = (double) (LevelManager.getInstance().rtfirstpart.get(curInd)) / 1000;
+        else if (LevelManager.getInstance().part == LevelManager.STAGE2)
+            seconds = (double) (LevelManager.getInstance().rtsecondpart.get(curInd)) / 1000;
+        data.append(seconds).append("s ").append(COMMA);
 
-        final String DATE = new SimpleDateFormat(TIMESTAMP_DATE, Locale.US).format(Calendar.getInstance().getTime());   // timestamp
-        final String TIME = new SimpleDateFormat(TIMESTAMP_TIME, Locale.US).format(Calendar.getInstance().getTime());
-        final String TIMESTAMP = DATE + " " + TIME;
-        data.append(TIMESTAMP).append(COMMA);
+        data.append(Util.getTimestamp(TIMESTAMP_DATE, TIMESTAMP_TIME)).append(COMMA);                                   // timestamp
 
         data.append("[").append(LevelManager.getInstance().screen_width).append("; ")
                 .append(LevelManager.getInstance().screen_height).append("]").append(COMMA);                            // taskresolution
 
-        data.append(LevelManager.getInstance().showinfullscreen).append(COMMA);
-        data.append(LevelManager.getInstance().abortallowed).append(COMMA);
         data.append(LevelManager.getInstance().trainingmode).append(COMMA);
-        data.append(LevelManager.getInstance().sessionLength).append(COMMA);
-        data.append(LevelManager.getInstance().numberoftrials).append(COMMA);
+
+        if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_ROUNDS))                           // sessionlength & numberofrounds
+            data.append(NULL).append(COMMA).append(LevelManager.getInstance().numberoftrials).append(COMMA);
+        else if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_TIME))
+            data.append(LevelManager.getInstance().sessionLength).append(COMMA).append(NULL).append(COMMA);
+        
+
         data.append(LevelManager.getInstance().setsize).append(COMMA);             // not sure
         data.append(LevelManager.getInstance().distractorsize).append(COMMA);
         data.append(LevelManager.getInstance().numberofdistincttargets).append(COMMA);
@@ -191,13 +186,25 @@ public class CSVWriter {
         writeLine(data.toString());
     }
 
-    public void collectQuestionResponse(int o) {
-        questionResponses.append(o).append(COMMA);
+    /**
+     * Collect data for each question: exp subject session nameofquestion response timestamp
+     */
+    public void collectQuestionResponse(String theQuestion, int resp) {
+        questionResponses
+                .append("CST").append(COMMA)
+                .append(LevelManager.getInstance().subject).append(COMMA)
+                .append(LevelManager.getInstance().session).append(COMMA)
+                .append(theQuestion).append(COMMA)
+                .append(resp).append(COMMA)
+                .append(Util.getTimestamp(TIMESTAMP_DATE, TIMESTAMP_TIME)).append(COMMA).append(NEW_LINE);
     }
 
-    public void writeQuestionResponses() {
-        questionResponses.append(NEW_LINE);
+    /**
+     * Writes data to data file
+     */
+    public void writeQuestionResponse() {
         writeLine(questionResponses.toString());
+        questionResponses.setLength(0); // clear StringBuilder
     }
 
     public static CSVWriter getInstance() {

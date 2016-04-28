@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import edu.uci.wmp.animalspan.LevelManager;
@@ -28,14 +29,11 @@ import java.lang.reflect.Field;
 public class Settings extends Fragment {
 
     LinearLayout llSettingsWidgets;
-    EditText etSubject, etSession;
+    EditText etSubject, etSession, etRoundsTime;
     Switch swQuestions;
     Switch swTrainingMode;
+    TextView tvRTPrompt, tvRTUnit;
     ImageView ivBack;
-    NumberPicker picker;
-    final String[] levelOptions = new String[] {"5", "10", "15", "20", "25", "30", "35", "40"};
-    final String[] timeOptions = new String[] {"100", "150", "200", "250", "300"};
-
 
     public Settings() {
         // Required empty public constructor
@@ -56,40 +54,38 @@ public class Settings extends Fragment {
         etSession = (EditText) view.findViewById(R.id.etSession);
         swQuestions = (Switch) view.findViewById(R.id.swQuestions);
         swTrainingMode = (Switch) view.findViewById(R.id.swTrainingMode);
+        tvRTPrompt = (TextView) view.findViewById(R.id.tvRTPrompt);
+        etRoundsTime = (EditText) view.findViewById(R.id.etRoundsTime);
+        tvRTUnit = (TextView) view.findViewById(R.id.tvRTUnit);
         ivBack = (ImageView) view.findViewById(R.id.ivSettingsBack);
 
-
-        etSubject.setText(String.valueOf(LevelManager.getInstance().subject));
-        etSession.setText(String.valueOf(LevelManager.getInstance().session));
         swQuestions.setTextOn("On");
         swQuestions.setTextOff("Off");
         swTrainingMode.setTextOn("Time");
-        swTrainingMode.setTextOff("Levels");
+        swTrainingMode.setTextOff("Rounds");
+        etSubject.setText(String.valueOf(LevelManager.getInstance().subject));
+        etSession.setText(String.valueOf(LevelManager.getInstance().session));
 
         // set default mode of switches
         swQuestions.setChecked(LevelManager.getInstance().questions);
         boolean trainingModeIsTime = LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_TIME);
         swTrainingMode.setChecked(trainingModeIsTime); // set switch default on/off
 
-        // setup numberpicker
-        picker = new NumberPicker(getActivity());
-        if (trainingModeIsTime) // set initial numberpicker mode
-            setNumberPickerTime();
+        // setup RoundsTime input
+        if (trainingModeIsTime)
+            setRTLayoutTime();
         else
-            setNumberPickerLevels();
-        picker.setScrollBarStyle(NumberPicker.SCROLLBARS_OUTSIDE_OVERLAY);
-        setNumberPickerTextColor(picker, Color.WHITE);
-        llSettingsWidgets.addView(picker);
+            setRTLayoutLevels();
 
         swTrainingMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     LevelManager.getInstance().trainingmode = LevelManager.TRAININGMODE_TIME;
-                    setNumberPickerTime();
+                    setRTLayoutTime();
                 } else {
-                    LevelManager.getInstance().trainingmode = LevelManager.TRAININGMODE_LEVELS;
-                    setNumberPickerLevels();
+                    LevelManager.getInstance().trainingmode = LevelManager.TRAININGMODE_ROUNDS;
+                    setRTLayoutLevels();
                 }
             }
         });
@@ -109,10 +105,11 @@ public class Settings extends Fragment {
                     LevelManager.getInstance().session = session;
 
                     // set trainingmode values
-                    if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_LEVELS))
-                        LevelManager.getInstance().numberoftrials = Integer.valueOf(levelOptions[picker.getValue()]);
+                    // TODO: check for input == 0, should not proceed
+                    if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_ROUNDS))
+                        LevelManager.getInstance().numberoftrials = Integer.valueOf(etRoundsTime.getText().toString());
                     else if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_TIME))
-                        LevelManager.getInstance().sessionLength = Integer.valueOf(timeOptions[picker.getValue()]);
+                        LevelManager.getInstance().sessionLength = Integer.valueOf(etRoundsTime.getText().toString());
 
                     LevelManager.getInstance().questions = swQuestions.isChecked(); // set questions
 
@@ -125,59 +122,15 @@ public class Settings extends Fragment {
         return view;
     }
 
-    public void setNumberPickerLevels() {
-        picker.setDisplayedValues(null); // added this line to prevent indexoutofbounds error
-        picker.setMaxValue(levelOptions.length - 1);
-        picker.setMinValue(0);
-        picker.setDisplayedValues(levelOptions);
-        picker.setValue(findIndex(LevelManager.getInstance().numberoftrials, levelOptions));
+    public void setRTLayoutLevels() {
+        tvRTPrompt.setText("Rounds:");
+        etRoundsTime.setText(String.valueOf(LevelManager.getInstance().numberoftrials));
+        tvRTUnit.setText("");
     }
 
-    public void setNumberPickerTime() {
-        picker.setDisplayedValues(null);
-        picker.setMaxValue(timeOptions.length - 1);
-        picker.setMinValue(0);
-        picker.setDisplayedValues(timeOptions);
-        picker.setValue(findIndex(LevelManager.getInstance().sessionLength, timeOptions));
-    }
-
-    /**
-     * Find index of option in option list, used for setting initial value of number picker
-     */
-    public int findIndex(int value, String[] options) {
-        for (int i = 0; i < options.length; i++) {
-            if (Integer.valueOf(options[i]) == value)
-                return i;
-        }
-        return 0;
-    }
-
-    public static boolean setNumberPickerTextColor(NumberPicker numberPicker, int color)
-    {
-        final int count = numberPicker.getChildCount();
-        for(int i = 0; i < count; i++){
-            View child = numberPicker.getChildAt(i);
-            if(child instanceof EditText){
-                try{
-                    Field selectorWheelPaintField = numberPicker.getClass()
-                            .getDeclaredField("mSelectorWheelPaint");
-                    selectorWheelPaintField.setAccessible(true);
-                    ((Paint)selectorWheelPaintField.get(numberPicker)).setColor(color);
-                    ((EditText)child).setTextColor(color);
-                    numberPicker.invalidate();
-                    return true;
-                }
-                catch(NoSuchFieldException e){
-                    Log.w("setNPTextColor", e);
-                }
-                catch(IllegalAccessException e){
-                    Log.w("setNPTextColor", e);
-                }
-                catch(IllegalArgumentException e){
-                    Log.w("setNPTextColor", e);
-                }
-            }
-        }
-        return false;
+    public void setRTLayoutTime() {
+        tvRTPrompt.setText("Time:");
+        etRoundsTime.setText(String.valueOf(LevelManager.getInstance().sessionLength));
+        tvRTUnit.setText("(s)");
     }
 }

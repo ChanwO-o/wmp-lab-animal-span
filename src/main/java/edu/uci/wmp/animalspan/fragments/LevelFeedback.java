@@ -122,7 +122,7 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
                 return; // remove this after implementing viewResults()
             }
         }
-        else if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_LEVELS)) {
+        else if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_ROUNDS)) {
             Log.d("mode", "levels");
             if (LevelManager.getInstance().numberoftrials == LevelManager.getInstance().trial) {
                 Log.d("Results", "session over");

@@ -72,7 +72,7 @@ public class MainActivityFragment extends Fragment implements View.OnTouchListen
             public void onClick(View v) {
                 // if user played demo mode, trainingmode stays as demo. Change it to level mode
                 if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_DEMO))
-                    LevelManager.getInstance().trainingmode = LevelManager.TRAININGMODE_LEVELS;
+                    LevelManager.getInstance().trainingmode = LevelManager.TRAININGMODE_ROUNDS;
                 LevelManager.getInstance().sessionStartMills = SystemClock.uptimeMillis(); // record session starting time (used for trainingmode = "time")
                 LevelManager.getInstance().trial = 0; // @TODO: move this to LevelManager.startSession()
                 CSVWriter.getInstance().createCsvFile();

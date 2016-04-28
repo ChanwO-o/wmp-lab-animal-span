@@ -26,13 +26,22 @@
 
     </LinearLayout>
 
+    <View
+        android:id="@+id/vLine"
+        android:layout_width="fill_parent"
+        android:layout_above="@+id/tvTapFace"
+        android:layout_height="1dp"
+        android:background="#ffffff" />
+
     <TextView
+        android:id="@+id/tvTapFace"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/white"
         android:text="@string/tap_face"
-        android:textSize="@dimen/font_size_medium"
+        android:textSize="@dimen/font_size_mediumlarge"
+        android:layout_marginBottom="@dimen/gap_medium"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 

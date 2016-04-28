@@ -45,12 +45,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() { // I modified Level1 file abortallowed=1 to test this; fix it back!
-        if (LevelManager.getInstance().testStarted && !LevelManager.getInstance().abortallowed)
-            return; // don't allow user to exit
-
-        if (LevelManager.getInstance().testStarted)
-            LevelManager.getInstance().saveLevelToFile(); // save level before exit if in the middle of a test
+    public void onBackPressed() {
+//        if (LevelManager.getInstance().testStarted && !LevelManager.getInstance().abortallowed) // not using abortallowed variable any longer
+//            return; // don't allow user to exit
+//
+//        if (LevelManager.getInstance().testStarted)
+//            LevelManager.getInstance().saveLevelToFile(); // save level before exit if in the middle of a test
         super.onBackPressed();
     }
 

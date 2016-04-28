@@ -75,5 +75,12 @@ public final class Util {
         ft.commit();
     }
 
-
+    /**
+     * Get current timestamp
+     */
+    public static String getTimestamp(final String TIMESTAMP_DATE, final String TIMESTAMP_TIME) {
+        final String DATE = new SimpleDateFormat(TIMESTAMP_DATE, Locale.US).format(Calendar.getInstance().getTime());
+        final String TIME = new SimpleDateFormat(TIMESTAMP_TIME, Locale.US).format(Calendar.getInstance().getTime());
+        return DATE + " " + TIME;
+    }
 }

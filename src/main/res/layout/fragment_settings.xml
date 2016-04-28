@@ -110,6 +110,43 @@
                 android:padding="@dimen/gap_medium" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/llRoundsTimeInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvRTPrompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="@dimen/gap_medium"
+                android:text="Prompt here"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/etRoundsTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:inputType="numberSigned"
+                android:padding="@dimen/gap_medium"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/tvRTUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="@dimen/gap_medium"
+                android:text="(S)"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <ImageView
