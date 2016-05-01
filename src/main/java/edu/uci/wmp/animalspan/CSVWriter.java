@@ -20,6 +20,7 @@ import java.util.Objects;
 public class CSVWriter {
     public static final CSVWriter INSTANCE = new CSVWriter();
 
+    private static final String[] ignoreFields = {"showinfullscreen", "abortallowed"};
     private static final String FOLDERPATH = "/wmplab/csvdata";
     private static final String COMMA = ", ";
     private static final String NEW_LINE = "\n ";
@@ -112,6 +113,16 @@ public class CSVWriter {
         return result.toString();
     }
 
+    /**
+     * Returns if field can be ignored
+     */
+    public boolean canIgnore(String field) {
+        for (String igField : ignoreFields)
+            if (field.equals(igField))
+                return true;
+        return false;
+    }
+
     public void collectData() {
         int curInd = LevelManager.getInstance().currentStimuliIndex;
         StringBuilder data = new StringBuilder();
@@ -141,7 +152,7 @@ public class CSVWriter {
             seconds = (double) (LevelManager.getInstance().rtfirstpart.get(curInd)) / 1000;
         else if (LevelManager.getInstance().part == LevelManager.STAGE2)
             seconds = (double) (LevelManager.getInstance().rtsecondpart.get(curInd)) / 1000;
-        data.append(seconds).append("s ").append(COMMA);
+        data.append(seconds).append(COMMA);
 
         data.append(Util.getTimestamp(TIMESTAMP_DATE, TIMESTAMP_TIME)).append(COMMA);                                   // timestamp
 

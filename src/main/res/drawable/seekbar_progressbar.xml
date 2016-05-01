@@ -3,9 +3,26 @@
 
     <item>
         <shape android:shape="rectangle">
-            <!--<corners android:radius="5dp" />-->
             <solid android:color="@color/white" />
         </shape>
     </item>
+
+
+    <!--<item android:top="2dp" android:left="2dp">-->
+        <!--<shape android:shape="rectangle">-->
+            <!--<solid android:color="@color/white" />-->
+        <!--</shape>-->
+    <!--</item>-->
+    <!--<item android:top="5dp" android:left="5dp">-->
+        <!--<shape android:shape="rectangle">-->
+            <!--<solid android:color="@color/aqua" />-->
+        <!--</shape>-->
+    <!--</item>-->
+
+
+    <!--<item android:top="10dp" android:left="10dp">-->
+        <!--<bitmap android:src="@drawable/thumb_old"-->
+            <!--android:gravity="center" />-->
+    <!--</item>-->
 
 </layer-list>

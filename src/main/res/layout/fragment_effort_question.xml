@@ -65,7 +65,6 @@
         android:id="@+id/rlSeekBarLabels"
         android:layout_width="@dimen/seekbar_label_width"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/tvEffortQuestion"
         android:layout_marginTop="@dimen/gap_huge">
 
@@ -77,6 +76,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:text="@string/too_easy"
+            android:drawableTop="@drawable/seekbar_stop"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/white" />
 
@@ -87,6 +87,7 @@
             android:layout_marginTop="@dimen/seekbar_label_margin_height"
             android:layout_centerHorizontal="true"
             android:text="@string/just_right"
+            android:drawableTop="@drawable/seekbar_stop"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/white" />
 
@@ -98,6 +99,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:text="@string/too_hard"
+            android:drawableTop="@drawable/seekbar_stop"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/white" />
     </RelativeLayout>

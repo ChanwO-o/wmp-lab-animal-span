@@ -82,9 +82,9 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
             ivDemoQuit.setVisibility(View.GONE);
         ivDemoQuit.setOnClickListener(this);
 
-        Log.d("stimsequence", StimuliManager.listToString(LevelManager.getInstance().stimulisequence));
-        Log.d("Answer", StimuliManager.listToString(LevelManager.getInstance().correctstimulisequence));
-        Log.d("Response", StimuliManager.listToString(LevelManager.getInstance().secondpartsequence));
+        Log.d("stimsequence", StimuliManager.iterableToString(LevelManager.getInstance().stimulisequence));
+        Log.d("Answer", StimuliManager.iterableToString(LevelManager.getInstance().correctstimulisequence));
+        Log.d("Response", StimuliManager.iterableToString(LevelManager.getInstance().secondpartsequence));
         Log.w("checking", "" + check());
 
         // feedback

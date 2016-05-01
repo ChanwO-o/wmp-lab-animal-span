@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -112,17 +113,24 @@ public class StimuliManager {
         }
     }
 
-    public static String listToString(List<Integer> l) {
-        String result = "";
-        for (int i = 0; i < l.size(); i++)
-            result += l.get(i) + " ";
-        return result;
+    public static <T> String iterableToString(Iterable<T> iterable) {
+        StringBuilder result = new StringBuilder();
+        for (T t : iterable)
+            result.append(t).append(" ");
+        return result.toString();
     }
 
-    public static String arrayToString(int[] a) {
-        String result = "";
-        for (int i = 0; i < a.length; i++)
-            result += a[i] + " ";
-        return result;
-    }
+//    public static <T> String listToString(List<T> l) {
+//        StringBuilder result = new StringBuilder();
+//        for (int i = 0; i < l.size(); i++)
+//            result.append(l.get(i)).append(" ");
+//        return result.toString();
+//    }
+//
+//    public static String arrayToString(int[] a) {
+//        String result = "";
+//        for (int i = 0; i < a.length; i++)
+//            result += a[i] + " ";
+//        return result;
+//    }
 }

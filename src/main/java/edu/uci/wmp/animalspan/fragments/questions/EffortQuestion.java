@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -27,14 +28,15 @@ public class EffortQuestion extends Fragment {
     TextView tvQuestion;
     SeekBar seekBar;
     RelativeLayout rlSeekBarLabels;
+    LinearLayout llEffortImages;
     ImageView ivEffortFirst;
     ImageView ivEffortSecond;
     ImageView ivEffortThird;
     ImageView ivNext;
     View[] hiddenViews;
 
-    final double IMAGE_WIDTH_PERCENTAGE = 0.35;
-    final double IMAGE_HEIGHT_PERCENTAGE = 0.33;
+    final double IMAGE_WIDTH_PERCENTAGE = 0.50;
+    final double IMAGE_HEIGHT_PERCENTAGE = 0.50;
 
     // second question setup
     final String SECONDQUESTION = "How hard did you try to do your best at the task?";
@@ -75,6 +77,7 @@ public class EffortQuestion extends Fragment {
         rlSeekBarLabels = (RelativeLayout) view.findViewById(R.id.rlSeekBarLabels);
         ivNext = (ImageView) view.findViewById(R.id.ivEffortQuestionsDone);
 
+        llEffortImages = (LinearLayout) view.findViewById(R.id.llEffortImages);
         ivEffortFirst = (ImageView) view.findViewById(R.id.ivEffortFirst);
         ivEffortSecond = (ImageView) view.findViewById(R.id.ivEffortSecond);
         ivEffortThird = (ImageView) view.findViewById(R.id.ivEffortThird);
@@ -82,23 +85,16 @@ public class EffortQuestion extends Fragment {
         // scale images
         int imageWidth = Double.valueOf(LevelManager.getInstance().screen_height * IMAGE_WIDTH_PERCENTAGE).intValue();
         int imageHeight = Double.valueOf(LevelManager.getInstance().screen_height * IMAGE_HEIGHT_PERCENTAGE).intValue();
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(imageWidth, imageHeight);
+        LinearLayout.LayoutParams imageLayoutParams = new LinearLayout.LayoutParams(imageWidth, imageHeight);
 
-        ivEffortFirst.setLayoutParams(layoutParams);
-        ivEffortSecond.setLayoutParams(layoutParams);
-        ivEffortThird.setLayoutParams(layoutParams);
-
-        // add margins to labels
-//        RelativeLayout.LayoutParams labelLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-//        int labelMarginHeight = seekBar.getHeight() / 2;
-//        Log.wtf("labelheight", "" + labelMarginHeight);
-//        labelLayoutParams.setMargins(0, labelMarginHeight, 0, 0);
-//        for (int i = 0; i < rlSeekBarLabels.getChildCount(); i++)
-//            rlSeekBarLabels.getChildAt(i).setLayoutParams(labelLayoutParams);
+        ivEffortFirst.setLayoutParams(imageLayoutParams);
+        ivEffortSecond.setLayoutParams(imageLayoutParams);
+        ivEffortThird.setLayoutParams(imageLayoutParams);
 
         responded = false;
         hiddenViews = new View[7];
         fillHiddenViews();
+        adjustLabelsLayout();
 
         ivNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,7 +112,6 @@ public class EffortQuestion extends Fragment {
                     }
                     else
                         Util.loadFragment(getActivity(), new MainActivityFragment());
-
                 }
 
             }
@@ -136,6 +131,7 @@ public class EffortQuestion extends Fragment {
 
         for (int i = 0; i < SECONDQUESTIONLABELS.length; i++)
             ((TextView) rlSeekBarLabels.getChildAt(i)).setText(SECONDQUESTIONLABELS[i]);
+        rlSeekBarLabels.getChildAt(1).setVisibility(View.GONE); // hide seekbar stop on second label (drawableTop)
         seekBar.setProgress(50);
         questionNum++;
         responded = false;
@@ -161,5 +157,34 @@ public class EffortQuestion extends Fragment {
         for (View v : hiddenViews)
             v.setVisibility(visibility);
         ivEffortSecond.setVisibility(View.INVISIBLE);
+        adjustLabelsLayout();
+    }
+
+    /**
+     * Extend relativelayout to position labels and stops precisely on seekbar
+     * Calculates new width using textview lengths so that labels are centered at seekbar stops
+     */
+    public void adjustLabelsLayout() {
+
+        rlSeekBarLabels.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.i("rl width", "" + rlSeekBarLabels.getWidth());
+                View v0 = rlSeekBarLabels.getChildAt(0);
+                View v2 = rlSeekBarLabels.getChildAt(2);
+                Log.i("rl child0 width", "" + v0.getWidth());
+                Log.i("rl child2 width", "" + v2.getWidth());
+
+                int seekBarWidthWithoutPadding = seekBar.getWidth() - 2 * (int) getResources().getDimension(R.dimen.seekbar_padding_width);
+                int newRlWidth = seekBarWidthWithoutPadding + v0.getWidth() / 2 + v2.getWidth() / 2;
+                Log.i("new rl width", "" + newRlWidth);
+                RelativeLayout.LayoutParams newRlLayoutParams= new RelativeLayout.LayoutParams(newRlWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
+                newRlLayoutParams.addRule(RelativeLayout.ALIGN_LEFT, seekBar.getId());
+                newRlLayoutParams.addRule(RelativeLayout.BELOW, tvQuestion.getId());
+                newRlLayoutParams.topMargin = (int) getResources().getDimension(R.dimen.gap_huge);
+                newRlLayoutParams.leftMargin = (int) getResources().getDimension(R.dimen.seekbar_padding_width) - v0.getWidth() / 2;
+                rlSeekBarLabels.setLayoutParams(newRlLayoutParams);
+            }
+        });
     }
 }

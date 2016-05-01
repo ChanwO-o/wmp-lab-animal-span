@@ -3,13 +3,21 @@ package edu.uci.wmp.animalspan;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.uci.wmp.animalspan.R;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import edu.uci.wmp.animalspan.fragments.MainActivityFragment;
 
 
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         setDisplaySettings();
         initializeManagers();
+        checkDirectories();
 
 //        LevelManager.getInstance().loadLevel(LevelManager.getInstance().startlevel);
 
@@ -64,6 +73,24 @@ public class MainActivity extends AppCompatActivity {
         LevelManager.getInstance().setContext(this);
         LevelManager.getInstance().loadSavedLevel(); // sets level variable if there is a saved instance
         LevelManager.getInstance().setScreenDimensions();
+        // StimuliManager.getInstance().setContext(this) TODO: implement instance in SM
+        Checks.getInstance().setContext(this);
         CSVWriter.getInstance().setContext(this);
+    }
+
+    /**
+     * Create and populate asset directories
+     */
+    public void checkDirectories() {
+        try {
+            Checks.getInstance().checkLevelsDirectory();
+            Checks.getInstance().checkStimuliDirectory();
+        }
+        catch (Checks.InvalidLevelFilesException e) {
+            Toast.makeText(this, "Error checking level files", Toast.LENGTH_SHORT).show();
+        }
+        catch (Checks.InvalidStimuliFilesException e) {
+            Toast.makeText(this, "Error checking stimuli files", Toast.LENGTH_SHORT).show();
+        }
     }
 }

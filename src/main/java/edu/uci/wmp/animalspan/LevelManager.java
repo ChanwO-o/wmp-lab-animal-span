@@ -272,11 +272,8 @@ public class LevelManager implements Serializable {
      */
     public void setLevelVariable(String varName, String newValue) throws NoSuchFieldException, IllegalAccessException {
 
-        // TODO: Ask Martin details on whether allowfullscreen and abortallowed will be written in future level files
-        if (varName.equals("showinfullscreen") || varName.equals("abortallowed")) {
-            Log.wtf("setLevelVariable()", "not using variable in LM");
+        if (CSVWriter.getInstance().canIgnore(varName)) // if (varName.equals("showinfullscreen") || varName.equals("abortallowed"))
             return;
-        }
 
         Field var = this.getClass().getDeclaredField(varName);
 
@@ -322,7 +319,7 @@ public class LevelManager implements Serializable {
             distincttargets.add(labeledDistinctTarget);
             temp.remove(randomIndex); // remove to prevent duplicates
         }
-        Log.d("distinct targets", StimuliManager.listToString(distincttargets));
+//        Log.d("distinct targets", StimuliManager.listToString(distincttargets));
 
         // choosing sequence from distinct targets
         for (int i = 0; i < setsize; i++) {
@@ -330,11 +327,11 @@ public class LevelManager implements Serializable {
             do {
                 int randomIndex = random.nextInt(distincttargets.size());
                 generatedStimuli = distincttargets.get(randomIndex);
-                Log.d("chosen stimuli", "random: " + randomIndex + " genStim: " + generatedStimuli);
+//                Log.d("chosen stimuli", "random: " + randomIndex + " genStim: " + generatedStimuli);
             } while (i != 0 && stimulisequence.get(i - 1) == generatedStimuli); // no two same stimuli in a row @TODO: remove this line & fix; useless since I'm shuffling anyways.
 
             stimulisequence.add(generatedStimuli);
-            Log.d("added", "" + generatedStimuli);
+//            Log.d("added", "" + generatedStimuli);
         }
     }
 
@@ -350,7 +347,7 @@ public class LevelManager implements Serializable {
             distinctdistractors.add(labeledDistinctDistractor);
             temp.remove(randomIndex);
         }
-        Log.d("distinct distractors", StimuliManager.listToString(distinctdistractors));
+        Log.d("distinct distractors", StimuliManager.iterableToString(distinctdistractors));
 
         for (int i = 0; i < distractorsize; i++) {
             int randomIndex = random.nextInt(distinctdistractors.size()); // past code had + 1 here >   = random.nextInt(numberofdistinctdistractors) + 1;
@@ -392,8 +389,8 @@ public class LevelManager implements Serializable {
         Log.i("numberofperceptuallures", "" + numberofperceptuallures);
         Log.i("numberofsemanticlures", "" + numberofsemanticlures);
         Log.i("numdistinctdistractors", "" + numberofdistinctdistractors);
-        Log.i("Stimuli list", StimuliManager.listToString(stimulisequence));
-        Log.i("Presentation list", StimuliManager.listToString(presentationstyle));
+        Log.i("Stimuli list", StimuliManager.iterableToString(stimulisequence));
+        Log.i("Presentation list", StimuliManager.iterableToString(presentationstyle));
     }
 
     public static LevelManager getInstance() {
