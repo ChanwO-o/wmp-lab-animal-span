@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -255,13 +256,16 @@ public class LevelManager implements Serializable {
         }
     }
 
-    public String getFilePath() {
-        return "levels/level" + level + ".txt";
+    public String getLevelFilePath() {
+        return "/wmplab/levels/level" + level + ".txt";
     }
 
     public BufferedReader openFileAsReader() throws IOException {
-        AssetManager am = context.getAssets();
-        InputStream in = am.open(getFilePath());
+//        AssetManager am = context.getAssets(); // using in-app assets
+//        InputStream in = am.open(getLevelFilePath());
+        String path = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + getLevelFilePath();
+        File levelFile = new File(path);
+        InputStream in = new FileInputStream(levelFile);
         return new BufferedReader(new InputStreamReader(in));
     }
 

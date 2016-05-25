@@ -137,7 +137,8 @@ public class Stage2 extends Fragment {
      */
     public ImageView createChoiceStimuli(int labeledFilename) throws IOException {
         final ImageView ivStim = new ImageView(getActivity());
-        ivStim.setImageBitmap(StimuliManager.getStimuli(getActivity(), labeledFilename));
+//        ivStim.setImageBitmap(StimuliManager.getStimuli(getActivity(), labeledFilename));
+        ivStim.setImageBitmap(StimuliManager.getStimuli(labeledFilename));
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(choiceStimuliSize, choiceStimuliSize);
         int margin = (int) LevelManager.getInstance().gapbetweenimages * 5; // margin between each image in grid
         layoutParams.setMargins(margin, margin, margin, margin);
@@ -198,7 +199,8 @@ public class Stage2 extends Fragment {
 
         try {
             ImageView ivResponse = new ImageView(getActivity());
-            ivResponse.setImageBitmap(StimuliManager.getStimuli(getActivity(), imageTag));
+//            ivResponse.setImageBitmap(StimuliManager.getStimuli(getActivity(), imageTag));
+            ivResponse.setImageBitmap(StimuliManager.getStimuli(imageTag));
             LinearLayout.LayoutParams responseLayoutParams = new LinearLayout.LayoutParams(100, 100);
             responseLayoutParams.setMargins(RESPONSE_MARGINS, RESPONSE_MARGINS, RESPONSE_MARGINS, RESPONSE_MARGINS);
             ivResponse.setLayoutParams(responseLayoutParams);

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,6 +124,13 @@ public class Stage1 extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onPause() {
+        Log.d("Stage1", "onPause()");
+        handler.removeCallbacks(response);
+        super.onPause();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivUpdown:
@@ -191,7 +199,8 @@ public class Stage1 extends Fragment implements View.OnClickListener {
      */
     public void displayStimuli() {
         try {
-            Bitmap b = StimuliManager.getStimuli(getActivity(), LevelManager.getInstance().stimulisequence.get(LevelManager.getInstance().currentStimuliIndex));
+//            Bitmap b = StimuliManager.getStimuli(getActivity(), LevelManager.getInstance().stimulisequence.get(LevelManager.getInstance().currentStimuliIndex));
+            Bitmap b = StimuliManager.getStimuli(LevelManager.getInstance().stimulisequence.get(LevelManager.getInstance().currentStimuliIndex));
             ivStage1Stimuli.setImageBitmap(b);
             if (LevelManager.getInstance().presentationstyle.get(LevelManager.getInstance().currentStimuliIndex) == StimuliManager.UPDOWN)
                 ivStage1Stimuli.setRotation(180);

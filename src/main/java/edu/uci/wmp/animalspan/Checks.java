@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.uci.wmp.animalspan.R;
 
@@ -32,13 +33,29 @@ public class Checks {
 
     public void setContext(Context context) { getInstance().context = context; }
 
+    /**
+     * Create and populate asset directories
+     */
+    public void runAllChecks() {
+        try {
+            Checks.getInstance().checkLevelsDirectory();
+            Checks.getInstance().checkStimuliDirectory();
+        }
+        catch (Checks.InvalidLevelFilesException e) {
+            Toast.makeText(getInstance().context, "Error checking level files", Toast.LENGTH_SHORT).show();
+        }
+        catch (Checks.InvalidStimuliFilesException e) {
+            Toast.makeText(getInstance().context, "Error checking stimuli files", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public void checkLevelsDirectory() throws InvalidLevelFilesException {
         File root = android.os.Environment.getExternalStorageDirectory();
         String outLevelFolderPath = root.getAbsolutePath() + LEVELFOLDER_PATH;
         File outLevelFolder = new File(outLevelFolderPath);
-        outLevelFolder.mkdirs();
-//        if (!outLevelFolder.mkdirs())
-//            return; // doesn't check if folder is populated yet
+//        outLevelFolder.mkdirs();
+        if (!outLevelFolder.mkdirs())
+            return; // doesn't check if folder is populated yet
 
         try { copyDirectory("levels/", outLevelFolderPath); }
         catch (IOException e) { throw new InvalidLevelFilesException(); }
@@ -48,7 +65,9 @@ public class Checks {
         File root = android.os.Environment.getExternalStorageDirectory();
         String outStimuliFolderPath = root.getAbsolutePath() + STIMULIFOLDER_PATH;
         File outStimuliFolder = new File(outStimuliFolderPath);
-        outStimuliFolder.mkdirs();
+//        outStimuliFolder.mkdirs();
+        if (!outStimuliFolder.mkdirs())
+            return; // doesn't check if folder is populated yet
 
         try {
             String[] destinations = new String[] { StimuliManager.TARGET, StimuliManager.SEMANTIC, StimuliManager.PERCEPTUAL, StimuliManager.DISTRACTOR };

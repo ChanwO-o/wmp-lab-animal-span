@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,6 +20,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import edu.uci.wmp.animalspan.Checks;
 import edu.uci.wmp.animalspan.LevelManager;
 import edu.uci.wmp.animalspan.Util;
 
@@ -33,6 +35,7 @@ public class Settings extends Fragment {
     Switch swQuestions;
     Switch swTrainingMode;
     TextView tvRTPrompt, tvRTUnit;
+    Button bPerformChecks;
     ImageView ivBack;
 
     public Settings() {
@@ -57,8 +60,10 @@ public class Settings extends Fragment {
         tvRTPrompt = (TextView) view.findViewById(R.id.tvRTPrompt);
         etRoundsTime = (EditText) view.findViewById(R.id.etRoundsTime);
         tvRTUnit = (TextView) view.findViewById(R.id.tvRTUnit);
+        bPerformChecks = (Button) view.findViewById(R.id.bPerformChecks);
         ivBack = (ImageView) view.findViewById(R.id.ivSettingsBack);
 
+        // initial setup
         swQuestions.setTextOn("On");
         swQuestions.setTextOff("Off");
         swTrainingMode.setTextOn("Time");
@@ -87,6 +92,13 @@ public class Settings extends Fragment {
                     LevelManager.getInstance().trainingmode = LevelManager.TRAININGMODE_ROUNDS;
                     setRTLayoutLevels();
                 }
+            }
+        });
+
+        bPerformChecks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Checks.getInstance().runAllChecks();
             }
         });
 

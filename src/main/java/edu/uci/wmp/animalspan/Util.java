@@ -33,16 +33,16 @@ public final class Util {
     static void dimSystemBar(Activity activity) {
         final View window = activity.getWindow().getDecorView();
 
-        window.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+//        window.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        setFlags(window);
 
         window.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
             public void onSystemUiVisibilityChange(int visibility) {
                 if (visibility == View.SYSTEM_UI_FLAG_VISIBLE) {
                     window.postDelayed(new Runnable() {
                         public void run() {
-                            window.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                            setFlags(window);
                         }
                     }, 2000);
                 }
@@ -50,19 +50,14 @@ public final class Util {
         });
     }
 
-    static void playSoundFile(MediaPlayer mediaPlayer, String fileName, Context context) {
-        try {
-            mediaPlayer.reset();
-            AssetManager assetManager = context.getAssets();
-            AssetFileDescriptor fd = assetManager.openFd(fileName + ".wav");
-            mediaPlayer.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "IOException caught", e);
-        } catch (IllegalStateException e) {
-            Log.e(LOG_TAG, "IllegalStateException caught", e);
-        }
+    private static void setFlags(View window) {
+        window.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
     /**

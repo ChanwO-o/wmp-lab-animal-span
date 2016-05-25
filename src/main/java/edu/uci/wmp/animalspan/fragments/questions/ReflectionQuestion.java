@@ -88,7 +88,7 @@ public class ReflectionQuestion extends Fragment {
 
     public void fillFaces() {
         for (int i = 1; i <= 5; i++)
-            llFaces.addView(createFace(StimuliManager.FACE_LABEL + i));
+            llFaces.addView(createFace(i));
     }
 
     /**
@@ -101,15 +101,15 @@ public class ReflectionQuestion extends Fragment {
         hiddenViews[3] = vLine;
     }
 
-    public ImageView createFace(final int labeledFilename) {
+    public ImageView createFace(final int id) {
         final ImageView ivFace = new ImageView(getActivity());
-        setFace(ivFace, labeledFilename);
+        setFace(ivFace, id);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(FACESIZE, FACESIZE);
         int margin = (int) LevelManager.getInstance().gapbetweenimages * 10; // margin between each image in grid
         layoutParams.setMargins(margin, margin, margin, margin);
         ivFace.setLayoutParams(layoutParams);
-        ivFace.setTag(labeledFilename); // set tag for click listener
+        ivFace.setTag(id); // set tag for click listener
 
         ivFace.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +117,7 @@ public class ReflectionQuestion extends Fragment {
                 if (!responded) {
                     responseStartTime = SystemClock.uptimeMillis();
 
-                    int greenLabel = labeledFilename + 10 * labeledFilename % 100; // set face green
+                    int greenLabel = id + 10 * id % 100; // set face green
                     Log.wtf("gl", "" + greenLabel);
                     setFace((ImageView) v, greenLabel);
 
@@ -125,7 +125,7 @@ public class ReflectionQuestion extends Fragment {
                     CSVWriter.getInstance().writeQuestionResponse();
 
                     responded = true;
-                    faceClickedID = (int) v.getTag() - StimuliManager.FACE_LABEL - 1;
+                    faceClickedID = (int) v.getTag() - 1;// - StimuliManager.FACE_LABEL - 1;
                     handler.postDelayed(response, 0);
                 }
             }
@@ -133,11 +133,38 @@ public class ReflectionQuestion extends Fragment {
         return ivFace;
     }
 
-    private void setFace(ImageView ivFace, int labeledFilename) {
-        try {
-            ivFace.setImageBitmap(StimuliManager.getStimuli(getActivity(), labeledFilename));
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void setFace(ImageView ivFace, int id) {
+        switch (id) {
+            case 1:
+                ivFace.setImageResource(R.drawable.face1);
+                break;
+            case 2:
+                ivFace.setImageResource(R.drawable.face2);
+                break;
+            case 3:
+                ivFace.setImageResource(R.drawable.face3);
+                break;
+            case 4:
+                ivFace.setImageResource(R.drawable.face4);
+                break;
+            case 5:
+                ivFace.setImageResource(R.drawable.face5);
+                break;
+            case 11:
+                ivFace.setImageResource(R.drawable.face1_g);
+                break;
+            case 22:
+                ivFace.setImageResource(R.drawable.face2_g);
+                break;
+            case 33:
+                ivFace.setImageResource(R.drawable.face3_g);
+                break;
+            case 44:
+                ivFace.setImageResource(R.drawable.face4_g);
+                break;
+            case 55:
+                ivFace.setImageResource(R.drawable.face5_g);
+                break;
         }
     }
 

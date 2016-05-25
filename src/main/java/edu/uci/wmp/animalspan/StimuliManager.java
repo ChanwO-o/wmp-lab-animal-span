@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -34,7 +36,6 @@ public class StimuliManager {
     public static final int SEMANTIC_LABEL = 200;
     public static final int PERCEPTUAL_LABEL = 300;
     public static final int DISTRACTOR_LABEL = 0;       // changed from 400 to 0, watch out for future unexpected errors
-    public static final int FACE_LABEL = 900;
     public static final int MIN_CHOICE_STIMULI_SIZE = 100;
     public static final int CHOICE_STIMULI_SIZE_MULTIPLIER = 25;
 
@@ -50,34 +51,20 @@ public class StimuliManager {
         return BitmapFactory.decodeStream(is);
     }
 
-    /**
-     * @param labeledFilename folder label in first digit using static int from StimuliManager.java + filename
-     */
-    public static Bitmap getStimuli(Context context, int labeledFilename) throws IOException {
-        int folder = labeledFilename  - (labeledFilename % 100);
-        int filename = labeledFilename % 100;
-//        Log.i("Folder", "" + folder);
-//        Log.i("Filename", "" + filename);
+//    /**
+//     * @param labeledFilename folder label in first digit using static int from StimuliManager.java + filename
+//     */
+//    public static Bitmap getStimuli(Context context, int labeledFilename) throws IOException {
+//        AssetManager assetManager = context.getAssets();
+//        InputStream is = assetManager.open(getImagePath(labeledFilename));
+//        return BitmapFactory.decodeStream(is);
+//    }
 
-        AssetManager assetManager = context.getAssets();
-        InputStream is = null;
-        switch (folder) {
-            case TARGET_LABEL:
-                is = assetManager.open(getImagePath(labeledFilename)); // @TODO: switch statement is meaningless
-                break;
-            case SEMANTIC_LABEL:
-                is = assetManager.open(getImagePath(labeledFilename));
-                break;
-            case PERCEPTUAL_LABEL:
-                is = assetManager.open(getImagePath(labeledFilename));
-                break;
-            case DISTRACTOR_LABEL:
-                is = assetManager.open(getImagePath(labeledFilename));
-                break;
-            case FACE_LABEL:
-                is = assetManager.open(getImagePath(labeledFilename));
-        }
-        return BitmapFactory.decodeStream(is);
+    public static Bitmap getStimuli(int labeledFileName) throws FileNotFoundException {
+        String path = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + getImagePath(labeledFileName);
+        File imageFile = new File(path);
+        InputStream in = new FileInputStream(imageFile);
+        return BitmapFactory.decodeStream(in);
     }
 
     public static Bitmap getFeedbackAsset(Context context, int result) throws IOException {
@@ -99,15 +86,13 @@ public class StimuliManager {
         Log.d("getImagePath()", "folderLabel " + folderLabel);
         switch (folderLabel) {
             case TARGET_LABEL:
-                return "stimuli/" + TARGET + labeledFileName % 100 + ".png";
+                return "/wmplab/stimuli/" + TARGET + labeledFileName % 100 + ".png";
             case SEMANTIC_LABEL:
-                return "stimuli/" + SEMANTIC + labeledFileName % 100 + ".png";
+                return "/wmplab/stimuli/" + SEMANTIC + labeledFileName % 100 + ".png";
             case PERCEPTUAL_LABEL:
-                return "stimuli/" + PERCEPTUAL + labeledFileName % 100 + ".png";
+                return "/wmplab/stimuli/" + PERCEPTUAL + labeledFileName % 100 + ".png";
             case DISTRACTOR_LABEL:
-                return "stimuli/" + DISTRACTOR + labeledFileName % 100 + ".png";
-            case FACE_LABEL:
-                return "stimuli/" + MISC + FACE + labeledFileName % 100 + ".png";
+                return "/wmplab/stimuli/" + DISTRACTOR + labeledFileName % 100 + ".png";
             default:
                 return "error";
         }
@@ -119,18 +104,4 @@ public class StimuliManager {
             result.append(t).append(" ");
         return result.toString();
     }
-
-//    public static <T> String listToString(List<T> l) {
-//        StringBuilder result = new StringBuilder();
-//        for (int i = 0; i < l.size(); i++)
-//            result.append(l.get(i)).append(" ");
-//        return result.toString();
-//    }
-//
-//    public static String arrayToString(int[] a) {
-//        String result = "";
-//        for (int i = 0; i < a.length; i++)
-//            result += a[i] + " ";
-//        return result;
-//    }
 }

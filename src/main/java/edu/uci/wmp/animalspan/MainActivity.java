@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.uci.wmp.animalspan.R;
@@ -24,9 +25,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setDisplaySettings();
         initializeManagers();
-        checkDirectories();
+        Checks.getInstance().runAllChecks();
 
 //        LevelManager.getInstance().loadLevel(LevelManager.getInstance().startlevel);
 
@@ -54,6 +57,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        // save level to file
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Util.dimSystemBar(this);
+    }
+
+    @Override
     public void onBackPressed() {
 //        if (LevelManager.getInstance().testStarted && !LevelManager.getInstance().abortallowed) // not using abortallowed variable any longer
 //            return; // don't allow user to exit
@@ -64,8 +79,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setDisplaySettings() {
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        Util.dimSystemBar(this);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
     }
 
     public void initializeManagers() {
@@ -76,21 +90,5 @@ public class MainActivity extends AppCompatActivity {
         // StimuliManager.getInstance().setContext(this) TODO: implement instance in SM
         Checks.getInstance().setContext(this);
         CSVWriter.getInstance().setContext(this);
-    }
-
-    /**
-     * Create and populate asset directories
-     */
-    public void checkDirectories() {
-        try {
-            Checks.getInstance().checkLevelsDirectory();
-            Checks.getInstance().checkStimuliDirectory();
-        }
-        catch (Checks.InvalidLevelFilesException e) {
-            Toast.makeText(this, "Error checking level files", Toast.LENGTH_SHORT).show();
-        }
-        catch (Checks.InvalidStimuliFilesException e) {
-            Toast.makeText(this, "Error checking stimuli files", Toast.LENGTH_SHORT).show();
-        }
     }
 }

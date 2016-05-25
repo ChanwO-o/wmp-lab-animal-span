@@ -82,6 +82,9 @@ public class EffortQuestion extends Fragment {
         ivEffortSecond = (ImageView) view.findViewById(R.id.ivEffortSecond);
         ivEffortThird = (ImageView) view.findViewById(R.id.ivEffortThird);
 
+        seekBar.bringToFront();
+        seekBar.invalidate();
+
         // scale images
         int imageWidth = Double.valueOf(LevelManager.getInstance().screen_height * IMAGE_WIDTH_PERCENTAGE).intValue();
         int imageHeight = Double.valueOf(LevelManager.getInstance().screen_height * IMAGE_HEIGHT_PERCENTAGE).intValue();
@@ -131,7 +134,7 @@ public class EffortQuestion extends Fragment {
 
         for (int i = 0; i < SECONDQUESTIONLABELS.length; i++)
             ((TextView) rlSeekBarLabels.getChildAt(i)).setText(SECONDQUESTIONLABELS[i]);
-        rlSeekBarLabels.getChildAt(1).setVisibility(View.GONE); // hide seekbar stop on second label (drawableTop)
+//        rlSeekBarLabels.getChildAt(1).setVisibility(View.GONE); // hide seekbar stop on second label (drawableTop)
         seekBar.setProgress(50);
         questionNum++;
         responded = false;
