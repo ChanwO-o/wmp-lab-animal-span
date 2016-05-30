@@ -36,7 +36,7 @@ public class Settings extends Fragment {
     Switch swTrainingMode;
     TextView tvRTPrompt, tvRTUnit;
     Button bPerformChecks;
-    ImageView ivBack;
+    Button bBack;
 
     public Settings() {
         // Required empty public constructor
@@ -61,7 +61,7 @@ public class Settings extends Fragment {
         etRoundsTime = (EditText) view.findViewById(R.id.etRoundsTime);
         tvRTUnit = (TextView) view.findViewById(R.id.tvRTUnit);
         bPerformChecks = (Button) view.findViewById(R.id.bPerformChecks);
-        ivBack = (ImageView) view.findViewById(R.id.ivSettingsBack);
+        bBack = (Button) view.findViewById(R.id.bSettingsBack);
 
         // initial setup
         swQuestions.setTextOn("On");
@@ -98,7 +98,14 @@ public class Settings extends Fragment {
         bPerformChecks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Checks.getInstance().runAllChecks();
+                if (Checks.getInstance().runAllChecks()) {
+                    int imgResource = R.drawable.checkmark;
+                    bPerformChecks.setCompoundDrawablesWithIntrinsicBounds(0, 0, imgResource, 0);
+                }
+                else {
+                    int imgResource = R.drawable.crossmark;
+                    bPerformChecks.setCompoundDrawablesWithIntrinsicBounds(0, 0, imgResource, 0);
+                }
             }
         });
 
@@ -106,7 +113,7 @@ public class Settings extends Fragment {
          * Check valid inputs of subject and session numbers
          * Update these values in LevelManager, then return back to main screen
          */
-        ivBack.setOnClickListener(new View.OnClickListener() {
+        bBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {

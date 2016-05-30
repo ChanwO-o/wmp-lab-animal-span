@@ -49,16 +49,18 @@ public class SessionResults extends Fragment {
 //        tvFirstPartReactionTime.setText(StimuliManager.listToString(LevelManager.getInstance().rtfirstpart));
 //        tvFirstPartAccuracy.setText(StimuliManager.listToString(LevelManager.getInstance().accuracyfirstpart));
 
-        String result = "Great job! You earned " + 5 + "coins!";
+        int score = LevelManager.getInstance().recalledImages * LevelManager.getInstance().level;
+        String result = "Great job!\nYou earned " + score + " points!";
         tvResults.setText(result);
 
         ivBackToMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (LevelManager.getInstance().questions)
-                    Util.loadFragment(getActivity(), new ReflectionQuestion());
-                else
-                    Util.loadFragment(getActivity(), new MainActivityFragment());
+//                if (LevelManager.getInstance().questions)
+//                    Util.loadFragment(getActivity(), new ReflectionQuestion());
+//                else
+//                    Util.loadFragment(getActivity(), new MainActivityFragment());
+                Util.loadFragment(getActivity(), new MainActivityFragment());
             }
         });
         return view;

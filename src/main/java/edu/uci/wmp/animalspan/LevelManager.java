@@ -53,6 +53,7 @@ public class LevelManager implements Serializable {
     public boolean testStarted = false;
     public long sessionStartMills = 0;                      // timer starting at beginning of session, used when mode = "time"
     public boolean questions = true;
+    public int recalledImages = 0;                          // records number of correct answers
 
     public List<Integer> stimulisequence;              // defines what stimuli has to be shown
     public List<Integer> distincttargets;              // distinct targets that the stimuli sequence is chosen from, use this for displaying image grid in Stage2
@@ -170,6 +171,7 @@ public class LevelManager implements Serializable {
         rtsecondpart = new ArrayList<>();
         accuracyfirstpart = new ArrayList<>();
         accuracysecondpart = new ArrayList<>();
+        recalledImages = 0; // reset score
     }
 
     /**

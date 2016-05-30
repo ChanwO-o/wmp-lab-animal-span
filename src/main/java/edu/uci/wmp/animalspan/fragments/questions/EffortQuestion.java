@@ -21,6 +21,7 @@ import edu.uci.wmp.animalspan.CSVWriter;
 import edu.uci.wmp.animalspan.LevelManager;
 import edu.uci.wmp.animalspan.Util;
 import edu.uci.wmp.animalspan.fragments.MainActivityFragment;
+import edu.uci.wmp.animalspan.fragments.SessionResults;
 
 public class EffortQuestion extends Fragment {
 
@@ -35,8 +36,8 @@ public class EffortQuestion extends Fragment {
     ImageView ivNext;
     View[] hiddenViews;
 
-    final double IMAGE_WIDTH_PERCENTAGE = 0.50;
-    final double IMAGE_HEIGHT_PERCENTAGE = 0.50;
+    final double IMAGE_WIDTH_PERCENTAGE = 0.40;
+    final double IMAGE_HEIGHT_PERCENTAGE = 0.40;
 
     // second question setup
     final String SECONDQUESTION = "How hard did you try to do your best at the task?";
@@ -114,7 +115,7 @@ public class EffortQuestion extends Fragment {
                         setUpNextQuestion();
                     }
                     else
-                        Util.loadFragment(getActivity(), new MainActivityFragment());
+                        Util.loadFragment(getActivity(), new SessionResults());
                 }
 
             }
@@ -184,7 +185,7 @@ public class EffortQuestion extends Fragment {
                 RelativeLayout.LayoutParams newRlLayoutParams= new RelativeLayout.LayoutParams(newRlWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
                 newRlLayoutParams.addRule(RelativeLayout.ALIGN_LEFT, seekBar.getId());
                 newRlLayoutParams.addRule(RelativeLayout.BELOW, tvQuestion.getId());
-                newRlLayoutParams.topMargin = (int) getResources().getDimension(R.dimen.gap_huge);
+                newRlLayoutParams.topMargin = (int) getResources().getDimension(R.dimen.gap_larger);
                 newRlLayoutParams.leftMargin = (int) getResources().getDimension(R.dimen.seekbar_padding_width) - v0.getWidth() / 2;
                 rlSeekBarLabels.setLayoutParams(newRlLayoutParams);
             }

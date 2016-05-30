@@ -183,8 +183,10 @@ public class Stage1 extends Fragment implements View.OnClickListener {
         LevelManager.getInstance().responsesfirstpart.add(orientation); // append response to responses list
         LevelManager.getInstance().rtfirstpart.add(responseTime); // append reaction time
 
-        if (orientation == LevelManager.getInstance().presentationstyle.get(LevelManager.getInstance().currentStimuliIndex)) // append accuracy
+        if (orientation == LevelManager.getInstance().presentationstyle.get(LevelManager.getInstance().currentStimuliIndex)) { // append accuracy
             LevelManager.getInstance().accuracyfirstpart.add(StimuliManager.CORRECT);
+            LevelManager.getInstance().recalledImages++;
+        }
         else
             LevelManager.getInstance().accuracyfirstpart.add(StimuliManager.INCORRECT);
 

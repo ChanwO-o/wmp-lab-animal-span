@@ -36,16 +36,19 @@ public class Checks {
     /**
      * Create and populate asset directories
      */
-    public void runAllChecks() {
+    public boolean runAllChecks() {
         try {
             Checks.getInstance().checkLevelsDirectory();
             Checks.getInstance().checkStimuliDirectory();
+            return true;
         }
         catch (Checks.InvalidLevelFilesException e) {
             Toast.makeText(getInstance().context, "Error checking level files", Toast.LENGTH_SHORT).show();
+            return false;
         }
         catch (Checks.InvalidStimuliFilesException e) {
             Toast.makeText(getInstance().context, "Error checking stimuli files", Toast.LENGTH_SHORT).show();
+            return false;
         }
     }
 

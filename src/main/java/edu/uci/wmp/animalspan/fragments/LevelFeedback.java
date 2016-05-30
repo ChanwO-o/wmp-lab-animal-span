@@ -19,6 +19,7 @@ import edu.uci.wmp.animalspan.LevelManager;
 import com.uci.wmp.animalspan.R;
 import edu.uci.wmp.animalspan.StimuliManager;
 import edu.uci.wmp.animalspan.Util;
+import edu.uci.wmp.animalspan.fragments.questions.ReflectionQuestion;
 
 import java.io.IOException;
 
@@ -151,7 +152,11 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
     }
 
     public void viewResults() {
-        Util.loadFragment(getActivity(), new SessionResults());
+//        Util.loadFragment(getActivity(), new SessionResults());
+        if (LevelManager.getInstance().questions)
+            Util.loadFragment(getActivity(), new ReflectionQuestion());
+        else
+            Util.loadFragment(getActivity(), new SessionResults());
     }
 
     @Override

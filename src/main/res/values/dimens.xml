@@ -15,6 +15,7 @@
     <dimen name="gap_medium">25dp</dimen>
     <dimen name="gap_mediumlarge">40dp</dimen>
     <dimen name="gap_large">50dp</dimen>
+    <dimen name="gap_larger">100dp</dimen>
     <dimen name="gap_huge">160dp</dimen>
 
     <dimen name="seekbar_width">900dp</dimen>

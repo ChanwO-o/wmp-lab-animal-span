@@ -7,10 +7,10 @@ part
 stimulus
 stimulusclass(0=distractor;1=target;2=perceptual lure;3=semantic lure)
 presentation style (0=normally;1=upside-down)
-acc
-acc1
-acc2
-rt
+accuracyoverall
+accuracyfirstpart
+accuracysecondpart
+reactiontime
 timestamp
 taskresolution
 trainingmode

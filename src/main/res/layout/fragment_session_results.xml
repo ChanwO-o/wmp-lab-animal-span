@@ -12,8 +12,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="Great job! You earned x coins!"
+        android:text="Great job! You earned x points!"
         android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="@dimen/font_size_medium"
         android:textColor="@color/white" />
 
     <ImageView
