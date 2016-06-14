@@ -151,7 +151,13 @@
             android:id="@+id/bPerformChecks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Check " />
+            android:text="Check external file structure " />
+
+        <Button
+            android:id="@+id/bPopulate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Populate" />
 
 
     </LinearLayout>

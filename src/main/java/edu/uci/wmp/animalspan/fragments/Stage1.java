@@ -98,7 +98,7 @@ public class Stage1 extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_stage1, container, false);
 
-//        TextView tvStimuliList = (TextView) view.findViewById(R.id.tvStimuliListStage1);
+        TextView tvStimuliList = (TextView) view.findViewById(R.id.tvStimuliListStage1);
         tvTimer = (TextView) view.findViewById(R.id.tvStage1Timer);
         ivStage1Stimuli = (ImageView) view.findViewById(R.id.ivStage1Stimuli);
         ImageView ivUpdoswn = (ImageView) view.findViewById(R.id.ivUpdown);
@@ -114,7 +114,7 @@ public class Stage1 extends Fragment implements View.OnClickListener {
         ivUpdoswn.setOnClickListener(this);
         ivRightup.setOnClickListener(this);
 
-//        tvStimuliList.setText(StimuliManager.listToString(LevelManager.getInstance().stimulisequence));
+        tvStimuliList.setText(StimuliManager.iterableToString(LevelManager.getInstance().stimulisequence));
         stimuliStartTime = SystemClock.uptimeMillis();
 
         handler.postDelayed(response, 0); // start_old loop
@@ -183,10 +183,8 @@ public class Stage1 extends Fragment implements View.OnClickListener {
         LevelManager.getInstance().responsesfirstpart.add(orientation); // append response to responses list
         LevelManager.getInstance().rtfirstpart.add(responseTime); // append reaction time
 
-        if (orientation == LevelManager.getInstance().presentationstyle.get(LevelManager.getInstance().currentStimuliIndex)) { // append accuracy
+        if (orientation == LevelManager.getInstance().presentationstyle.get(LevelManager.getInstance().currentStimuliIndex)) // append accuracy
             LevelManager.getInstance().accuracyfirstpart.add(StimuliManager.CORRECT);
-            LevelManager.getInstance().recalledImages++;
-        }
         else
             LevelManager.getInstance().accuracyfirstpart.add(StimuliManager.INCORRECT);
 

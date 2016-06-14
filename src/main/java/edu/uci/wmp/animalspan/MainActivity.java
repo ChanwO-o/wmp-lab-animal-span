@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         setDisplaySettings();
         initializeManagers();
-        Checks.getInstance().runAllChecks();
+//        Checks.getInstance().runAllChecks(); // should perform this check when user starts game?
 
 //        LevelManager.getInstance().loadLevel(LevelManager.getInstance().startlevel);
 

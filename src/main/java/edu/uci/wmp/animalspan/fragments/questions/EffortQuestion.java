@@ -83,8 +83,10 @@ public class EffortQuestion extends Fragment {
         ivEffortSecond = (ImageView) view.findViewById(R.id.ivEffortSecond);
         ivEffortThird = (ImageView) view.findViewById(R.id.ivEffortThird);
 
-        seekBar.bringToFront();
-        seekBar.invalidate();
+//        seekBar.bringToFront();
+//        seekBar.invalidate(); // for setting seekbar above done button in case they overlap
+        seekBar.getThumb().setAlpha(90); // set transparency value 0-255
+
 
         // scale images
         int imageWidth = Double.valueOf(LevelManager.getInstance().screen_height * IMAGE_WIDTH_PERCENTAGE).intValue();
@@ -117,7 +119,11 @@ public class EffortQuestion extends Fragment {
                     else
                         Util.loadFragment(getActivity(), new SessionResults());
                 }
-
+//                RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//                buttonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, ivNext.getId());
+//                buttonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, ivNext.getId());
+//                buttonLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, ivNext.getId());
+//                ivNext.setLayoutParams(buttonLayoutParams); // test code for bringing button to bottom of screen, failed
             }
         });
 
@@ -129,7 +135,6 @@ public class EffortQuestion extends Fragment {
      */
     public void setUpNextQuestion() {
         tvQuestion.setText(SECONDQUESTION);
-
         ivEffortFirst.setImageResource(R.drawable.tryhard1);
         ivEffortThird.setImageResource(R.drawable.tryhard2);
 

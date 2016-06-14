@@ -325,7 +325,6 @@ public class LevelManager implements Serializable {
             distincttargets.add(labeledDistinctTarget);
             temp.remove(randomIndex); // remove to prevent duplicates
         }
-//        Log.d("distinct targets", StimuliManager.listToString(distincttargets));
 
         // choosing sequence from distinct targets
         for (int i = 0; i < setsize; i++) {

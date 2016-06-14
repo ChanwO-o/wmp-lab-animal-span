@@ -7,15 +7,28 @@
     tools:context="edu.uci.wmp.animalspan.fragments.SessionResults">
 
     <TextView
-        android:id="@+id/tvResuts"
+        android:id="@+id/tvGreatJob"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="Great job! You earned x points!"
+        android:text="Great job!"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="@dimen/font_size_medium"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_size_mediumlarge"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvResuts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvGreatJob"
+        android:layout_centerHorizontal="true"
+        android:text="You earned x points!"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_size_mediumlarge"
+        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/ivBackToMain"
@@ -27,43 +40,4 @@
         android:contentDescription="@string/desc"
         android:src="@drawable/done" />
 
-    <!--<TextView-->
-    <!--android:id="@+id/tvLastLevelReached"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:textColor="@color/white"-->
-    <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
-    <!--android:text="Last level:" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/tvFirstPartResponses"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:textColor="@color/white"-->
-    <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
-    <!--android:text="First part responses" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/tvSecondPartResponses"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:textColor="@color/white"-->
-    <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
-    <!--android:text="Second part responses" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/tvFirstPartReactionTime"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:textColor="@color/white"-->
-    <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
-    <!--android:text="First part reaction time" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/tvFirstPartAccuracy"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:textColor="@color/white"-->
-    <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
-    <!--android:text="First part accuracy" />-->
 </RelativeLayout>

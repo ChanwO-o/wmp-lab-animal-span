@@ -4,12 +4,12 @@
     android:layout_height="match_parent"
     tools:context="edu.uci.wmp.animalspan.fragments.Stage1">
 
-    <!--<TextView-->
-        <!--android:id="@+id/tvStimuliListStage1"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Stimuli list"-->
-        <!--android:textColor="@color/white" />-->
+    <TextView
+        android:id="@+id/tvStimuliListStage1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stimuli list"
+        android:textColor="@color/white" />
 
     <!--<TextView-->
     <!--android:id="@+id/tvSlowResponsePrompt"-->

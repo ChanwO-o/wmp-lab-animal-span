@@ -36,6 +36,7 @@ public class Settings extends Fragment {
     Switch swTrainingMode;
     TextView tvRTPrompt, tvRTUnit;
     Button bPerformChecks;
+    Button bPopulate;
     Button bBack;
 
     public Settings() {
@@ -61,6 +62,7 @@ public class Settings extends Fragment {
         etRoundsTime = (EditText) view.findViewById(R.id.etRoundsTime);
         tvRTUnit = (TextView) view.findViewById(R.id.tvRTUnit);
         bPerformChecks = (Button) view.findViewById(R.id.bPerformChecks);
+        bPopulate = (Button) view.findViewById(R.id.bPopulate);
         bBack = (Button) view.findViewById(R.id.bSettingsBack);
 
         // initial setup
@@ -106,6 +108,13 @@ public class Settings extends Fragment {
                     int imgResource = R.drawable.crossmark;
                     bPerformChecks.setCompoundDrawablesWithIntrinsicBounds(0, 0, imgResource, 0);
                 }
+            }
+        });
+
+        bPopulate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Checks.getInstance().populateAssets();
             }
         });
 

@@ -155,8 +155,10 @@ public class Stage2 extends Fragment {
 
                     // add accuracy: checks if answers in secondpartsequence corespond to correctstimulisequence (which includes Targets only, ignoring distractors etc.)
                     int cur = LevelManager.getInstance().currentStimuliIndex;
-                    if (LevelManager.getInstance().correctstimulisequence.get(cur).equals(LevelManager.getInstance().secondpartsequence.get(cur)))
+                    if (LevelManager.getInstance().correctstimulisequence.get(cur).equals(LevelManager.getInstance().secondpartsequence.get(cur))) {
                         LevelManager.getInstance().accuracysecondpart.add(StimuliManager.CORRECT);
+                        LevelManager.getInstance().recalledImages++;
+                    }
                     else
                         LevelManager.getInstance().accuracysecondpart.add(StimuliManager.INCORRECT);
 

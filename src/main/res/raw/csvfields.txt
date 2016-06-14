@@ -1,4 +1,4 @@
-experiment
+version
 subject
 session
 level
@@ -16,8 +16,8 @@ taskresolution
 trainingmode
 sessionLength
 numberofrounds
-start setsize
-start distractorsize
+setsize
+distractorsize
 numberofdistincttargets
 numberofperceptuallures
 numberofsemanticlures
