@@ -36,6 +36,7 @@ public class SessionResults extends Fragment {
         TextView tvResults = (TextView) view.findViewById(R.id.tvResuts);
         ImageView ivBackToMain = (ImageView) view.findViewById(R.id.ivBackToMain);
 
+        LevelManager.getInstance().saveLevelToFile(); // save progress
         int score = LevelManager.getInstance().recalledImages * LevelManager.getInstance().level;
         Toast.makeText(getActivity(), LevelManager.getInstance().recalledImages + " x " + LevelManager.getInstance().level, Toast.LENGTH_SHORT).show();
         String result = "You earned " + score + " points!";

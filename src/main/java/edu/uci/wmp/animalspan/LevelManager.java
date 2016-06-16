@@ -3,6 +3,7 @@ package edu.uci.wmp.animalspan;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Point;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
@@ -131,15 +132,15 @@ public class LevelManager implements Serializable {
         reset();
     }
 
-    public LevelManager(Context context) {
-        setContext(context);
-        setScreenDimensions();
-        random = new Random();
-        level = startlevel;
-        trial = 0;
-        part = STAGE0;
-        reset();
-    }
+//    public LevelManager(Context context) {
+//        setContext(context);
+//        setScreenDimensions();
+//        random = new Random();
+//        level = startlevel;
+//        trial = 0;
+//        part = STAGE0;
+//        startSession();
+//    }
 
     /**
      * Set pixel values for width & height.
@@ -171,18 +172,47 @@ public class LevelManager implements Serializable {
         rtsecondpart = new ArrayList<>();
         accuracyfirstpart = new ArrayList<>();
         accuracysecondpart = new ArrayList<>();
-        recalledImages = 0; // reset score
     }
 
     /**
-     * Setup LevelManager for new session (initialize lists, variables, etc.)
+     * Setup LevelManager for new session
      */
     public void startSession() {
-        // @TODO: implement so that only this method needs to be called at the beginning of a session, and clean up other LevelManager crap from other classes
+        stimulisequence.clear();
+        distincttargets.clear();
+        distinctdistractors.clear();
+        correctstimulisequence.clear();
+        presentationstyle.clear();
+        secondpartsequence.clear();
+        responsesfirstpart.clear();
+        rtfirstpart.clear();
+        rtsecondpart.clear();
+        accuracyfirstpart.clear();
+        accuracysecondpart.clear();
+        loadSavedLevel(); // sets level variable if there is a saved instance
+        sessionStartMills = SystemClock.uptimeMillis(); // record session starting time (used for trainingmode = "time")
+        trial = 0;
+        testStarted = true;
+        recalledImages = 0; // reset score
+        CSVWriter.getInstance().createCsvFile();
     }
 
+    /**
+     * Called at the beginning of a trial
+     */
     public void startTrial() {
-        // @TODO: implement so that only this method needs to be called at the beginning of a session, and clean up other LevelManager crap from other classes
+        stimulisequence.clear();
+        distincttargets.clear();
+        distinctdistractors.clear();
+        correctstimulisequence.clear();
+        presentationstyle.clear();
+        secondpartsequence.clear();
+        responsesfirstpart.clear();
+        rtfirstpart.clear();
+        rtsecondpart.clear();
+        accuracyfirstpart.clear();
+        accuracysecondpart.clear();
+        loadLevel(level);
     }
 
     public void loadLevel(int level) {
@@ -216,21 +246,24 @@ public class LevelManager implements Serializable {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(SAVE_LEVEL_FILENAME));
             String savedLevel = reader.readLine();
-            Log.d("saved level loaded", savedLevel);
+            Log.i("saved level loaded", savedLevel);
             getInstance().level = Integer.valueOf(savedLevel);
         } catch (IOException e) {
-            e.printStackTrace();
-            Log.d("no save file found", "setting to startlevel");
+            Log.i("no save file found", "setting to startlevel");
             getInstance().level = startlevel;
+            e.printStackTrace();
         }
 
     }
 
     public void saveLevelToFile() {
         try {
-            String filePath = context.getFilesDir().getPath() + SAVE_LEVEL_FILENAME;
-            File file = new File(filePath);
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            File root = android.os.Environment.getExternalStorageDirectory();
+            File saveFile = new File (root.getAbsolutePath() + SAVE_LEVEL_FILENAME);
+//            String filePath = context.getFilesDir().getPath() + SAVE_LEVEL_FILENAME;
+//            File file = new File(filePath);
+            FileWriter fw = new FileWriter(saveFile, false);
+            BufferedWriter writer = new BufferedWriter(fw);
             writer.write(Integer.toString(getInstance().level));
             writer.newLine();
             writer.close();

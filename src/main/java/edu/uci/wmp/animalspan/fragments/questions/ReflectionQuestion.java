@@ -86,6 +86,12 @@ public class ReflectionQuestion extends Fragment {
         return view;
     }
 
+    @Override
+    public void onPause() {
+        handler.removeCallbacks(response);
+        super.onPause();
+    }
+
     public void fillFaces() {
         for (int i = 1; i <= 5; i++)
             llFaces.addView(createFace(i));
@@ -118,7 +124,6 @@ public class ReflectionQuestion extends Fragment {
                     responseStartTime = SystemClock.uptimeMillis();
 
                     int greenLabel = id + 10 * id % 100; // set face green
-                    Log.wtf("gl", "" + greenLabel);
                     setFace((ImageView) v, greenLabel);
 
                     CSVWriter.getInstance().collectQuestionResponse(tvQuestion.getText().toString(), (int) v.getTag() % 100);

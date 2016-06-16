@@ -8,24 +8,27 @@
         android:id="@+id/tvStimuliListStage2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Stimuli answer here" />
+        android:text="Stimuli answer here"
+        android:textColor="@color/white" />
 
     <LinearLayout
         android:id="@+id/responselist"
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="50dp"
-        android:layout_gravity="center_horizontal|top">
+        android:layout_gravity="center_horizontal|top"
+        android:orientation="horizontal"
+        android:paddingTop="50dp">
+
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/stimulichoices"
-        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="50dp"
-        android:layout_gravity="center_horizontal|bottom">
+        android:layout_gravity="center_horizontal|bottom"
+        android:orientation="vertical"
+        android:paddingBottom="50dp">
+
     </LinearLayout>
 
 </FrameLayout>

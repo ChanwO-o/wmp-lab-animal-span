@@ -158,6 +158,7 @@ public class Stage2 extends Fragment {
                     if (LevelManager.getInstance().correctstimulisequence.get(cur).equals(LevelManager.getInstance().secondpartsequence.get(cur))) {
                         LevelManager.getInstance().accuracysecondpart.add(StimuliManager.CORRECT);
                         LevelManager.getInstance().recalledImages++;
+//                        Log.d("CORRECT", "recalled is " + LevelManager.getInstance().recalledImages);
                     }
                     else
                         LevelManager.getInstance().accuracysecondpart.add(StimuliManager.INCORRECT);

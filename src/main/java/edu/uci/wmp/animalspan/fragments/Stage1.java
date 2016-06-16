@@ -125,7 +125,7 @@ public class Stage1 extends Fragment implements View.OnClickListener {
 
     @Override
     public void onPause() {
-        Log.d("Stage1", "onPause()");
+//        Log.d("Stage1", "onPause()");
         handler.removeCallbacks(response);
         super.onPause();
     }

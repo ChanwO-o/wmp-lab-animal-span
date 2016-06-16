@@ -1,8 +1,10 @@
 package edu.uci.wmp.animalspan;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 
+import com.uci.wmp.animalspan.BuildConfig;
 import com.uci.wmp.animalspan.R;
 
 import java.io.BufferedReader;
@@ -54,7 +56,7 @@ public class CSVWriter {
         File root = android.os.Environment.getExternalStorageDirectory();
         File csvFolder = new File (root.getAbsolutePath() + FOLDERPATH);
         if (!csvFolder.exists())
-            Log.d("csvFolder", "folder created: " + csvFolder.mkdirs());
+            Log.i("csvFolder", "folder created: " + csvFolder.mkdirs());
 
         final String DATE = new SimpleDateFormat(FORMAT_DATE, Locale.US).format(Calendar.getInstance().getTime());
         final String TIME = new SimpleDateFormat(FORMAT_TIME, Locale.US).format(Calendar.getInstance().getTime());
@@ -127,7 +129,8 @@ public class CSVWriter {
         int curInd = LevelManager.getInstance().currentStimuliIndex;
         StringBuilder data = new StringBuilder();
 
-        data.append("CST").append(COMMA);                                                                               // experiment
+        data.append(Build.VERSION.RELEASE).append(COMMA);                                                                             // OS
+        data.append(BuildConfig.VERSION_NAME).append(COMMA);                                                                          // version name
         data.append(LevelManager.getInstance().subject).append(COMMA);
         data.append(LevelManager.getInstance().session).append(COMMA);
         data.append(LevelManager.getInstance().level).append(COMMA);

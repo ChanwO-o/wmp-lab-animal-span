@@ -1,6 +1,7 @@
 package edu.uci.wmp.animalspan;
 
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -29,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
         setDisplaySettings();
         initializeManagers();
-//        Checks.getInstance().runAllChecks(); // should perform this check when user starts game?
 
 //        LevelManager.getInstance().loadLevel(LevelManager.getInstance().startlevel);
 
@@ -65,7 +65,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Util.dimSystemBar(this);
+        if (Build.VERSION.RELEASE.equals("4.4.2"))
+            Util.dimSystemBar(this);
     }
 
     @Override
@@ -85,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
     public void initializeManagers() {
         LevelManager.getInstance().reset();
         LevelManager.getInstance().setContext(this);
-        LevelManager.getInstance().loadSavedLevel(); // sets level variable if there is a saved instance
         LevelManager.getInstance().setScreenDimensions();
         // StimuliManager.getInstance().setContext(this) TODO: implement instance in SM
         Checks.getInstance().setContext(this);

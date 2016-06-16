@@ -48,10 +48,8 @@ public class GetReady extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (LevelManager.getInstance() != null) {
-            LevelManager.getInstance().reset();
-            LevelManager.getInstance().loadLevel(LevelManager.getInstance().level);
+            LevelManager.getInstance().startTrial();
             LevelManager.getInstance().logVariables();
-            LevelManager.getInstance().testStarted = true; // starting test; no back button allowed if abortallowed == true
         }
         else
             Log.e("Stage 1 lm", "level manager is null!");
@@ -62,7 +60,7 @@ public class GetReady extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_get_ready, container, false);
         TextView tvGetReady = (TextView) view.findViewById(R.id.tvGetReady);
-//        TextView tvTrialsLeft = (TextView) view.findViewById(R.id.tvTrialsLeft);
+        TextView tvTrialsLeft = (TextView) view.findViewById(R.id.tvTrialsLeft);
         ivReadyNext = (ImageView) view.findViewById(R.id.ivReadyGo);
 
         String readyPrompt = String.format("Get ready for level %d!", LevelManager.getInstance().level);
@@ -74,8 +72,10 @@ public class GetReady extends Fragment implements View.OnClickListener {
         LevelManager.getInstance().trial++; // one trial completed
         Log.wtf("numberoftrials", "" + LevelManager.getInstance().numberoftrials);
         Log.wtf("current trial", "" + LevelManager.getInstance().trial);
-        String trials = "Trials left: " + (LevelManager.getInstance().numberoftrials - LevelManager.getInstance().trial);
-//        tvTrialsLeft.setText(trials);
+        String trials = "numberoftrials: " + LevelManager.getInstance().numberoftrials +
+                        "\ncurrent trial: " + LevelManager.getInstance().trial +
+                        "\nTrials left: " + (LevelManager.getInstance().numberoftrials - LevelManager.getInstance().trial);
+        tvTrialsLeft.setText(trials);
 
         handler.postDelayed(showButton, 0);
 

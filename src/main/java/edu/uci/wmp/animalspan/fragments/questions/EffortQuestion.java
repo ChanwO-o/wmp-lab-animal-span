@@ -85,7 +85,7 @@ public class EffortQuestion extends Fragment {
 
 //        seekBar.bringToFront();
 //        seekBar.invalidate(); // for setting seekbar above done button in case they overlap
-        seekBar.getThumb().setAlpha(90); // set transparency value 0-255
+        seekBar.getThumb().setAlpha(200); // set transparency value 0-255
 
 
         // scale images
@@ -178,15 +178,15 @@ public class EffortQuestion extends Fragment {
         rlSeekBarLabels.post(new Runnable() {
             @Override
             public void run() {
-                Log.i("rl width", "" + rlSeekBarLabels.getWidth());
+//                Log.i("rl width", "" + rlSeekBarLabels.getWidth());
                 View v0 = rlSeekBarLabels.getChildAt(0);
                 View v2 = rlSeekBarLabels.getChildAt(2);
-                Log.i("rl child0 width", "" + v0.getWidth());
-                Log.i("rl child2 width", "" + v2.getWidth());
+//                Log.i("rl child0 width", "" + v0.getWidth());
+//                Log.i("rl child2 width", "" + v2.getWidth());
 
                 int seekBarWidthWithoutPadding = seekBar.getWidth() - 2 * (int) getResources().getDimension(R.dimen.seekbar_padding_width);
                 int newRlWidth = seekBarWidthWithoutPadding + v0.getWidth() / 2 + v2.getWidth() / 2;
-                Log.i("new rl width", "" + newRlWidth);
+//                Log.i("new rl width", "" + newRlWidth);
                 RelativeLayout.LayoutParams newRlLayoutParams= new RelativeLayout.LayoutParams(newRlWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
                 newRlLayoutParams.addRule(RelativeLayout.ALIGN_LEFT, seekBar.getId());
                 newRlLayoutParams.addRule(RelativeLayout.BELOW, tvQuestion.getId());

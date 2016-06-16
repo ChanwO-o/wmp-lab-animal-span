@@ -70,12 +70,10 @@ public class MainActivityFragment extends Fragment implements View.OnTouchListen
         ivStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // if user played demo mode, trainingmode stays as demo. Change it to level mode
+                // if user played demo mode, change it to level mode
                 if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_DEMO))
                     LevelManager.getInstance().trainingmode = LevelManager.TRAININGMODE_ROUNDS;
-                LevelManager.getInstance().sessionStartMills = SystemClock.uptimeMillis(); // record session starting time (used for trainingmode = "time")
-                LevelManager.getInstance().trial = 0; // @TODO: move this to LevelManager.startSession()
-                CSVWriter.getInstance().createCsvFile();
+                LevelManager.getInstance().startSession();
                 Util.loadFragment(getActivity(), new GetReady());
             }
         });
@@ -84,9 +82,7 @@ public class MainActivityFragment extends Fragment implements View.OnTouchListen
             @Override
             public void onClick(View v) {
                 LevelManager.getInstance().trainingmode = LevelManager.TRAININGMODE_DEMO; // start demo mode with no limits to time or levels
-                LevelManager.getInstance().sessionStartMills = SystemClock.uptimeMillis();
-                LevelManager.getInstance().trial = 0; // @TODO: move this to LevelManager.startSession()
-                CSVWriter.getInstance().createCsvFile();
+                LevelManager.getInstance().startSession();
 //                Util.loadFragment(getActivity(), new GetReady());
                 Util.loadFragment(getActivity(), new ReflectionQuestion());
             }

@@ -83,7 +83,7 @@ public class StimuliManager {
 
     public static String getImagePath(int labeledFileName) {
         int folderLabel = labeledFileName - (labeledFileName % 100);
-        Log.d("getImagePath()", "folderLabel " + folderLabel);
+//        Log.d("getImagePath()", "folderLabel " + folderLabel);
         switch (folderLabel) {
             case TARGET_LABEL:
                 return "/wmplab/stimuli/" + TARGET + labeledFileName % 100 + ".png";

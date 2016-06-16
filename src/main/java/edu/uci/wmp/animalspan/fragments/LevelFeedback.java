@@ -21,16 +21,25 @@ import edu.uci.wmp.animalspan.StimuliManager;
 import edu.uci.wmp.animalspan.Util;
 import edu.uci.wmp.animalspan.fragments.questions.ReflectionQuestion;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Random;
 
 public class LevelFeedback extends Fragment implements View.OnClickListener {
 
+    TextView tvFeedbackPhrase;
     ImageView ivDemoQuit;
     ImageView ivLevelFeedbackNext;
     long levelFeedbackStartTime;
 
     final int LEVELFEEDBACK_SHOW_BUTTON_TIME = 1;
     final double FEEDBACK_PERCENTAGE = 0.25; // 25% of width
+    final int LEVEL_UP = 1;
+    final int LEVEL_SAME = 0;
+    final int LEVEL_DOWN = -1;
 
     private Handler handler = new Handler();
 
@@ -63,7 +72,7 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_level_feedback, container, false);
 
-//        TextView tvTrialsLeft = (TextView) view.findViewById(R.id.tvTrialsLeft); // moved this to GetReady
+        tvFeedbackPhrase = (TextView) view.findViewById(R.id.tvFeedbackPhrase);
         ImageView ivFeedback = (ImageView) view.findViewById(R.id.ivFeedback);
         ivDemoQuit = (ImageView) view.findViewById(R.id.ivDemoQuit);
         ivLevelFeedbackNext = (ImageView) view.findViewById(R.id.ivLevelFeedbackNext);
@@ -96,11 +105,9 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
                 ivFeedback.setImageBitmap(StimuliManager.getFeedbackAsset(getActivity(), StimuliManager.INCORRECT));
         } catch ( IOException e) { e.printStackTrace(); }
 
-//        LevelManager.getInstance().trial++; // one trial completed
-//        String trials = "Trials left: " + (LevelManager.getInstance().numberoftrials - LevelManager.getInstance().trial);
-//        tvTrialsLeft.setText(trials); // moved this chunk to GetReady
-
         handler.postDelayed(showButton, 0);
+
+        calculateNextLevel();
 
         return view;
     }
@@ -114,7 +121,6 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
 
     public void goToNextLevel() {
         if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_TIME)) {
-            Log.d("mode", "time");
             long currentMillsInSession = SystemClock.uptimeMillis();
             int currentSecondsInSession = (int) (currentMillsInSession - LevelManager.getInstance().sessionStartMills) / 1000;
             if (currentSecondsInSession > LevelManager.getInstance().sessionLength) {
@@ -124,15 +130,13 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
             }
         }
         else if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_ROUNDS)) {
-            Log.d("mode", "levels");
             if (LevelManager.getInstance().numberoftrials == LevelManager.getInstance().trial) {
                 Log.d("Results", "session over");
                 viewResults();
                 return; // remove this after implementing viewResults()
             }
-
         }
-        calculateNextLevel();
+//        calculateNextLevel();
         Util.loadFragment(getActivity(), new GetReady());
     }
 
@@ -143,12 +147,20 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
         boolean first = !LevelManager.getInstance().accuracyfirstpart.contains(StimuliManager.INCORRECT);
         boolean second = check();
 
-        if (first && second && LevelManager.getInstance().level < LevelManager.MAX_LEVEL) // advance to next level
+        if (first && second && LevelManager.getInstance().level < LevelManager.MAX_LEVEL) { // advance to next level
+            Log.wtf("LEVEL_UP", "up");
             LevelManager.getInstance().level++;
-        else if (!second && LevelManager.getInstance().level > LevelManager.MIN_LEVEL) // go back one level
+            tvFeedbackPhrase.setText(getFeedbackPhrase(LEVEL_UP));
+        }
+        else if (!second && LevelManager.getInstance().level > LevelManager.MIN_LEVEL) { // go back one level
+            Log.wtf("LEVEL_DOWN", "down");
             LevelManager.getInstance().level--;
-//        else if (!first && second) // stay on current level
-            // do nothing;
+            tvFeedbackPhrase.setText(getFeedbackPhrase(LEVEL_DOWN));
+        }
+        else { // stay on current level   // else if (!first && second)
+            Log.wtf("LEVEL_SAME", "same");
+            tvFeedbackPhrase.setText(getFeedbackPhrase(LEVEL_SAME));
+        }
     }
 
     public void viewResults() {
@@ -157,6 +169,41 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
             Util.loadFragment(getActivity(), new ReflectionQuestion());
         else
             Util.loadFragment(getActivity(), new SessionResults());
+    }
+
+    /**
+     * Return random phrase from feedback phrase files; iterate down random number of lines
+     */
+    public String getFeedbackPhrase(int next) {
+        int resourceId = 0;
+        if (next == LEVEL_UP)
+            resourceId = R.raw.roundfeedback_up;
+        else if (next == LEVEL_DOWN)
+            resourceId = R.raw.roundfeedback_down;
+        else if (next == LEVEL_SAME)
+            resourceId = R.raw.roundfeedback_same;
+
+        InputStream inputStream = getActivity().getResources().openRawResource(resourceId);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        String line = "";
+        try
+        {
+//            reader.mark(0); // when reset() is called, reader will return to line 0 after reaching last line in file
+            int r = new Random().nextInt(200);
+            Log.wtf("randnum", "" + r);
+            for (int i = 0; i < r; ++i) {
+                if ((line = reader.readLine()) == null) { // reached end of phrases file
+                    inputStream = getActivity().getResources().openRawResource(resourceId); // reset inputstream and reader
+                    reader = new BufferedReader(new InputStreamReader(inputStream));
+                    line = reader.readLine();
+                }
+                Log.d("Reading feedback_up", line);
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return line;
     }
 
     @Override
