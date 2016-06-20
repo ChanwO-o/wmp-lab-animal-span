@@ -26,7 +26,7 @@ import edu.uci.wmp.animalspan.fragments.SessionResults;
 public class EffortQuestion extends Fragment {
 
     int questionNum = 1;
-    TextView tvQuestion;
+    TextView tvQuestion, tvSeekBarFirst, tvSeekBarSecond, tvSeekBarThird;
     SeekBar seekBar;
     RelativeLayout rlSeekBarLabels;
     LinearLayout llEffortImages;
@@ -53,7 +53,7 @@ public class EffortQuestion extends Fragment {
         public void run() {
             long current = SystemClock.uptimeMillis() - responseStartTime;
             if (current < HIDE_TIME) {
-                setViewsVisible(View.GONE);
+                setViewsVisible(View.INVISIBLE);
                 handler.postDelayed(this, 0);
             } else
                 setViewsVisible(View.VISIBLE);
@@ -76,6 +76,9 @@ public class EffortQuestion extends Fragment {
         tvQuestion = (TextView) view.findViewById(R.id.tvEffortQuestion);
         seekBar = (SeekBar) view.findViewById(R.id.seekBar);
         rlSeekBarLabels = (RelativeLayout) view.findViewById(R.id.rlSeekBarLabels);
+        tvSeekBarFirst = (TextView) rlSeekBarLabels.findViewById(R.id.tvSeekBarFirst);
+        tvSeekBarSecond = (TextView) rlSeekBarLabels.findViewById(R.id.tvSeekBarSecond);
+        tvSeekBarThird = (TextView) rlSeekBarLabels.findViewById(R.id.tvSeekBarThird);
         ivNext = (ImageView) view.findViewById(R.id.ivEffortQuestionsDone);
 
         llEffortImages = (LinearLayout) view.findViewById(R.id.llEffortImages);
@@ -83,10 +86,14 @@ public class EffortQuestion extends Fragment {
         ivEffortSecond = (ImageView) view.findViewById(R.id.ivEffortSecond);
         ivEffortThird = (ImageView) view.findViewById(R.id.ivEffortThird);
 
+        responded = false;
+        hiddenViews = new View[10];
+        fillHiddenViews();
+        setViewsVisible(View.INVISIBLE); // remove flicker
+
 //        seekBar.bringToFront();
 //        seekBar.invalidate(); // for setting seekbar above done button in case they overlap
         seekBar.getThumb().setAlpha(200); // set transparency value 0-255
-
 
         // scale images
         int imageWidth = Double.valueOf(LevelManager.getInstance().screen_height * IMAGE_WIDTH_PERCENTAGE).intValue();
@@ -96,11 +103,6 @@ public class EffortQuestion extends Fragment {
         ivEffortFirst.setLayoutParams(imageLayoutParams);
         ivEffortSecond.setLayoutParams(imageLayoutParams);
         ivEffortThird.setLayoutParams(imageLayoutParams);
-
-        responded = false;
-        hiddenViews = new View[7];
-        fillHiddenViews();
-        adjustLabelsLayout();
 
         ivNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,15 +121,16 @@ public class EffortQuestion extends Fragment {
                     else
                         Util.loadFragment(getActivity(), new SessionResults());
                 }
-//                RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//                buttonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, ivNext.getId());
-//                buttonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, ivNext.getId());
-//                buttonLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, ivNext.getId());
-//                ivNext.setLayoutParams(buttonLayoutParams); // test code for bringing button to bottom of screen, failed
             }
         });
-
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        adjustLabelsLayout();
+        setViewsVisible(View.VISIBLE);
+        super.onResume();
     }
 
     /**
@@ -144,6 +147,7 @@ public class EffortQuestion extends Fragment {
         seekBar.setProgress(50);
         questionNum++;
         responded = false;
+        adjustLabelsLayout();
     }
 
     /**
@@ -155,8 +159,11 @@ public class EffortQuestion extends Fragment {
         hiddenViews[2] = ivEffortSecond;
         hiddenViews[3] = ivEffortThird;
         hiddenViews[4] = rlSeekBarLabels;
-        hiddenViews[5] = seekBar;
-        hiddenViews[6] = ivNext;
+        hiddenViews[5] = tvSeekBarFirst;
+        hiddenViews[6] = tvSeekBarSecond;
+        hiddenViews[7] = tvSeekBarThird;
+        hiddenViews[8] = seekBar;
+        hiddenViews[9] = ivNext;
     }
 
     /**
@@ -166,7 +173,6 @@ public class EffortQuestion extends Fragment {
         for (View v : hiddenViews)
             v.setVisibility(visibility);
         ivEffortSecond.setVisibility(View.INVISIBLE);
-        adjustLabelsLayout();
     }
 
     /**

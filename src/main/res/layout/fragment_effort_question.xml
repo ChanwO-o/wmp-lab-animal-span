@@ -58,7 +58,7 @@
         android:paddingRight="@dimen/seekbar_padding_width"
         android:progress="50"
         android:progressDrawable="@drawable/seekbar_progressbar"
-        android:thumb="@drawable/thumb_nottransparent" />
+        android:thumb="@drawable/thumb_0" />
 
     <RelativeLayout
         android:id="@+id/rlSeekBarLabels"

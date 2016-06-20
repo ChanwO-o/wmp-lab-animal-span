@@ -18,6 +18,9 @@
     <dimen name="gap_larger">100dp</dimen>
     <dimen name="gap_huge">160dp</dimen>
 
+    <dimen name="feedback_phrase_maxwidth">900dp</dimen>
+    <!--<dimen name="feedback_paddingtop">200dp</dimen>-->
+
     <dimen name="seekbar_width">900dp</dimen>
     <dimen name="seekbar_padding_width">150dp</dimen>
     <dimen name="seekbar_thick">2dip</dimen>

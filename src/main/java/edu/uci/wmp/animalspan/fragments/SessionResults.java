@@ -1,5 +1,7 @@
 package edu.uci.wmp.animalspan.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -37,9 +39,7 @@ public class SessionResults extends Fragment {
         ImageView ivBackToMain = (ImageView) view.findViewById(R.id.ivBackToMain);
 
         LevelManager.getInstance().saveLevelToFile(); // save progress
-        int score = LevelManager.getInstance().recalledImages * LevelManager.getInstance().level;
-        Toast.makeText(getActivity(), LevelManager.getInstance().recalledImages + " x " + LevelManager.getInstance().level, Toast.LENGTH_SHORT).show();
-        String result = "You earned " + score + " points!";
+        String result = "You earned " + LevelManager.getInstance().points + " points!";
         tvResults.setText(result);
 
         ivBackToMain.setOnClickListener(new View.OnClickListener() {

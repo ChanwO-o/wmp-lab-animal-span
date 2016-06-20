@@ -28,10 +28,12 @@ public class StimuliManager {
     public static final String DISTRACTOR = "distractors/";
     public static final String MISC = "miscellaneous/";
     public static final String FACE = "faces/";
-    public static final int TARGET_STIMULI_CHOICES = 12;
-    public static final int SEMANTIC_STIMULI_CHOICES = 12;
-    public static final int PERCEPTUAL_STIMULI_CHOICES = 12;
-    public static final int DISTRACTOR_STIMULI_CHOICES = 12;
+    public static final int MIN_STIMULI_CHOICES = 1;
+    public static final int MAX_STIMULI_CHOICES = 12;
+//    public static final int TARGET_STIMULI_CHOICES = 12;
+//    public static final int SEMANTIC_STIMULI_CHOICES = 12;
+//    public static final int PERCEPTUAL_STIMULI_CHOICES = 12;
+//    public static final int DISTRACTOR_STIMULI_CHOICES = 12;
     public static final int TARGET_LABEL = 100;
     public static final int SEMANTIC_LABEL = 200;
     public static final int PERCEPTUAL_LABEL = 300;
@@ -51,15 +53,15 @@ public class StimuliManager {
         return BitmapFactory.decodeStream(is);
     }
 
-//    /**
-//     * @param labeledFilename folder label in first digit using static int from StimuliManager.java + filename
-//     */
-//    public static Bitmap getStimuli(Context context, int labeledFilename) throws IOException {
+//    public static Bitmap getStimuli(Context context, int labeledFileName) throws IOException {
 //        AssetManager assetManager = context.getAssets();
-//        InputStream is = assetManager.open(getImagePath(labeledFilename));
+//        InputStream is = assetManager.open(getImagePath(labeledFileName));
 //        return BitmapFactory.decodeStream(is);
 //    }
 
+    /**
+     * @param labeledFileName folder label in first digit using static int from StimuliManager.java + filename
+     */
     public static Bitmap getStimuli(int labeledFileName) throws FileNotFoundException {
         String path = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + getImagePath(labeledFileName);
         File imageFile = new File(path);

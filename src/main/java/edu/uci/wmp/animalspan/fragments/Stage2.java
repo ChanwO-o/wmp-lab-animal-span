@@ -137,7 +137,6 @@ public class Stage2 extends Fragment {
      */
     public ImageView createChoiceStimuli(int labeledFilename) throws IOException {
         final ImageView ivStim = new ImageView(getActivity());
-//        ivStim.setImageBitmap(StimuliManager.getStimuli(getActivity(), labeledFilename));
         ivStim.setImageBitmap(StimuliManager.getStimuli(labeledFilename));
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(choiceStimuliSize, choiceStimuliSize);
         int margin = (int) LevelManager.getInstance().gapbetweenimages * 5; // margin between each image in grid
@@ -157,8 +156,7 @@ public class Stage2 extends Fragment {
                     int cur = LevelManager.getInstance().currentStimuliIndex;
                     if (LevelManager.getInstance().correctstimulisequence.get(cur).equals(LevelManager.getInstance().secondpartsequence.get(cur))) {
                         LevelManager.getInstance().accuracysecondpart.add(StimuliManager.CORRECT);
-                        LevelManager.getInstance().recalledImages++;
-//                        Log.d("CORRECT", "recalled is " + LevelManager.getInstance().recalledImages);
+                        LevelManager.getInstance().points += LevelManager.getInstance().level; // points added by current level
                     }
                     else
                         LevelManager.getInstance().accuracysecondpart.add(StimuliManager.INCORRECT);

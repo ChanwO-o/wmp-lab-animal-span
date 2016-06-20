@@ -1,6 +1,7 @@
 package edu.uci.wmp.animalspan;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Point;
 import android.os.SystemClock;
@@ -24,8 +25,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import edu.uci.wmp.animalspan.fragments.Settings;
+
 /**
  * Created by ChanWoo on 11/18/2015
+ * TODO: set privacy for functions (public -> private)
+ * TODO: remove all getInstance() calls
  */
 public class LevelManager implements Serializable {
 
@@ -40,6 +45,7 @@ public class LevelManager implements Serializable {
     public static final String TRAININGMODE_TIME = "time";
     public static final String TRAININGMODE_DEMO = "demo";
     public static final String SAVE_LEVEL_FILENAME = "save_level.txt";
+    public static final String SHAREDPREF_KEY = "shared_pref";
 
     private Context context;
     private Random random;
@@ -54,7 +60,7 @@ public class LevelManager implements Serializable {
     public boolean testStarted = false;
     public long sessionStartMills = 0;                      // timer starting at beginning of session, used when mode = "time"
     public boolean questions = true;
-    public int recalledImages = 0;                          // records number of correct answers
+    public int points = 0;                              // records total points awarded for the session
 
     public List<Integer> stimulisequence;              // defines what stimuli has to be shown
     public List<Integer> distincttargets;              // distinct targets that the stimuli sequence is chosen from, use this for displaying image grid in Stage2
@@ -79,7 +85,7 @@ public class LevelManager implements Serializable {
 //    public boolean abortallowed = false;           // define whether pressing escape or q aborts the program
 
     // training parameters (this does NOT go into level file)
-    public String trainingmode = LevelManager.TRAININGMODE_ROUNDS;        // time: ends session after a certain amount of time; rounds: ends session after a certain amount of rounds
+    public String trainingmode = TRAININGMODE_ROUNDS;        // time: ends session after a certain amount of time; rounds: ends session after a certain amount of rounds
     public int sessionLength = 300;               // This is the length of the session in seconds (default: 300s)
     public int numberoftrials = 10;               // define how long a training session takes in number of levels
     public int startlevel = 1;                    // define with which level to start_old  *** changed var name level -> startlevel ***
@@ -193,7 +199,7 @@ public class LevelManager implements Serializable {
         sessionStartMills = SystemClock.uptimeMillis(); // record session starting time (used for trainingmode = "time")
         trial = 0;
         testStarted = true;
-        recalledImages = 0; // reset score
+        points = 0; // reset score
         CSVWriter.getInstance().createCsvFile();
     }
 
@@ -276,6 +282,34 @@ public class LevelManager implements Serializable {
 
     public void setContext(Context context) {
         getInstance().context = context;
+    }
+
+    /**
+     * Store selected variables into preferences
+     */
+    public void saveSharedPreferences() {
+        SharedPreferences sharedPref = context.getSharedPreferences(SHAREDPREF_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(Settings.SUBJECT_KEY, subject);
+        editor.putInt(Settings.SESSION_KEY, session);
+        editor.putBoolean(Settings.QUESTIONS_KEY, questions);
+        editor.putString(Settings.TRAININGMODE_KEY, trainingmode);
+        editor.putInt(Settings.TRIALS_KEY, numberoftrials);
+        editor.putInt(Settings.SESSIONLENGTH_KEY, sessionLength);
+        editor.apply();
+    }
+
+    /**
+     * Read variables from preferences
+     */
+    public void readSharedPreferences() {
+        SharedPreferences sharedPref = context.getSharedPreferences(SHAREDPREF_KEY, Context.MODE_PRIVATE);
+        subject = sharedPref.getInt(Settings.SUBJECT_KEY, 1);
+        session = sharedPref.getInt(Settings.SESSION_KEY, 1);
+        questions = sharedPref.getBoolean(Settings.QUESTIONS_KEY, true);
+        trainingmode = sharedPref.getString(Settings.TRAININGMODE_KEY, TRAININGMODE_ROUNDS);
+        numberoftrials = sharedPref.getInt(Settings.TRIALS_KEY, 10);
+        sessionLength = sharedPref.getInt(Settings.SESSIONLENGTH_KEY, 300);
     }
 
     public void setLevel(int newLevel) throws InvalidLevelException {

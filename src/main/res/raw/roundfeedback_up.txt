@@ -7,7 +7,7 @@ Fantastic! The next round will be harder.
 Wonderful effort! The next round will be harder.
 You've got this down! The next round will be harder.
 Wow! You're a superstar. The next round will be harder.
-"Impressive, let's try a more difficult round."
+Impressive, let's try a more difficult round.
 Great job! Now let's try a more difficult round.
 That was an impressive round! Let's try one that is more difficult.
 You've really figured this out! The next round will be harder.
@@ -20,7 +20,7 @@ This is no problem for you! Let's make it a little more challenging.
 You're a pro at this! Let's make it a bit more difficult.
 Look at you go!! Let's give you more of a challenge.
 Awesome job! Let's make it a little harder now.
-"WOW! That was awesome, let's try the next difficulty step."
+WOW! That was awesome, let's try the next difficulty step.
 Spectacular work! The next round will be a bit tougher.
 Stellar job! The next round will be a little harder.
 Amazing job! The next round will be more difficult.
@@ -51,6 +51,6 @@ Great matching! The next round will involve a more challenging quest.
 Fantastic! You made most of your matches and the game will become more difficult.
 You beat that round! Let's make it more difficult this time.
 Are you a professional Match Quest player? Let's try the next difficulty.
-"This game is tricky, but you're doing so well! It's about to get even more intense!"
-"Wow, what just happened? You blasted through that round. Let's make it harder this time."
+This game is tricky, but you're doing so well! It's about to get even more intense!
+Wow, what just happened? You blasted through that round. Let's make it harder this time.
 Dynamite! Let's make it a little harder!

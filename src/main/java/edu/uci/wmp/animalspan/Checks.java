@@ -27,6 +27,10 @@ public class Checks {
 
     public final String LEVELFOLDER_PATH = "/wmplab/levels/";
     public final String STIMULIFOLDER_PATH = "/wmplab/stimuli/";
+    public final String STIMULI_LIST1_PATH = "/wmplab/stimuli/list1/";
+    public final String STIMULI_LIST2_PATH = "/wmplab/stimuli/list2/";
+    public final String STIMULI_LIST3_PATH = "/wmplab/stimuli/list3/";
+    public final String STIMULI_DIST_PATH = "/wmplab/stimuli/distractors/";
 
     private StringBuilder errorMessages = new StringBuilder();
     private Context context;
@@ -36,31 +40,33 @@ public class Checks {
     public class InvalidLevelFilesException extends IOException {}
     public class InvalidStimuliFilesException extends IOException {}
 
-
     public void setContext(Context context) { getInstance().context = context; }
 
     /**
-     * Create and populate asset directories
+     * Check Levels directory and stimuli directory, fire toast message of all missing directories and files
      */
     public boolean runAllChecks() {
-        try {
-            Checks.getInstance().checkLevelsDirectory();
-//            Checks.getInstance().checkStimuliDirectory();
-            return true;
-        }
+        boolean checkPass = true;
+        try { Checks.getInstance().checkLevelsDirectory(); }
         catch (Checks.InvalidLevelFilesException e) {
             Toast.makeText(getInstance().context, "Error checking level files", Toast.LENGTH_SHORT).show();
             Toast.makeText(getInstance().context, errorMessages.toString(), Toast.LENGTH_SHORT).show();
-            return false;
+            checkPass = false;
         }
-//        catch (Checks.InvalidStimuliFilesException e) {
-//            Toast.makeText(getInstance().context, "Error checking stimuli files", Toast.LENGTH_SHORT).show();
-//            return false;
-//        }
+        errorMessages.setLength(0); // clear error message queue
+
+        try { Checks.getInstance().checkStimuliDirectory(); }
+        catch (Checks.InvalidStimuliFilesException e) {
+            Toast.makeText(getInstance().context, "Error checking stimuli files", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getInstance().context, errorMessages.toString(), Toast.LENGTH_SHORT).show();
+            checkPass = false;
+        }
+        errorMessages.setLength(0);
+        return checkPass;
     }
 
     /**
-     * Populate missing files, return true if successful
+     * Populate all level & stimuli files, return true if successful
      */
     public boolean populateAssets() {
         try {
@@ -88,8 +94,8 @@ public class Checks {
         File outLevelFolder = new File(outLevelFolderPath);
 
         if (!outLevelFolder.exists()) { // no dir; don't bother looking through level files
-            Log.e("checkLevelsDirectory()", "Level Folder doesn't exist");
-            errorMessages.append("Level folder does not exist\nLevels check end\n");
+            Log.e("checkLevelsDirectory()", "Level Folder does not exist");
+            errorMessages.append("Level folder does not exist\n");
             throw new InvalidLevelFilesException();
         }
 
@@ -113,10 +119,63 @@ public class Checks {
             if (!checkedLevels.contains(i)) {
                 String missingMsg = "level" + i + ".txt is missing\n";
                 errorMessages.append(missingMsg);
-                throw new InvalidLevelFilesException();
             }
         }
-        errorMessages.append("END");
+        if (errorMessages.length() != 0)
+            throw new InvalidLevelFilesException();
+    }
+
+    /**
+     * Checks Stimuli directory for missing files
+     * Append missing file names or directories to error message queue
+     */
+    public void checkStimuliDirectory() throws InvalidStimuliFilesException {
+        File root = android.os.Environment.getExternalStorageDirectory();
+        File outStimuliFolder = new File(root.getAbsolutePath() + STIMULIFOLDER_PATH);
+        File list1Folder = new File(root.getAbsolutePath() + STIMULI_LIST1_PATH);
+        File list2Folder = new File(root.getAbsolutePath() + STIMULI_LIST2_PATH);
+        File list3Folder = new File(root.getAbsolutePath() + STIMULI_LIST3_PATH);
+        File distFolder = new File(root.getAbsolutePath() + STIMULI_DIST_PATH);
+        File[] stimFolders = new File[] {list1Folder, list2Folder, list3Folder, distFolder};
+
+        if (!outStimuliFolder.exists()) { // no dir; don't bother looking through stimuli files
+            Log.e("checkStimuliDirectory()", "Stimuli Folder does not exist");
+            errorMessages.append("Stimuli folder does not exist\n");
+            throw new InvalidStimuliFilesException();
+        }
+
+        for (File stimFolder : stimFolders) // check each stimuli folder one by one
+        {
+            if (!stimFolder.exists()) {
+                String missingFolderMsg = stimFolder.getName() + " folder missing\n";
+                errorMessages.append(missingFolderMsg);
+                continue;
+            }
+
+            String[] stimuliFiles = stimFolder.list();
+            Set<Integer> checkedStimuli = new HashSet<>();
+
+            for (String stimuli : stimuliFiles) {
+                if (stimuli.length() != 5 && stimuli.length() != 6)         // stimuli file names are 5 or 6 characters long
+                    continue;
+                if (!stimuli.endsWith(".png"))                              // stimuli file names end with ".png"
+                    continue;
+                int numEndIndex = stimuli.indexOf(".png");
+                int stimuliNumber = Integer.valueOf(stimuli.substring(0, numEndIndex)); // get stimuli number
+                if (stimuliNumber < StimuliManager.MIN_STIMULI_CHOICES || StimuliManager.MAX_STIMULI_CHOICES < stimuliNumber)   // stimuli file's number must be in range
+                    continue;
+                checkedStimuli.add(stimuliNumber);
+            }
+
+            for (int i = StimuliManager.MIN_STIMULI_CHOICES; i <= StimuliManager.MAX_STIMULI_CHOICES; ++i) {
+                if (!checkedStimuli.contains(i)) {
+                    String missingMsg = stimFolder.getName() + "/" + i + ".png is missing\n";
+                    errorMessages.append(missingMsg);
+                }
+            }
+        }
+        if (errorMessages.length() != 0)
+            throw new InvalidStimuliFilesException();
     }
 
     public void populateLevelDirectory() throws InvalidLevelFilesException {

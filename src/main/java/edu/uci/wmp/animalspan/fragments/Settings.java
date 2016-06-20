@@ -30,6 +30,13 @@ import java.lang.reflect.Field;
 
 public class Settings extends Fragment {
 
+    public static final String SUBJECT_KEY = "subject_key";
+    public static final String SESSION_KEY = "session_key";
+    public static final String QUESTIONS_KEY = "questions_key";
+    public static final String TRAININGMODE_KEY = "trainingmode_key";
+    public static final String TRIALS_KEY = "rounds_key";
+    public static final String SESSIONLENGTH_KEY = "sessionlength_key";
+
     LinearLayout llSettingsWidgets;
     EditText etSubject, etSession, etRoundsTime;
     Switch swQuestions;
@@ -127,10 +134,8 @@ public class Settings extends Fragment {
             public void onClick(View v) {
                 try {
                     // read inputs
-                    int subject = Integer.valueOf(etSubject.getText().toString());
-                    int session = Integer.valueOf(etSession.getText().toString());
-                    LevelManager.getInstance().subject = subject;
-                    LevelManager.getInstance().session = session;
+                    LevelManager.getInstance().subject = Integer.valueOf(etSubject.getText().toString());
+                    LevelManager.getInstance().session = Integer.valueOf(etSession.getText().toString());
 
                     // set trainingmode values
                     // TODO: check for input == 0, should not proceed
@@ -140,7 +145,7 @@ public class Settings extends Fragment {
                         LevelManager.getInstance().sessionLength = Integer.valueOf(etRoundsTime.getText().toString());
 
                     LevelManager.getInstance().questions = swQuestions.isChecked(); // set questions
-
+                    LevelManager.getInstance().saveSharedPreferences(); // save settings variables to preferences
                     Util.loadFragment(getActivity(), new MainActivityFragment());
                 } catch (Exception e) {
                     Toast.makeText(getActivity(), "Invalid inputs: Subject & session numbers must be integers", Toast.LENGTH_SHORT).show();

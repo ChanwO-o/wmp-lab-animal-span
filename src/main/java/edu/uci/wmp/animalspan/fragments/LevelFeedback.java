@@ -2,6 +2,9 @@ package edu.uci.wmp.animalspan.fragments;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
@@ -14,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import edu.uci.wmp.animalspan.LevelManager;
 import com.uci.wmp.animalspan.R;
@@ -136,7 +140,6 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
                 return; // remove this after implementing viewResults()
             }
         }
-//        calculateNextLevel();
         Util.loadFragment(getActivity(), new GetReady());
     }
 
@@ -148,18 +151,21 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
         boolean second = check();
 
         if (first && second && LevelManager.getInstance().level < LevelManager.MAX_LEVEL) { // advance to next level
-            Log.wtf("LEVEL_UP", "up");
+            Log.wtf("LEVEL_UP", "++");
             LevelManager.getInstance().level++;
-            tvFeedbackPhrase.setText(getFeedbackPhrase(LEVEL_UP));
+            if (LevelManager.getInstance().numberoftrials != LevelManager.getInstance().trial) // don't display feedback phrase on last trial
+                tvFeedbackPhrase.setText(getFeedbackPhrase(LEVEL_UP));
         }
         else if (!second && LevelManager.getInstance().level > LevelManager.MIN_LEVEL) { // go back one level
-            Log.wtf("LEVEL_DOWN", "down");
+            Log.wtf("LEVEL_DOWN", "--");
             LevelManager.getInstance().level--;
-            tvFeedbackPhrase.setText(getFeedbackPhrase(LEVEL_DOWN));
+            if (LevelManager.getInstance().numberoftrials != LevelManager.getInstance().trial)
+                tvFeedbackPhrase.setText(getFeedbackPhrase(LEVEL_DOWN));
         }
-        else { // stay on current level   // else if (!first && second)
-            Log.wtf("LEVEL_SAME", "same");
-            tvFeedbackPhrase.setText(getFeedbackPhrase(LEVEL_SAME));
+        else { // stay on current level
+            Log.wtf("LEVEL_SAME", "==");
+            if (LevelManager.getInstance().numberoftrials != LevelManager.getInstance().trial)
+                tvFeedbackPhrase.setText(getFeedbackPhrase(LEVEL_SAME));
         }
     }
 
@@ -172,7 +178,8 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
     }
 
     /**
-     * Return random phrase from feedback phrase files; iterate down random number of lines
+     * Return random phrase from feedback phrase files with removed quotation marks, separated into lines
+     * Iterate down random number of lines in file
      */
     public String getFeedbackPhrase(int next) {
         int resourceId = 0;
@@ -203,6 +210,12 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
         catch (IOException e) {
             e.printStackTrace();
         }
+
+        // replace punctuation with newline characters
+        String[] punc = new String[] {". ", "! ", "? "}; // keep one space after punctuation for effectiveness
+        for (String p : punc)
+            if (line != null)
+                line = line.replace(p, p + "\n");
         return line;
     }
 

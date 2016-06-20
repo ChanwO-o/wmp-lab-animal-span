@@ -1,10 +1,12 @@
 package edu.uci.wmp.animalspan;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
@@ -25,13 +27,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         setDisplaySettings();
         initializeManagers();
-
-//        LevelManager.getInstance().loadLevel(LevelManager.getInstance().startlevel);
 
         // Check whether the activity is using the layout version with
         // the fragment_container FrameLayout. If so, we must add the first fragment
@@ -65,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (Build.VERSION.RELEASE.equals("4.4.2"))
+        if (Build.VERSION.SDK_INT >= 14)
             Util.dimSystemBar(this);
     }
 
@@ -86,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     public void initializeManagers() {
         LevelManager.getInstance().reset();
         LevelManager.getInstance().setContext(this);
+        LevelManager.getInstance().readSharedPreferences();
         LevelManager.getInstance().setScreenDimensions();
         // StimuliManager.getInstance().setContext(this) TODO: implement instance in SM
         Checks.getInstance().setContext(this);

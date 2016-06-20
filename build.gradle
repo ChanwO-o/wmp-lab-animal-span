@@ -5,10 +5,10 @@ android {
     buildToolsVersion "23.0.2"
     defaultConfig {
         applicationId 'edu.uci.wmp.animalspan'
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 23
-        versionCode 14
-        versionName "0.14"
+        versionCode 15
+        versionName "0.15"
     }
     buildTypes {
         release {
