@@ -207,14 +207,14 @@ public class Checks {
     }
 
     private void copyDirectory(String assetFolderPath, String outFolderPath) throws IOException {
-        Log.i("copying directory", assetFolderPath + " -> " + outFolderPath);
+        Log.i("copyDirectory()", assetFolderPath + " -> " + outFolderPath);
         String trimmedAssetFolderPath = assetFolderPath.substring(0, assetFolderPath.length() - 1);
         AssetManager am = context.getAssets();
         InputStream in;
         OutputStream out;
 
         for (String filename : am.list(trimmedAssetFolderPath)) {
-            Log.i("reading asset", filename);
+            Log.d("reading asset", filename);
             in = am.open(assetFolderPath + filename);
             File outFile = new File(outFolderPath, filename);
             out = new FileOutputStream(outFile);

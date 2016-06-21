@@ -90,6 +90,12 @@ public class MainActivityFragment extends Fragment implements View.OnTouchListen
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Util.dimSystemBar(getActivity());
+    }
+
     /**
      * Touch events
      */

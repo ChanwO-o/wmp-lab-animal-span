@@ -35,7 +35,7 @@ public final class Util {
     /**
      * Clear status & navigation bars from screen, keep them off with STICKY flag
      */
-    static void dimSystemBar(Activity activity) {
+    public static void dimSystemBar(Activity activity) {
         final View window = activity.getWindow().getDecorView();
         setFlags(window);
 

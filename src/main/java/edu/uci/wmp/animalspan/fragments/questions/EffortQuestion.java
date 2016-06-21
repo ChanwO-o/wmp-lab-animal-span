@@ -30,14 +30,11 @@ public class EffortQuestion extends Fragment {
     SeekBar seekBar;
     RelativeLayout rlSeekBarLabels;
     LinearLayout llEffortImages;
-    ImageView ivEffortFirst;
-    ImageView ivEffortSecond;
-    ImageView ivEffortThird;
-    ImageView ivNext;
+    ImageView ivEffortFirst, ivEffortSecond, ivEffortThird, ivNext;
     View[] hiddenViews;
 
-    final double IMAGE_WIDTH_PERCENTAGE = 0.40;
-    final double IMAGE_HEIGHT_PERCENTAGE = 0.40;
+    final double IMAGE_WIDTH_PERCENTAGE = 0.50;
+    final double IMAGE_HEIGHT_PERCENTAGE = 0.50;
 
     // second question setup
     final String SECONDQUESTION = "How hard did you try to do your best at the task?";
@@ -45,7 +42,8 @@ public class EffortQuestion extends Fragment {
 
     boolean responded;
     long responseStartTime;
-    final int HIDE_TIME = 250; // hide all views
+    final int HIDE_TIME = 500; // hide all views
+    final int HIDE_FLICKER_TIME = 50; // short hide time for screen flickering
     private Handler handler = new Handler();
 
     private Runnable response = new Runnable() {
@@ -59,6 +57,18 @@ public class EffortQuestion extends Fragment {
                 setViewsVisible(View.VISIBLE);
         }
     };
+
+//    private Runnable hideFlicker = new Runnable() {
+//        @Override
+//        public void run() {
+//            long current = SystemClock.uptimeMillis();
+//            if (!responded && current < HIDE_FLICKER_TIME) {
+//                setViewsVisible(View.INVISIBLE);
+//                handler.postDelayed(this, 0);
+//            } else
+//                setViewsVisible(View.VISIBLE);
+//        }
+//    };
 
     public EffortQuestion() {
         // Required empty public constructor
@@ -91,8 +101,8 @@ public class EffortQuestion extends Fragment {
         fillHiddenViews();
         setViewsVisible(View.INVISIBLE); // remove flicker
 
-//        seekBar.bringToFront();
-//        seekBar.invalidate(); // for setting seekbar above done button in case they overlap
+        seekBar.bringToFront();
+        seekBar.invalidate(); // for drawing seekbar above labels
         seekBar.getThumb().setAlpha(200); // set transparency value 0-255
 
         // scale images
@@ -128,9 +138,9 @@ public class EffortQuestion extends Fragment {
 
     @Override
     public void onResume() {
+        super.onResume();
         adjustLabelsLayout();
         setViewsVisible(View.VISIBLE);
-        super.onResume();
     }
 
     /**
@@ -172,7 +182,8 @@ public class EffortQuestion extends Fragment {
     public void setViewsVisible(int visibility) {
         for (View v : hiddenViews)
             v.setVisibility(visibility);
-        ivEffortSecond.setVisibility(View.INVISIBLE);
+        if (questionNum == 2)
+            ivEffortSecond.setVisibility(View.INVISIBLE);
     }
 
     /**
@@ -193,12 +204,20 @@ public class EffortQuestion extends Fragment {
                 int seekBarWidthWithoutPadding = seekBar.getWidth() - 2 * (int) getResources().getDimension(R.dimen.seekbar_padding_width);
                 int newRlWidth = seekBarWidthWithoutPadding + v0.getWidth() / 2 + v2.getWidth() / 2;
 //                Log.i("new rl width", "" + newRlWidth);
-                RelativeLayout.LayoutParams newRlLayoutParams= new RelativeLayout.LayoutParams(newRlWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
+                RelativeLayout.LayoutParams newRlLayoutParams = new RelativeLayout.LayoutParams(newRlWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
                 newRlLayoutParams.addRule(RelativeLayout.ALIGN_LEFT, seekBar.getId());
                 newRlLayoutParams.addRule(RelativeLayout.BELOW, tvQuestion.getId());
-                newRlLayoutParams.topMargin = (int) getResources().getDimension(R.dimen.gap_larger);
+                int theTinyGapBetweenWhiteLabelBarAndSeekbar = Double.valueOf(v0.getHeight() * 0.25).intValue();
+                newRlLayoutParams.topMargin = (int) getResources().getDimension(R.dimen.gap_huge) - theTinyGapBetweenWhiteLabelBarAndSeekbar;
                 newRlLayoutParams.leftMargin = (int) getResources().getDimension(R.dimen.seekbar_padding_width) - v0.getWidth() / 2;
                 rlSeekBarLabels.setLayoutParams(newRlLayoutParams);
+
+                if (questionNum == 2) { // set second label to center of seekbar
+                    RelativeLayout.LayoutParams invisibleSecondTextViewLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    invisibleSecondTextViewLayoutParams.topMargin = (int) getResources().getDimension(R.dimen.seekbar_label_margin_height);
+                    invisibleSecondTextViewLayoutParams.leftMargin = seekBarWidthWithoutPadding / 2 + v0.getWidth() / 2;
+                    tvSeekBarSecond.setLayoutParams(invisibleSecondTextViewLayoutParams);
+                }
             }
         });
     }

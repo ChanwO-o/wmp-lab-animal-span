@@ -41,6 +41,7 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
 
     final int LEVELFEEDBACK_SHOW_BUTTON_TIME = 1;
     final double FEEDBACK_PERCENTAGE = 0.25; // 25% of width
+    final double FEEDBACK_TOPMARGIN_PERCENTAGE = 0.10; // top margin of height
     final int LEVEL_UP = 1;
     final int LEVEL_SAME = 0;
     final int LEVEL_DOWN = -1;
@@ -85,6 +86,7 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
         int imageSize = Double.valueOf(LevelManager.getInstance().screen_width * FEEDBACK_PERCENTAGE).intValue();
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(imageSize, imageSize);
         layoutParams.gravity = Gravity.CENTER;
+        layoutParams.topMargin = Double.valueOf(LevelManager.getInstance().screen_height * FEEDBACK_TOPMARGIN_PERCENTAGE).intValue();
         ivFeedback.setLayoutParams(layoutParams);
 
         // display button 1 second after loading
@@ -96,10 +98,10 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
             ivDemoQuit.setVisibility(View.GONE);
         ivDemoQuit.setOnClickListener(this);
 
-        Log.d("stimsequence", StimuliManager.iterableToString(LevelManager.getInstance().stimulisequence));
-        Log.d("Answer", StimuliManager.iterableToString(LevelManager.getInstance().correctstimulisequence));
-        Log.d("Response", StimuliManager.iterableToString(LevelManager.getInstance().secondpartsequence));
-        Log.w("checking", "" + check());
+//        Log.d("stimsequence", StimuliManager.iterableToString(LevelManager.getInstance().stimulisequence));
+//        Log.d("Answer", StimuliManager.iterableToString(LevelManager.getInstance().correctstimulisequence));
+//        Log.d("Response", StimuliManager.iterableToString(LevelManager.getInstance().secondpartsequence));
+//        Log.w("checking", "" + check());
 
         // feedback
         try {

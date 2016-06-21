@@ -8,12 +8,12 @@
         android:id="@+id/llSettingsWidgets"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/gap_huge"
+        android:layout_marginEnd="@dimen/gap_huge"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/llSubject"
+        <RelativeLayout
+            android:id="@+id/rlSubject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -30,14 +30,15 @@
                 android:id="@+id/etSubject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:ems="10"
                 android:inputType="numberSigned"
                 android:padding="@dimen/gap_medium"
                 android:textColor="@color/white" />
-        </LinearLayout>
+        </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/llSession"
+        <RelativeLayout
+            android:id="@+id/rlSession"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -55,15 +56,16 @@
                 android:id="@+id/etSession"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_gravity="center_horizontal"
                 android:ems="10"
                 android:inputType="numberSigned"
                 android:padding="@dimen/gap_medium"
                 android:textColor="@color/white" />
-        </LinearLayout>
+        </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/llQuestions"
+        <RelativeLayout
+            android:id="@+id/rlQuestions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -81,13 +83,14 @@
                 android:id="@+id/swQuestions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_gravity="center_horizontal"
                 android:checked="true"
                 android:padding="@dimen/gap_medium" />
-        </LinearLayout>
+        </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/llTrainingMode"
+        <RelativeLayout
+            android:id="@+id/rlTrainingMode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -105,13 +108,14 @@
                 android:id="@+id/swTrainingMode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_gravity="center_horizontal"
                 android:checked="false"
                 android:padding="@dimen/gap_medium" />
-        </LinearLayout>
+        </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/llRoundsTimeInput"
+        <RelativeLayout
+            android:id="@+id/rlRoundsTimeInput"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -130,6 +134,7 @@
                 android:id="@+id/etRoundsTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_gravity="center_horizontal"
                 android:ems="10"
                 android:inputType="numberSigned"
@@ -140,24 +145,34 @@
                 android:id="@+id/tvRTUnit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_gravity="center_horizontal"
                 android:padding="@dimen/gap_medium"
                 android:text="(S)"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white" />
-        </LinearLayout>
+        </RelativeLayout>
 
-        <Button
-            android:id="@+id/bPerformChecks"
+        <RelativeLayout
+            android:id="@+id/rlFileStructureButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Check external file structure " />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/bPopulate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Populate" />
+            <Button
+                android:id="@+id/bPerformChecks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Check external file structure " />
+
+            <Button
+                android:id="@+id/bPopulate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="Populate external files" />
+
+        </RelativeLayout>
 
 
     </LinearLayout>

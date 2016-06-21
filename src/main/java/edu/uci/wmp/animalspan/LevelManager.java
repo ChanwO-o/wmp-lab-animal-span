@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -228,7 +229,7 @@ public class LevelManager implements Serializable {
 
             String line;
             while ((line = br.readLine()) != null) {
-                Log.d("loadLevel()", line);
+//                Log.d("loadLevel()", line);
                 processLine(line);
             }
         } catch (InvalidLevelException e) {
@@ -250,39 +251,54 @@ public class LevelManager implements Serializable {
      */
     public void loadSavedLevel() {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(SAVE_LEVEL_FILENAME));
+            File root = android.os.Environment.getExternalStorageDirectory();
+            BufferedReader reader = new BufferedReader(new FileReader(root.getAbsolutePath() + "/wmplab/" + SAVE_LEVEL_FILENAME));
             String savedLevel = reader.readLine();
-            Log.i("saved level loaded", savedLevel);
-            getInstance().level = Integer.valueOf(savedLevel);
+            level = Integer.valueOf(savedLevel);
+            Log.i("loadSavedLevel()", "Loaded level " + savedLevel);
+        } catch (FileNotFoundException e) {
+            Log.e("loadSavedLevel()", "No save file found, setting to startlevel (level " + startlevel);
+            level = startlevel;
+            e.printStackTrace();
         } catch (IOException e) {
-            Log.i("no save file found", "setting to startlevel");
-            getInstance().level = startlevel;
+            Log.e("loadSavedLevel()", "Error loading save");
+            level = startlevel;
             e.printStackTrace();
         }
 
     }
 
-    public void saveLevelToFile() {
+    /**
+     * Save final level user has reached/will continue from.
+     * If sessionFin == true, user has correctly completed the session and will continue onwards from the last level + 1 unless at level 30.
+     * ELse if sessionFin == false, user has aborted the game and will have to continue from level - 1 unless at level 1.
+     */
+    public void saveLevelToFile(boolean sessionFin) {
         try {
             File root = android.os.Environment.getExternalStorageDirectory();
-            File saveFile = new File (root.getAbsolutePath() + SAVE_LEVEL_FILENAME);
+            File saveFile = new File (root.getAbsolutePath() + "/wmplab/" + SAVE_LEVEL_FILENAME);
 //            String filePath = context.getFilesDir().getPath() + SAVE_LEVEL_FILENAME;
 //            File file = new File(filePath);
             FileWriter fw = new FileWriter(saveFile, false);
             BufferedWriter writer = new BufferedWriter(fw);
-            writer.write(Integer.toString(getInstance().level));
+            if (sessionFin)
+                writer.write(Integer.toString(level));
+            else { // 1 level down
+                if (level > 1)
+                    writer.write(Integer.toString(--level));
+                else
+                    writer.write(Integer.toString(level));
+            }
+            Log.i("saveLevelToFile()", "Saved on level " + level);
             writer.newLine();
             writer.close();
-            Log.d("saveLevelToFile()", "saved at level " + getInstance().level);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    public void setContext(Context context) {
-        getInstance().context = context;
-    }
+    public void setContext(Context context) { this.context = context; }
 
     /**
      * Store selected variables into preferences
@@ -400,7 +416,8 @@ public class LevelManager implements Serializable {
                 int randomIndex = random.nextInt(distincttargets.size());
                 generatedStimuli = distincttargets.get(randomIndex);
 //                Log.d("chosen stimuli", "random: " + randomIndex + " genStim: " + generatedStimuli);
-            } while (i != 0 && stimulisequence.get(i - 1) == generatedStimuli); // no two same stimuli in a row @TODO: remove this line & fix; useless since I'm shuffling anyways.
+            } while (i >= 2 && stimulisequence.get(i - 1) == generatedStimuli && stimulisequence.get(i - 2) == generatedStimuli); // no three same stimuli in a row
+//            while (i != 0 && stimulisequence.get(i - 1) == generatedStimuli); // no two same stimuli in a row
 
             stimulisequence.add(generatedStimuli);
 //            Log.d("added", "" + generatedStimuli);

@@ -121,7 +121,10 @@ public class Settings extends Fragment {
         bPopulate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Checks.getInstance().populateAssets();
+                if (Checks.getInstance().populateAssets())
+                    bPopulate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.checkmark, 0);
+                else
+                    bPopulate.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.crossmark, 0);
             }
         });
 

@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|top"
+        android:layout_marginTop="@dimen/gap_large"
         android:maxWidth="@dimen/feedback_phrase_maxwidth"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceMedium"

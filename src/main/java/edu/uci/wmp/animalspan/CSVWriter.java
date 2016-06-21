@@ -56,7 +56,7 @@ public class CSVWriter {
         File root = android.os.Environment.getExternalStorageDirectory();
         File csvFolder = new File (root.getAbsolutePath() + FOLDERPATH);
         if (!csvFolder.exists())
-            Log.i("csvFolder", "folder created: " + csvFolder.mkdirs());
+            Log.i("createCsvFile()", "CSV folder created " + csvFolder.mkdirs());
 
         final String DATE = new SimpleDateFormat(FORMAT_DATE, Locale.US).format(Calendar.getInstance().getTime());
         final String TIME = new SimpleDateFormat(FORMAT_TIME, Locale.US).format(Calendar.getInstance().getTime());
@@ -74,9 +74,8 @@ public class CSVWriter {
     private void writeLine(String line) {
         FileWriter fw;
         BufferedWriter out = null;
-//        FileOutputStream os = null;
         try {
-            Log.d("path", csvFile.getAbsolutePath());
+//            Log.d("writeLine()", line);
             fw = new FileWriter(csvFile, true);
             out = new BufferedWriter(fw);
             out.write(line); // write line
@@ -109,7 +108,7 @@ public class CSVWriter {
             }
             result.append(NEW_LINE); // new line
         } catch (IOException e) {
-            Log.e("getFields()", "error reading fields");
+            Log.e("getFields()", "Error reading fields");
             e.printStackTrace();
         }
         return result.toString();

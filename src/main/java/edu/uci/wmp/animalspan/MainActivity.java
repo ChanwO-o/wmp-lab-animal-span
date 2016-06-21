@@ -56,14 +56,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        // save level to file
+        // punish user for aborting the test by saving decreased level by 1. Successful session closure is handled at SessionResults
+        if (LevelManager.getInstance().testStarted)
+            LevelManager.getInstance().saveLevelToFile(false);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (Build.VERSION.SDK_INT >= 14)
-            Util.dimSystemBar(this);
+        Util.dimSystemBar(this);
     }
 
     @Override
