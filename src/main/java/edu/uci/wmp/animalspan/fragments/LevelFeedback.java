@@ -130,18 +130,24 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
             long currentMillsInSession = SystemClock.uptimeMillis();
             int currentSecondsInSession = (int) (currentMillsInSession - LevelManager.getInstance().sessionStartMills) / 1000;
             if (currentSecondsInSession > LevelManager.getInstance().sessionLength) {
-                Log.d("Results", "session over");
                 viewResults();
-                return; // remove this after implementing viewResults()
+                return;
             }
         }
-        else if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_ROUNDS)) {
+        else if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_ROUNDS)
+                || LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_DEMO)) {
             if (LevelManager.getInstance().numberoftrials == LevelManager.getInstance().trial) {
-                Log.d("Results", "session over");
                 viewResults();
-                return; // remove this after implementing viewResults()
+                return;
             }
         }
+//        else if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_DEMO)) {
+//            Log.wtf("aaa", "aaa");
+//            viewResults();
+//            Log.wtf("bbb", "bbb");
+//            return;
+//        }
+//        Log.wtf("ccc", "ccc");
         Util.loadFragment(getActivity(), new GetReady());
     }
 
@@ -172,7 +178,7 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
     }
 
     public void viewResults() {
-//        Util.loadFragment(getActivity(), new SessionResults());
+        Log.i("viewResults()", "Session is over");
         if (LevelManager.getInstance().questions)
             Util.loadFragment(getActivity(), new ReflectionQuestion());
         else
@@ -199,14 +205,13 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
         {
 //            reader.mark(0); // when reset() is called, reader will return to line 0 after reaching last line in file
             int r = new Random().nextInt(200);
-            Log.wtf("randnum", "" + r);
             for (int i = 0; i < r; ++i) {
                 if ((line = reader.readLine()) == null) { // reached end of phrases file
                     inputStream = getActivity().getResources().openRawResource(resourceId); // reset inputstream and reader
                     reader = new BufferedReader(new InputStreamReader(inputStream));
                     line = reader.readLine();
                 }
-                Log.d("Reading feedback_up", line);
+//                Log.d("getFeedbackPhrase()", "Reading line " + line);
             }
         }
         catch (IOException e) {

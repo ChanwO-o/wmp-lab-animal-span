@@ -39,17 +39,17 @@ public final class Util {
         final View window = activity.getWindow().getDecorView();
         setFlags(window);
 
-//        window.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() { // don't need to run thread; STICKY flag automatically keeps them cleared
-//            public void onSystemUiVisibilityChange(int visibility) {
-//                if (visibility == View.SYSTEM_UI_FLAG_VISIBLE) {
-//                    window.postDelayed(new Runnable() {
-//                        public void run() {
-//                            setFlags(window);
-//                        }
-//                    }, 2000);
-//                }
-//            }
-//        });
+        window.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() { // don't need to run thread; STICKY flag automatically keeps them cleared
+            public void onSystemUiVisibilityChange(int visibility) {
+                if (visibility == View.SYSTEM_UI_FLAG_VISIBLE) {
+                    window.postDelayed(new Runnable() {
+                        public void run() {
+                            setFlags(window);
+                        }
+                    }, 2000);
+                }
+            }
+        });
     }
 
     private static void setFlags(View window) {

@@ -25,12 +25,12 @@ import java.util.Set;
 public class Checks {
     private static final Checks INSTANCE = new Checks();
 
-    public final String LEVELFOLDER_PATH = "/wmplab/levels/";
-    public final String STIMULIFOLDER_PATH = "/wmplab/stimuli/";
-    public final String STIMULI_LIST1_PATH = "/wmplab/stimuli/list1/";
-    public final String STIMULI_LIST2_PATH = "/wmplab/stimuli/list2/";
-    public final String STIMULI_LIST3_PATH = "/wmplab/stimuli/list3/";
-    public final String STIMULI_DIST_PATH = "/wmplab/stimuli/distractors/";
+    public final String LEVELFOLDER_PATH = "/wmplab/Toy Store/levels/";
+    public final String STIMULIFOLDER_PATH = "/wmplab/Toy Store/stimuli/";
+    public final String STIMULI_LIST1_PATH = "/wmplab/Toy Store/stimuli/list1/";
+    public final String STIMULI_LIST2_PATH = "/wmplab/Toy Store/stimuli/list2/";
+    public final String STIMULI_LIST3_PATH = "/wmplab/Toy Store/stimuli/list3/";
+    public final String STIMULI_DIST_PATH = "/wmplab/Toy Store/stimuli/distractors/";
 
     private StringBuilder errorMessages = new StringBuilder();
     private Context context;

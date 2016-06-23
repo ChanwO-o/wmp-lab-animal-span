@@ -48,12 +48,15 @@ public class Stage1 extends Fragment implements View.OnClickListener {
         @Override
         public void run() {
             responseTime = SystemClock.uptimeMillis() - stimuliStartTime;
+            int seconds = (int) (responseTime / 1000);
+            int milliseconds = (int)(responseTime % 1000);
 
             // timer text
-            int seconds = (int) (responseTime/1000);
-            int milliseconds = (int)(responseTime % 1000);
-            String time = String.format("%02d", seconds) + ":" + String.format("%03d", milliseconds);
-            tvTimer.setText(time);
+            if (LevelManager.getInstance().debug) {
+                long millsLeft = LevelManager.getInstance().timetoanswerfirstpart * 1000 - responseTime;
+                String time = String.format("%02d", millsLeft / 1000) + ":" + String.format("%03d", millsLeft % 1000);
+                tvTimer.setText(time);
+            }
 
             // user responds too slow
             if (seconds >= LevelManager.getInstance().timetoanswerfirstpart && !responded) {
@@ -114,7 +117,8 @@ public class Stage1 extends Fragment implements View.OnClickListener {
         ivUpdoswn.setOnClickListener(this);
         ivRightup.setOnClickListener(this);
 
-        tvStimuliList.setText(StimuliManager.iterableToString(LevelManager.getInstance().stimulisequence));
+        if (LevelManager.getInstance().debug)
+            tvStimuliList.setText(StimuliManager.iterableToString(LevelManager.getInstance().stimulisequence));
         stimuliStartTime = SystemClock.uptimeMillis();
 
         handler.postDelayed(response, 0); // start_old loop

@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Animal Span</string>
+    <string name="app_name">Toy Store</string>
     <string name="action_settings">Settings</string>
 
-    <string name="animal_span">Animal Span</string>
+    <!--<string name="animal_span">Animal Span</string>-->
     <string name="slow_response_prompt">Please try to respond correctly as quickly as possible!</string>
     <string name="desc">Content description</string>
 

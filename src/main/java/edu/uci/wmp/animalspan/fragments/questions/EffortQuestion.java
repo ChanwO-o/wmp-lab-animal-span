@@ -43,7 +43,7 @@ public class EffortQuestion extends Fragment {
     boolean responded;
     long responseStartTime;
     final int HIDE_TIME = 500; // hide all views
-    final int HIDE_FLICKER_TIME = 50; // short hide time for screen flickering
+    final int HIDE_FLICKER_TIME = 100; // short hide time for screen flickering
     private Handler handler = new Handler();
 
     private Runnable response = new Runnable() {
@@ -58,17 +58,19 @@ public class EffortQuestion extends Fragment {
         }
     };
 
-//    private Runnable hideFlicker = new Runnable() {
-//        @Override
-//        public void run() {
-//            long current = SystemClock.uptimeMillis();
-//            if (!responded && current < HIDE_FLICKER_TIME) {
-//                setViewsVisible(View.INVISIBLE);
-//                handler.postDelayed(this, 0);
-//            } else
-//                setViewsVisible(View.VISIBLE);
-//        }
-//    };
+    /**
+     * Hides the flicker from views adjusting and instantly being displayed on screen
+     */
+    private Runnable hideFlicker = new Runnable() {
+        @Override
+        public void run() {
+            long current = SystemClock.uptimeMillis();
+            if (!responded && current < HIDE_FLICKER_TIME) {
+                handler.postDelayed(this, 0);
+            } else
+                setViewsVisible(View.VISIBLE);
+        }
+    };
 
     public EffortQuestion() {
         // Required empty public constructor
@@ -140,7 +142,7 @@ public class EffortQuestion extends Fragment {
     public void onResume() {
         super.onResume();
         adjustLabelsLayout();
-        setViewsVisible(View.VISIBLE);
+        handler.postDelayed(hideFlicker, 0);
     }
 
     /**

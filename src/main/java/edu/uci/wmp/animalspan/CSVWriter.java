@@ -23,7 +23,7 @@ public class CSVWriter {
     public static final CSVWriter INSTANCE = new CSVWriter();
 
     private static final String[] ignoreFields = {"showinfullscreen", "abortallowed"};
-    private static final String FOLDERPATH = "/wmplab/csvdata";
+    private static final String FOLDERPATH = "/wmplab/Toy Store/csvdata";
     private static final String COMMA = ", ";
     private static final String NEW_LINE = "\n ";
     private static final String NULL = "na ";
@@ -47,7 +47,7 @@ public class CSVWriter {
     }
 
     /**
-     * Makes directory wmplab/csvdata/
+     * Makes directory wmplab/Toy Store/csvdata/
      * Generates filename (current date & time)
      * Writes first line of fields
      */
@@ -60,7 +60,10 @@ public class CSVWriter {
 
         final String DATE = new SimpleDateFormat(FORMAT_DATE, Locale.US).format(Calendar.getInstance().getTime());
         final String TIME = new SimpleDateFormat(FORMAT_TIME, Locale.US).format(Calendar.getInstance().getTime());
-        final String filename = LevelManager.getInstance().subject + "_" +
+
+        String subj = (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_DEMO)) ? "DEMO" : LevelManager.getInstance().subject + "";
+
+        final String filename = subj + "_" +
                 LevelManager.getInstance().session + "_" +
                 DATE + "_" + TIME + "_" + ".csv";
 
@@ -125,12 +128,19 @@ public class CSVWriter {
     }
 
     public void collectData() {
+//        if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_DEMO)) // demo mode does not output a data file
+//            return;
         int curInd = LevelManager.getInstance().currentStimuliIndex;
         StringBuilder data = new StringBuilder();
 
-        data.append(Build.VERSION.RELEASE).append(COMMA);                                                                             // OS
-        data.append(BuildConfig.VERSION_NAME).append(COMMA);                                                                          // version name
-        data.append(LevelManager.getInstance().subject).append(COMMA);
+        data.append(Build.VERSION.RELEASE).append(COMMA);                                                               // OS
+        data.append(BuildConfig.VERSION_NAME).append(COMMA);                                                            // version name
+
+        if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_DEMO))                             // should not write subject id on demo mode
+            data.append("DEMO").append(COMMA);
+        else
+            data.append(LevelManager.getInstance().subject).append(COMMA);
+
         data.append(LevelManager.getInstance().session).append(COMMA);
         data.append(LevelManager.getInstance().level).append(COMMA);
         data.append(LevelManager.getInstance().trial).append(COMMA);

@@ -53,12 +53,6 @@ public class StimuliManager {
         return BitmapFactory.decodeStream(is);
     }
 
-//    public static Bitmap getStimuli(Context context, int labeledFileName) throws IOException {
-//        AssetManager assetManager = context.getAssets();
-//        InputStream is = assetManager.open(getImagePath(labeledFileName));
-//        return BitmapFactory.decodeStream(is);
-//    }
-
     /**
      * @param labeledFileName folder label in first digit using static int from StimuliManager.java + filename
      */
@@ -88,13 +82,13 @@ public class StimuliManager {
 //        Log.d("getImagePath()", "folderLabel " + folderLabel);
         switch (folderLabel) {
             case TARGET_LABEL:
-                return "/wmplab/stimuli/" + TARGET + labeledFileName % 100 + ".png";
+                return "/wmplab/Toy Store/stimuli/" + TARGET + labeledFileName % 100 + ".png";
             case SEMANTIC_LABEL:
-                return "/wmplab/stimuli/" + SEMANTIC + labeledFileName % 100 + ".png";
+                return "/wmplab/Toy Store/stimuli/" + SEMANTIC + labeledFileName % 100 + ".png";
             case PERCEPTUAL_LABEL:
-                return "/wmplab/stimuli/" + PERCEPTUAL + labeledFileName % 100 + ".png";
+                return "/wmplab/Toy Store/stimuli/" + PERCEPTUAL + labeledFileName % 100 + ".png";
             case DISTRACTOR_LABEL:
-                return "/wmplab/stimuli/" + DISTRACTOR + labeledFileName % 100 + ".png";
+                return "/wmplab/Toy Store/stimuli/" + DISTRACTOR + labeledFileName % 100 + ".png";
             default:
                 return "error";
         }

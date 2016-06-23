@@ -57,8 +57,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         // punish user for aborting the test by saving decreased level by 1. Successful session closure is handled at SessionResults
-        if (LevelManager.getInstance().testStarted)
+        if (LevelManager.getInstance().testStarted && !LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_DEMO)) {
             LevelManager.getInstance().saveLevelToFile(false);
+            Log.wtf("Activity onPause()", "You aborted the test!");
+            finish(); // quit entire session, user must restart game
+        }
     }
 
     @Override

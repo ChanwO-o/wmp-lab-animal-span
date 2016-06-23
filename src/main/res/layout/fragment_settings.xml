@@ -90,6 +90,31 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rlDebugMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="@dimen/gap_medium"
+                android:text="Debug"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white" />
+
+            <Switch
+                android:id="@+id/swDebug"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center_horizontal"
+                android:checked="false"
+                android:padding="@dimen/gap_medium" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/rlTrainingMode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

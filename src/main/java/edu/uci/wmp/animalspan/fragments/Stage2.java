@@ -71,7 +71,8 @@ public class Stage2 extends Fragment {
         responseListLayout = (LinearLayout) view.findViewById(R.id.responselist);
         stimuliChoicesLayout = (LinearLayout) view.findViewById(R.id.stimulichoices);
 
-        tvStimuliList.setText(StimuliManager.iterableToString(LevelManager.getInstance().stimulisequence));
+        if (LevelManager.getInstance().debug)
+            tvStimuliList.setText(StimuliManager.iterableToString(LevelManager.getInstance().stimulisequence));
 
         addChoicesToSet();
         displayChoices();

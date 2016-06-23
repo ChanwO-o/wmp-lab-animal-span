@@ -2,12 +2,12 @@ package edu.uci.wmp.animalspan;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
 import android.graphics.Point;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -30,8 +30,6 @@ import edu.uci.wmp.animalspan.fragments.Settings;
 
 /**
  * Created by ChanWoo on 11/18/2015
- * TODO: set privacy for functions (public -> private)
- * TODO: remove all getInstance() calls
  */
 public class LevelManager implements Serializable {
 
@@ -39,13 +37,15 @@ public class LevelManager implements Serializable {
 
     public static final int MIN_LEVEL = 1;                  // lowest level available
     public static final int MAX_LEVEL = 30;                 // highest level available
+    public static final int DEMO_MAX_ROUNDS = 3;            // demo mode plays only 3 rounds
     public static final int STAGE1 = 1;                     // stage 1
     public static final int STAGE2 = 2;                     // stage 2
     public static final int STAGE0 = 0;                     // neither
     public static final String TRAININGMODE_ROUNDS = "rounds";
     public static final String TRAININGMODE_TIME = "time";
     public static final String TRAININGMODE_DEMO = "demo";
-    public static final String SAVE_LEVEL_FILENAME = "save_level.txt";
+    private static final String SAVE_FOLDER_PATH = "/wmplab/Toy Store/data/";
+    public static final String SAVE_LEVEL_FILENAME = "_data.txt";
     public static final String SHAREDPREF_KEY = "shared_pref";
 
     private Context context;
@@ -61,6 +61,7 @@ public class LevelManager implements Serializable {
     public boolean testStarted = false;
     public long sessionStartMills = 0;                      // timer starting at beginning of session, used when mode = "time"
     public boolean questions = true;
+    public boolean debug = false;
     public int points = 0;                              // records total points awarded for the session
 
     public List<Integer> stimulisequence;              // defines what stimuli has to be shown
@@ -162,8 +163,8 @@ public class LevelManager implements Serializable {
         display.getSize(size);
         screen_width = size.x;
         screen_height = size.y;
-        Log.i("Width", "" + screen_width);
-        Log.i("Height", "" + screen_height);
+        Log.d("Width", "" + screen_width);
+        Log.d("Height", "" + screen_height);
     }
 
     public void reset() {
@@ -196,7 +197,14 @@ public class LevelManager implements Serializable {
         rtsecondpart.clear();
         accuracyfirstpart.clear();
         accuracysecondpart.clear();
-        loadSavedLevel(); // sets level variable if there is a saved instance
+
+        if (trainingmode.equals(TRAININGMODE_DEMO)) {
+            loadLevel(1);
+            numberoftrials = 3;
+        }
+        else
+            loadSavedLevel(); // sets level variable if there is a saved instance
+
         sessionStartMills = SystemClock.uptimeMillis(); // record session starting time (used for trainingmode = "time")
         trial = 0;
         testStarted = true;
@@ -207,7 +215,7 @@ public class LevelManager implements Serializable {
     /**
      * Called at the beginning of a trial
      */
-    public void startTrial() {
+    public void startRound() {
         stimulisequence.clear();
         distincttargets.clear();
         distinctdistractors.clear();
@@ -252,7 +260,7 @@ public class LevelManager implements Serializable {
     public void loadSavedLevel() {
         try {
             File root = android.os.Environment.getExternalStorageDirectory();
-            BufferedReader reader = new BufferedReader(new FileReader(root.getAbsolutePath() + "/wmplab/" + SAVE_LEVEL_FILENAME));
+            BufferedReader reader = new BufferedReader(new FileReader(root.getAbsolutePath() + SAVE_FOLDER_PATH + subject + SAVE_LEVEL_FILENAME));
             String savedLevel = reader.readLine();
             level = Integer.valueOf(savedLevel);
             Log.i("loadSavedLevel()", "Loaded level " + savedLevel);
@@ -276,9 +284,10 @@ public class LevelManager implements Serializable {
     public void saveLevelToFile(boolean sessionFin) {
         try {
             File root = android.os.Environment.getExternalStorageDirectory();
-            File saveFile = new File (root.getAbsolutePath() + "/wmplab/" + SAVE_LEVEL_FILENAME);
-//            String filePath = context.getFilesDir().getPath() + SAVE_LEVEL_FILENAME;
-//            File file = new File(filePath);
+            File saveFolder = new File (root.getAbsolutePath() + SAVE_FOLDER_PATH);
+            if (!saveFolder.exists())
+                Log.i("saveLevelToFile()", "Save folder created " + saveFolder.mkdirs());
+            File saveFile = new File (saveFolder, subject + SAVE_LEVEL_FILENAME);
             FileWriter fw = new FileWriter(saveFile, false);
             BufferedWriter writer = new BufferedWriter(fw);
             if (sessionFin)
@@ -309,8 +318,9 @@ public class LevelManager implements Serializable {
         editor.putInt(Settings.SUBJECT_KEY, subject);
         editor.putInt(Settings.SESSION_KEY, session);
         editor.putBoolean(Settings.QUESTIONS_KEY, questions);
+        editor.putBoolean(Settings.DEBUG_KEY, debug);
         editor.putString(Settings.TRAININGMODE_KEY, trainingmode);
-        editor.putInt(Settings.TRIALS_KEY, numberoftrials);
+        editor.putInt(Settings.ROUNDS_KEY, numberoftrials);
         editor.putInt(Settings.SESSIONLENGTH_KEY, sessionLength);
         editor.apply();
     }
@@ -323,8 +333,9 @@ public class LevelManager implements Serializable {
         subject = sharedPref.getInt(Settings.SUBJECT_KEY, 1);
         session = sharedPref.getInt(Settings.SESSION_KEY, 1);
         questions = sharedPref.getBoolean(Settings.QUESTIONS_KEY, true);
+        debug = sharedPref.getBoolean(Settings.DEBUG_KEY, true);
         trainingmode = sharedPref.getString(Settings.TRAININGMODE_KEY, TRAININGMODE_ROUNDS);
-        numberoftrials = sharedPref.getInt(Settings.TRIALS_KEY, 10);
+        numberoftrials = sharedPref.getInt(Settings.ROUNDS_KEY, 10);
         sessionLength = sharedPref.getInt(Settings.SESSIONLENGTH_KEY, 300);
     }
 
@@ -342,7 +353,7 @@ public class LevelManager implements Serializable {
     }
 
     public String getLevelFilePath() {
-        return "/wmplab/levels/level" + level + ".txt";
+        return "/wmplab/Toy Store/levels/level" + level + ".txt";
     }
 
     public BufferedReader openFileAsReader() throws IOException {

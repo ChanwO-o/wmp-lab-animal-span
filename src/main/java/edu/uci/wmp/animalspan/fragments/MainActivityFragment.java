@@ -81,10 +81,10 @@ public class MainActivityFragment extends Fragment implements View.OnTouchListen
         ivDemo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LevelManager.getInstance().trainingmode = LevelManager.TRAININGMODE_DEMO; // start demo mode with no limits to time or levels
+                LevelManager.getInstance().trainingmode = LevelManager.TRAININGMODE_DEMO; // start demo mode and play max 3 rounds
                 LevelManager.getInstance().startSession();
-//                Util.loadFragment(getActivity(), new GetReady());
-                Util.loadFragment(getActivity(), new ReflectionQuestion());
+                Util.loadFragment(getActivity(), new GetReady());
+//                Util.loadFragment(getActivity(), new ReflectionQuestion()); // used for testing questions easily
             }
         });
         return view;

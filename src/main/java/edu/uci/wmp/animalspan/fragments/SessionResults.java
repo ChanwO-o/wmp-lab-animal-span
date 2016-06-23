@@ -38,7 +38,8 @@ public class SessionResults extends Fragment {
         TextView tvResults = (TextView) view.findViewById(R.id.tvResuts);
         ImageView ivBackToMain = (ImageView) view.findViewById(R.id.ivBackToMain);
 
-        LevelManager.getInstance().saveLevelToFile(true); // save progress
+        if (!LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_DEMO))
+            LevelManager.getInstance().saveLevelToFile(true); // save progress
         String result = "You earned " + LevelManager.getInstance().points + " points!";
         tvResults.setText(result);
 

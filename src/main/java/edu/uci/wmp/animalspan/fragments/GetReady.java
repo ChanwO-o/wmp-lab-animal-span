@@ -48,7 +48,7 @@ public class GetReady extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (LevelManager.getInstance() != null) {
-            LevelManager.getInstance().startTrial();
+            LevelManager.getInstance().startRound();
             LevelManager.getInstance().logVariables();
         }
         else
@@ -70,12 +70,16 @@ public class GetReady extends Fragment implements View.OnClickListener {
         ivReadyNext.setOnClickListener(this);
 
         LevelManager.getInstance().trial++; // one trial completed
+
         Log.wtf("numberoftrials", "" + LevelManager.getInstance().numberoftrials);
         Log.wtf("current trial", "" + LevelManager.getInstance().trial);
-        String trials = "numberoftrials: " + LevelManager.getInstance().numberoftrials +
-                        "\ncurrent trial: " + LevelManager.getInstance().trial +
-                        "\nTrials left: " + (LevelManager.getInstance().numberoftrials - LevelManager.getInstance().trial);
-        tvTrialsLeft.setText(trials);
+
+        if (LevelManager.getInstance().debug) {
+            String trials = "numberoftrials: " + LevelManager.getInstance().numberoftrials +
+                    "\ncurrent trial: " + LevelManager.getInstance().trial +
+                    "\nTrials left: " + (LevelManager.getInstance().numberoftrials - LevelManager.getInstance().trial);
+            tvTrialsLeft.setText(trials);
+        }
 
         handler.postDelayed(showButton, 0);
 
