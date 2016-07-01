@@ -2,24 +2,15 @@ package edu.uci.wmp.animalspan;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.uci.wmp.animalspan.R;
-
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class Checks {
@@ -182,7 +173,7 @@ public class Checks {
         File root = android.os.Environment.getExternalStorageDirectory();
         String outLevelFolderPath = root.getAbsolutePath() + LEVELFOLDER_PATH;
         File outLevelFolder = new File(outLevelFolderPath);
-        outLevelFolder.mkdirs();
+        Log.i("populateLevelDir()", "folder " + outLevelFolder.mkdirs());
 
         try { copyDirectory("levels/", outLevelFolderPath); }
         catch (IOException e) { throw new InvalidLevelFilesException(); }
@@ -192,14 +183,14 @@ public class Checks {
         File root = android.os.Environment.getExternalStorageDirectory();
         String outStimuliFolderPath = root.getAbsolutePath() + STIMULIFOLDER_PATH;
         File outStimuliFolder = new File(outStimuliFolderPath);
-        outStimuliFolder.mkdirs();
+        Log.i("populateStimuliDir()", "folder " + outStimuliFolder.mkdirs());
 
         try {
             String[] destinations = new String[] { StimuliManager.TARGET, StimuliManager.SEMANTIC, StimuliManager.PERCEPTUAL, StimuliManager.DISTRACTOR };
             for (String dest : destinations) {
                 String newOutStimuliFolderPath = outStimuliFolderPath + dest;
                 outStimuliFolder = new File(newOutStimuliFolderPath);
-                outStimuliFolder.mkdir();
+                Log.i("populateStimuliDir()", "folder " + outStimuliFolder.mkdirs());
                 copyDirectory("stimuli/" + dest, newOutStimuliFolderPath);
             }
         }

@@ -1,12 +1,9 @@
 package edu.uci.wmp.animalspan.fragments;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,24 +11,28 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import edu.uci.wmp.animalspan.CSVWriter;
-import edu.uci.wmp.animalspan.LevelManager;
 import com.uci.wmp.animalspan.R;
-import edu.uci.wmp.animalspan.StimuliManager;
-import edu.uci.wmp.animalspan.Util;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import edu.uci.wmp.animalspan.CSVWriter;
+import edu.uci.wmp.animalspan.LevelManager;
+import edu.uci.wmp.animalspan.StimuliManager;
+import edu.uci.wmp.animalspan.Util;
+
 public class Stage2 extends Fragment {
 
+    LinearLayout llGodMode;
     LinearLayout responseListLayout;
     LinearLayout stimuliChoicesLayout;
     List<Integer> stimuliChoices;
     int choiceStimuliSize;
 
+    final double GODMODE_ANSWER_SIZE = 0.06;
+    final double RESPNSE_SIZE = 0.13; // 13% of screen height
     final int RESPONSE_MARGINS = 5;
     final int PAUSE_TIME = 1000;
 
@@ -68,18 +69,37 @@ public class Stage2 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_stage2, container, false);
 
         TextView tvStimuliList = (TextView) view.findViewById(R.id.tvStimuliListStage2);
+        llGodMode = (LinearLayout) view.findViewById(R.id.llGodMode);
         responseListLayout = (LinearLayout) view.findViewById(R.id.responselist);
         stimuliChoicesLayout = (LinearLayout) view.findViewById(R.id.stimulichoices);
 
-        if (LevelManager.getInstance().debug)
-            tvStimuliList.setText(StimuliManager.iterableToString(LevelManager.getInstance().stimulisequence));
+        try {
+            if (LevelManager.getInstance().debug) {
+                tvStimuliList.setText(Util.iterableToString(LevelManager.getInstance().stimulisequence));
+                fillGodModeLayout();
+            }
+            addChoicesToSet();
+            displayChoices();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        addChoicesToSet();
-        displayChoices();
 
         reactionStartTime = SystemClock.uptimeMillis(); // first reaction timer starts when fragment is created
 
         return view;
+    }
+
+    private void fillGodModeLayout() throws IOException {
+        for (Integer answer : LevelManager.getInstance().correctstimulisequence) {
+            ImageView ivAnswer = new ImageView(getActivity());
+            ivAnswer.setImageBitmap(StimuliManager.getInstance().getStimuli(answer));
+            int godAnswerImageSize = Double.valueOf(LevelManager.getInstance().screen_height * GODMODE_ANSWER_SIZE).intValue();
+            LinearLayout.LayoutParams godLayoutParams = new LinearLayout.LayoutParams(godAnswerImageSize, godAnswerImageSize);
+            godLayoutParams.setMargins(RESPONSE_MARGINS, RESPONSE_MARGINS, RESPONSE_MARGINS, RESPONSE_MARGINS);
+            ivAnswer.setLayoutParams(godLayoutParams);
+            llGodMode.addView(ivAnswer);
+        }
     }
 
     public void addChoicesToSet() {
@@ -103,33 +123,28 @@ public class Stage2 extends Fragment {
         return lureList;
     }
 
-    public void displayChoices() {
-        try {
-            int numberOfRows = stimuliChoices.size() / LevelManager.getInstance().stimuliperline;   // number of LinearLayouts needed
-            int remainder = stimuliChoices.size() % LevelManager.getInstance().stimuliperline;      // checking remainder to determine number of rows needed
+    public void displayChoices() throws IOException {
+        int numberOfRows = stimuliChoices.size() / LevelManager.getInstance().stimuliperline;   // number of LinearLayouts needed
+        int remainder = stimuliChoices.size() % LevelManager.getInstance().stimuliperline;      // checking remainder to determine number of rows needed
 
-            if (remainder != 0) // e.g. 13 stimuli with 4 stim per line would give 3 rows only
-                numberOfRows++; // so add 1
+        if (remainder != 0) // e.g. 13 stimuli with 4 stim per line would give 3 rows only
+            numberOfRows++; // so add 1
 
-            choiceStimuliSize = setChoiceStimuliSize(numberOfRows); // set choice stimuli size after calculating rows
+        choiceStimuliSize = setChoiceStimuliSize(numberOfRows); // set choice stimuli size after calculating rows
 
-            for (int i = 0; i < numberOfRows; i++) {
-                LinearLayout stimuliRow = new LinearLayout(getActivity()); // create a new LinearLayout for each row
-                stimuliRow.setOrientation(LinearLayout.HORIZONTAL);
+        for (int i = 0; i < numberOfRows; i++) {
+            LinearLayout stimuliRow = new LinearLayout(getActivity()); // create a new LinearLayout for each row
+            stimuliRow.setOrientation(LinearLayout.HORIZONTAL);
 
-                for (int j = 0; j < LevelManager.getInstance().stimuliperline; j++) { // fill each layout with stimuli
-                    int stimuliIndex = (LevelManager.getInstance().stimuliperline * i +  j); // index to get stimuli from stimuliChoices list
-                    ImageView ivStim = createChoiceStimuli(stimuliChoices.get(stimuliIndex));
-                    stimuliRow.addView(ivStim);
+            for (int j = 0; j < LevelManager.getInstance().stimuliperline; j++) { // fill each layout with stimuli
+                int stimuliIndex = (LevelManager.getInstance().stimuliperline * i +  j); // index to get stimuli from stimuliChoices list
+                ImageView ivStim = createChoiceStimuli(stimuliChoices.get(stimuliIndex));
+                stimuliRow.addView(ivStim);
 
-                    if (i == numberOfRows - 1 && j + 1 == remainder)    // for stages that have few stimuli on the last row (e.g. Level 12) break out of loop to prevent indexoutofbounds
-                        break;
-                }
-                stimuliChoicesLayout.addView(stimuliRow);
+                if (i == numberOfRows - 1 && j + 1 == remainder)    // for stages that have few stimuli on the last row (e.g. Level 12) break out of loop to prevent indexoutofbounds
+                    break;
             }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
+            stimuliChoicesLayout.addView(stimuliRow);
         }
     }
 
@@ -138,7 +153,7 @@ public class Stage2 extends Fragment {
      */
     public ImageView createChoiceStimuli(int labeledFilename) throws IOException {
         final ImageView ivStim = new ImageView(getActivity());
-        ivStim.setImageBitmap(StimuliManager.getStimuli(labeledFilename));
+        ivStim.setImageBitmap(StimuliManager.getInstance().getStimuli(labeledFilename));
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(choiceStimuliSize, choiceStimuliSize);
         int margin = (int) LevelManager.getInstance().gapbetweenimages * 5; // margin between each image in grid
         layoutParams.setMargins(margin, margin, margin, margin);
@@ -201,9 +216,9 @@ public class Stage2 extends Fragment {
 
         try {
             ImageView ivResponse = new ImageView(getActivity());
-//            ivResponse.setImageBitmap(StimuliManager.getStimuli(getActivity(), imageTag));
-            ivResponse.setImageBitmap(StimuliManager.getStimuli(imageTag));
-            LinearLayout.LayoutParams responseLayoutParams = new LinearLayout.LayoutParams(100, 100);
+            ivResponse.setImageBitmap(StimuliManager.getInstance().getStimuli(imageTag));
+            int responseImageSize = Double.valueOf(LevelManager.getInstance().screen_height * RESPNSE_SIZE).intValue();
+            LinearLayout.LayoutParams responseLayoutParams = new LinearLayout.LayoutParams(responseImageSize, responseImageSize);
             responseLayoutParams.setMargins(RESPONSE_MARGINS, RESPONSE_MARGINS, RESPONSE_MARGINS, RESPONSE_MARGINS);
             ivResponse.setLayoutParams(responseLayoutParams);
             responseListLayout.addView(ivResponse);

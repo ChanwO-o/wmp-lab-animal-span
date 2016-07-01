@@ -1,14 +1,12 @@
 package edu.uci.wmp.animalspan.fragments.questions;
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,7 +18,6 @@ import com.uci.wmp.animalspan.R;
 import edu.uci.wmp.animalspan.CSVWriter;
 import edu.uci.wmp.animalspan.LevelManager;
 import edu.uci.wmp.animalspan.Util;
-import edu.uci.wmp.animalspan.fragments.MainActivityFragment;
 import edu.uci.wmp.animalspan.fragments.SessionResults;
 
 public class EffortQuestion extends Fragment {

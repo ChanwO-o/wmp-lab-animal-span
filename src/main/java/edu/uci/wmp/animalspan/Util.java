@@ -1,36 +1,18 @@
 package edu.uci.wmp.animalspan;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.AssetManager;
-import android.media.MediaPlayer;
-import android.util.Log;
 import android.view.View;
 
 import com.uci.wmp.animalspan.R;
 
-import edu.uci.wmp.animalspan.fragments.MainActivityFragment;
-import edu.uci.wmp.animalspan.fragments.Settings;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public final class Util {
-
-    private static final String LOG_TAG = "Util";
 
     /**
      * Clear status & navigation bars from screen, keep them off with STICKY flag
@@ -67,6 +49,13 @@ public final class Util {
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.fragment_container, fragment);
         ft.commit();
+    }
+
+    public static <T> String iterableToString(Iterable<T> iterable) {
+        StringBuilder result = new StringBuilder();
+        for (T t : iterable)
+            result.append(t).append(" ");
+        return result.toString();
     }
 
     /**

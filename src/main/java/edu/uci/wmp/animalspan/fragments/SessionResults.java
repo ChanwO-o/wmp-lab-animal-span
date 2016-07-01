@@ -1,22 +1,17 @@
 package edu.uci.wmp.animalspan.fragments;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import edu.uci.wmp.animalspan.LevelManager;
 import com.uci.wmp.animalspan.R;
 
+import edu.uci.wmp.animalspan.LevelManager;
 import edu.uci.wmp.animalspan.Util;
-import edu.uci.wmp.animalspan.fragments.questions.EffortQuestion;
-import edu.uci.wmp.animalspan.fragments.questions.ReflectionQuestion;
 
 
 public class SessionResults extends Fragment {

@@ -1,33 +1,23 @@
 package edu.uci.wmp.animalspan.fragments;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.uci.wmp.animalspan.R;
+
 import edu.uci.wmp.animalspan.Checks;
 import edu.uci.wmp.animalspan.LevelManager;
 import edu.uci.wmp.animalspan.Util;
-
-import com.uci.wmp.animalspan.R;
-
-import java.lang.reflect.Field;
-import java.text.NumberFormat;
 
 public class Settings extends Fragment {
 

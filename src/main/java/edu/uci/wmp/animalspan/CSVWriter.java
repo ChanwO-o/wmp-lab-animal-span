@@ -17,7 +17,6 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.Objects;
 
 public class CSVWriter {
     public static final CSVWriter INSTANCE = new CSVWriter();
@@ -128,8 +127,6 @@ public class CSVWriter {
     }
 
     public void collectData() {
-//        if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_DEMO)) // demo mode does not output a data file
-//            return;
         int curInd = LevelManager.getInstance().currentStimuliIndex;
         StringBuilder data = new StringBuilder();
 
@@ -145,7 +142,7 @@ public class CSVWriter {
         data.append(LevelManager.getInstance().level).append(COMMA);
         data.append(LevelManager.getInstance().trial).append(COMMA);
         data.append(LevelManager.getInstance().part).append(COMMA);
-        data.append(StimuliManager.getImagePath(LevelManager.getInstance().stimulisequence.get(curInd))).append(COMMA); // stimulus
+        data.append(StimuliManager.getInstance().getImagePath(LevelManager.getInstance().stimulisequence.get(curInd))).append(COMMA); // stimulus
         data.append(LevelManager.getInstance().stimulisequence.get(curInd) / 100).append(COMMA);                        // stimulus class
         data.append(LevelManager.getInstance().presentationstyle.get(curInd)).append(COMMA);                            // presentation style
 
@@ -159,11 +156,16 @@ public class CSVWriter {
         else if (LevelManager.getInstance().part == LevelManager.STAGE2)
             data.append(NULL).append(COMMA).append(LevelManager.getInstance().accuracysecondpart.get(curInd)).append(COMMA);
 
-        double seconds = 0;                                                                                             // reaction time (rt)
-        if (LevelManager.getInstance().part == LevelManager.STAGE1)
-            seconds = (double) (LevelManager.getInstance().rtfirstpart.get(curInd)) / 1000;
+        String seconds = null;                                                                                             // reaction time (rt)
+        if (LevelManager.getInstance().part == LevelManager.STAGE1) {
+            double rtf = LevelManager.getInstance().rtfirstpart.get(curInd);
+            if (rtf == StimuliManager.NOANSWER)
+                seconds = " ";
+            else
+                seconds = String.valueOf(rtf / 1000);
+        }
         else if (LevelManager.getInstance().part == LevelManager.STAGE2)
-            seconds = (double) (LevelManager.getInstance().rtsecondpart.get(curInd)) / 1000;
+            seconds = String.valueOf((double) (LevelManager.getInstance().rtsecondpart.get(curInd)) / 1000);
         data.append(seconds).append(COMMA);
 
         data.append(Util.getTimestamp(TIMESTAMP_DATE, TIMESTAMP_TIME)).append(COMMA);                                   // timestamp

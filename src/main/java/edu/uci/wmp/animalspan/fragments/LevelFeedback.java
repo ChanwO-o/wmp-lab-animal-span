@@ -1,12 +1,7 @@
 package edu.uci.wmp.animalspan.fragments;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Build;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
@@ -17,20 +12,19 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import edu.uci.wmp.animalspan.LevelManager;
 import com.uci.wmp.animalspan.R;
-import edu.uci.wmp.animalspan.StimuliManager;
-import edu.uci.wmp.animalspan.Util;
-import edu.uci.wmp.animalspan.fragments.questions.ReflectionQuestion;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Random;
+
+import edu.uci.wmp.animalspan.LevelManager;
+import edu.uci.wmp.animalspan.StimuliManager;
+import edu.uci.wmp.animalspan.Util;
+import edu.uci.wmp.animalspan.fragments.questions.ReflectionQuestion;
 
 public class LevelFeedback extends Fragment implements View.OnClickListener {
 
@@ -98,17 +92,12 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
             ivDemoQuit.setVisibility(View.GONE);
         ivDemoQuit.setOnClickListener(this);
 
-//        Log.d("stimsequence", StimuliManager.iterableToString(LevelManager.getInstance().stimulisequence));
-//        Log.d("Answer", StimuliManager.iterableToString(LevelManager.getInstance().correctstimulisequence));
-//        Log.d("Response", StimuliManager.iterableToString(LevelManager.getInstance().secondpartsequence));
-//        Log.w("checking", "" + check());
-
         // feedback
         try {
             if (check())
-                ivFeedback.setImageBitmap(StimuliManager.getFeedbackAsset(getActivity(), StimuliManager.CORRECT));
+                ivFeedback.setImageBitmap(StimuliManager.getInstance().getFeedbackAsset(StimuliManager.CORRECT));
             else
-                ivFeedback.setImageBitmap(StimuliManager.getFeedbackAsset(getActivity(), StimuliManager.INCORRECT));
+                ivFeedback.setImageBitmap(StimuliManager.getInstance().getFeedbackAsset(StimuliManager.INCORRECT));
         } catch ( IOException e) { e.printStackTrace(); }
 
         handler.postDelayed(showButton, 0);
@@ -141,13 +130,6 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
                 return;
             }
         }
-//        else if (LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_DEMO)) {
-//            Log.wtf("aaa", "aaa");
-//            viewResults();
-//            Log.wtf("bbb", "bbb");
-//            return;
-//        }
-//        Log.wtf("ccc", "ccc");
         Util.loadFragment(getActivity(), new GetReady());
     }
 

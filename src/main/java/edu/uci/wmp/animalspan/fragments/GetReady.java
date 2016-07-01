@@ -1,9 +1,7 @@
 package edu.uci.wmp.animalspan.fragments;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
@@ -13,10 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.uci.wmp.animalspan.R;
+
+import java.util.Locale;
+
 import edu.uci.wmp.animalspan.LevelManager;
 import edu.uci.wmp.animalspan.Util;
-
-import com.uci.wmp.animalspan.R;
 
 public class GetReady extends Fragment implements View.OnClickListener {
 
@@ -63,7 +63,7 @@ public class GetReady extends Fragment implements View.OnClickListener {
         TextView tvTrialsLeft = (TextView) view.findViewById(R.id.tvTrialsLeft);
         ivReadyNext = (ImageView) view.findViewById(R.id.ivReadyGo);
 
-        String readyPrompt = String.format("Get ready for level %d!", LevelManager.getInstance().level);
+        String readyPrompt = String.format(Locale.getDefault(), "Get ready for level %d!", LevelManager.getInstance().level);
         tvGetReady.setText(readyPrompt);
 
         ivReadyNext.setVisibility(View.GONE); // hide button for 1 second

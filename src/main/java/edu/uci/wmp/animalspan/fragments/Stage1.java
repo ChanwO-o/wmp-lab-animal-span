@@ -1,12 +1,11 @@
 package edu.uci.wmp.animalspan.fragments;
 
+import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +13,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import edu.uci.wmp.animalspan.CSVWriter;
-import edu.uci.wmp.animalspan.LevelManager;
 import com.uci.wmp.animalspan.R;
-import edu.uci.wmp.animalspan.StimuliManager;
-import edu.uci.wmp.animalspan.Util;
 
 import java.io.IOException;
+import java.util.Locale;
+
+import edu.uci.wmp.animalspan.CSVWriter;
+import edu.uci.wmp.animalspan.LevelManager;
+import edu.uci.wmp.animalspan.StimuliManager;
+import edu.uci.wmp.animalspan.Util;
 
 public class Stage1 extends Fragment implements View.OnClickListener {
 
@@ -49,12 +50,11 @@ public class Stage1 extends Fragment implements View.OnClickListener {
         public void run() {
             responseTime = SystemClock.uptimeMillis() - stimuliStartTime;
             int seconds = (int) (responseTime / 1000);
-            int milliseconds = (int)(responseTime % 1000);
 
             // timer text
             if (LevelManager.getInstance().debug) {
                 long millsLeft = LevelManager.getInstance().timetoanswerfirstpart * 1000 - responseTime;
-                String time = String.format("%02d", millsLeft / 1000) + ":" + String.format("%03d", millsLeft % 1000);
+                String time = String.format(Locale.getDefault(), "%02d", millsLeft / 1000) + ":" + String.format(Locale.getDefault(), "%03d", millsLeft % 1000);
                 tvTimer.setText(time);
             }
 
@@ -118,7 +118,7 @@ public class Stage1 extends Fragment implements View.OnClickListener {
         ivRightup.setOnClickListener(this);
 
         if (LevelManager.getInstance().debug)
-            tvStimuliList.setText(StimuliManager.iterableToString(LevelManager.getInstance().stimulisequence));
+            tvStimuliList.setText(Util.iterableToString(LevelManager.getInstance().stimulisequence));
         stimuliStartTime = SystemClock.uptimeMillis();
 
         handler.postDelayed(response, 0); // start_old loop
@@ -185,7 +185,8 @@ public class Stage1 extends Fragment implements View.OnClickListener {
      */
     public void answer(int orientation) {
         LevelManager.getInstance().responsesfirstpart.add(orientation); // append response to responses list
-        LevelManager.getInstance().rtfirstpart.add(responseTime); // append reaction time
+        if (orientation != StimuliManager.NOANSWER)
+            LevelManager.getInstance().rtfirstpart.add(responseTime); // append reaction time
 
         if (orientation == LevelManager.getInstance().presentationstyle.get(LevelManager.getInstance().currentStimuliIndex)) // append accuracy
             LevelManager.getInstance().accuracyfirstpart.add(StimuliManager.CORRECT);
@@ -204,7 +205,7 @@ public class Stage1 extends Fragment implements View.OnClickListener {
     public void displayStimuli() {
         try {
 //            Bitmap b = StimuliManager.getStimuli(getActivity(), LevelManager.getInstance().stimulisequence.get(LevelManager.getInstance().currentStimuliIndex));
-            Bitmap b = StimuliManager.getStimuli(LevelManager.getInstance().stimulisequence.get(LevelManager.getInstance().currentStimuliIndex));
+            Bitmap b = StimuliManager.getInstance().getStimuli(LevelManager.getInstance().stimulisequence.get(LevelManager.getInstance().currentStimuliIndex));
             ivStage1Stimuli.setImageBitmap(b);
             if (LevelManager.getInstance().presentationstyle.get(LevelManager.getInstance().currentStimuliIndex) == StimuliManager.UPDOWN)
                 ivStage1Stimuli.setRotation(180);

@@ -1,11 +1,9 @@
 package edu.uci.wmp.animalspan.fragments.questions;
 
-import android.graphics.Color;
-import android.os.Bundle;
 import android.app.Fragment;
-import android.os.SystemClock;
+import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +13,9 @@ import android.widget.TextView;
 
 import com.uci.wmp.animalspan.R;
 
-import java.io.IOException;
-
 import edu.uci.wmp.animalspan.CSVWriter;
 import edu.uci.wmp.animalspan.LevelManager;
-import edu.uci.wmp.animalspan.StimuliManager;
 import edu.uci.wmp.animalspan.Util;
-import edu.uci.wmp.animalspan.fragments.MainActivityFragment;
 
 public class ReflectionQuestion extends Fragment {
 

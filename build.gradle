@@ -4,11 +4,11 @@ android {
     compileSdkVersion 24
     buildToolsVersion "23.0.2"
     defaultConfig {
-        applicationId 'edu.uci.wmp.animalspan'
+        applicationId 'edu.uci.wmp.toystore'
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 18
-        versionName "1.1"
+        versionCode 19
+        versionName "1.2"
     }
     buildTypes {
         release {

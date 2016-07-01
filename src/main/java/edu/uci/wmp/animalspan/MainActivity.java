@@ -1,21 +1,11 @@
 package edu.uci.wmp.animalspan;
 
-import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.view.Window;
-import android.widget.Toast;
 
 import com.uci.wmp.animalspan.R;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 import edu.uci.wmp.animalspan.fragments.MainActivityFragment;
 
@@ -70,16 +60,6 @@ public class MainActivity extends AppCompatActivity {
         Util.dimSystemBar(this);
     }
 
-    @Override
-    public void onBackPressed() {
-//        if (LevelManager.getInstance().testStarted && !LevelManager.getInstance().abortallowed) // not using abortallowed variable any longer
-//            return; // don't allow user to exit
-//
-//        if (LevelManager.getInstance().testStarted)
-//            LevelManager.getInstance().saveLevelToFile(); // save level before exit if in the middle of a test
-        super.onBackPressed();
-    }
-
     public void setDisplaySettings() {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
     }
@@ -89,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         LevelManager.getInstance().setContext(this);
         LevelManager.getInstance().readSharedPreferences();
         LevelManager.getInstance().setScreenDimensions();
-        // StimuliManager.getInstance().setContext(this) TODO: implement instance in SM
+        StimuliManager.getInstance().setContext(this);
         Checks.getInstance().setContext(this);
         CSVWriter.getInstance().setContext(this);
     }

@@ -7,7 +7,6 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -83,8 +82,6 @@ public class LevelManager implements Serializable {
     // general settings
     public int screen_width = 1280; // taskresolutionwidth = 1024;         // define resolution for which game is optimized
     public int screen_height = 736; // getTaskresolutionheight = 768;
-//    public boolean showinfullscreen = true;        // define whether you want to show this fullscreen or not
-//    public boolean abortallowed = false;           // define whether pressing escape or q aborts the program
 
     // training parameters (this does NOT go into level file)
     public String trainingmode = TRAININGMODE_ROUNDS;        // time: ends session after a certain amount of time; rounds: ends session after a certain amount of rounds
@@ -140,16 +137,6 @@ public class LevelManager implements Serializable {
         reset();
     }
 
-//    public LevelManager(Context context) {
-//        setContext(context);
-//        setScreenDimensions();
-//        random = new Random();
-//        level = startlevel;
-//        trial = 0;
-//        part = STAGE0;
-//        startSession();
-//    }
-
     /**
      * Set pixel values for width & height.
      * Can be used only if context is given; thus not called in default constructor
@@ -200,7 +187,7 @@ public class LevelManager implements Serializable {
 
         if (trainingmode.equals(TRAININGMODE_DEMO)) {
             loadLevel(1);
-            numberoftrials = 3;
+            numberoftrials = DEMO_MAX_ROUNDS;
         }
         else
             loadSavedLevel(); // sets level variable if there is a saved instance
@@ -447,7 +434,7 @@ public class LevelManager implements Serializable {
             distinctdistractors.add(labeledDistinctDistractor);
             temp.remove(randomIndex);
         }
-        Log.d("distinct distractors", StimuliManager.iterableToString(distinctdistractors));
+        Log.d("distinct distractors", Util.iterableToString(distinctdistractors));
 
         for (int i = 0; i < distractorsize; i++) {
             int randomIndex = random.nextInt(distinctdistractors.size()); // past code had + 1 here >   = random.nextInt(numberofdistinctdistractors) + 1;
@@ -489,8 +476,8 @@ public class LevelManager implements Serializable {
         Log.i("numberofperceptuallures", "" + numberofperceptuallures);
         Log.i("numberofsemanticlures", "" + numberofsemanticlures);
         Log.i("numdistinctdistractors", "" + numberofdistinctdistractors);
-        Log.i("Stimuli list", StimuliManager.iterableToString(stimulisequence));
-        Log.i("Presentation list", StimuliManager.iterableToString(presentationstyle));
+        Log.i("Stimuli list", Util.iterableToString(stimulisequence));
+        Log.i("Presentation list", Util.iterableToString(presentationstyle));
     }
 
     public static LevelManager getInstance() {

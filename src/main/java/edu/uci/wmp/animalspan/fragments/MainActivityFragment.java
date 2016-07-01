@@ -1,14 +1,10 @@
 package edu.uci.wmp.animalspan.fragments;
 
 import android.annotation.SuppressLint;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.app.Fragment;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,12 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import edu.uci.wmp.animalspan.CSVWriter;
-import edu.uci.wmp.animalspan.LevelManager;
 import com.uci.wmp.animalspan.R;
+
+import edu.uci.wmp.animalspan.LevelManager;
 import edu.uci.wmp.animalspan.Util;
-import edu.uci.wmp.animalspan.fragments.questions.EffortQuestion;
-import edu.uci.wmp.animalspan.fragments.questions.ReflectionQuestion;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -180,8 +174,8 @@ public class MainActivityFragment extends Fragment implements View.OnTouchListen
             selected = false;
         }
 
-        public void logDimensions() {
-            Log.i("Dimensions", "l: " + left + " t: " + top + " r: " + right + " b: " + bottom);
-        }
+//        public void logDimensions() {
+//            Log.i("Dimensions", "l: " + left + " t: " + top + " r: " + right + " b: " + bottom);
+//        }
     }
 }
