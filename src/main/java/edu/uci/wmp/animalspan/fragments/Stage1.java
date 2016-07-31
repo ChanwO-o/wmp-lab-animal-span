@@ -91,7 +91,7 @@ public class Stage1 extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LevelManager.getInstance().part = LevelManager.STAGE1;
+	    LevelManager.getInstance().part = LevelManager.STAGE1;
         LevelManager.getInstance().currentStimuliIndex = 0;
         responded = false;
     }
@@ -193,8 +193,7 @@ public class Stage1 extends Fragment implements View.OnClickListener {
         else
             LevelManager.getInstance().accuracyfirstpart.add(StimuliManager.INCORRECT);
 
-        if (LevelManager.getInstance().showbuttonpressfeedback) // give feedback if showbuttonpressfeedback is true
-            giveFeedback();
+		giveFeedback();
         responded = true;
         feedbackStartTime = SystemClock.uptimeMillis(); // start_old displaying feedback
     }
@@ -217,12 +216,17 @@ public class Stage1 extends Fragment implements View.OnClickListener {
     }
 
     /**
-     * Draws a red or green border around stimuli
+     * Draws a red or green border around stimuli, gray if showbuttonpressfeedback is false
      */
     public void giveFeedback() {
-        if (LevelManager.getInstance().accuracyfirstpart.get(LevelManager.getInstance().currentStimuliIndex) == StimuliManager.CORRECT)
-            ivStage1Stimuli.setBackgroundColor(Color.GREEN); // correct
-        else
-            ivStage1Stimuli.setBackgroundColor(Color.RED); // incorrect
+	    if (LevelManager.getInstance().showbuttonpressfeedback) { // give feedback if showbuttonpressfeedback is true
+		    if (LevelManager.getInstance().accuracyfirstpart.get(LevelManager.getInstance().currentStimuliIndex) == StimuliManager.CORRECT)
+			    ivStage1Stimuli.setBackgroundColor(Color.GREEN); // correct
+		    else
+			    ivStage1Stimuli.setBackgroundColor(Color.RED); // incorrect
+	    }
+	    else {
+		    ivStage1Stimuli.setBackgroundColor(Color.GRAY);
+	    }
     }
 }

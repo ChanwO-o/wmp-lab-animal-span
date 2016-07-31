@@ -36,10 +36,13 @@ public class LevelManager implements Serializable {
 
     public static final int MIN_LEVEL = 1;                  // lowest level available
     public static final int MAX_LEVEL = 30;                 // highest level available
+    public static final int STARTLEVEL = 1;                 // define which level to start by default with no saves
     public static final int DEMO_MAX_ROUNDS = 3;            // demo mode plays only 3 rounds
-    public static final int STAGE1 = 1;                     // stage 1
-    public static final int STAGE2 = 2;                     // stage 2
-    public static final int STAGE0 = 0;                     // neither
+	public static final int MAINSCREEN = 0;                 // stage 1
+	public static final int GETREADY = 1;                   // get ready
+	public static final int STAGE1 = 2;                   // get ready
+	public static final int STAGE2 = 3;                   // get ready
+	public static final int STAGE0 = -1;                    // neither
     public static final String TRAININGMODE_ROUNDS = "rounds";
     public static final String TRAININGMODE_TIME = "time";
     public static final String TRAININGMODE_DEMO = "demo";
@@ -53,6 +56,7 @@ public class LevelManager implements Serializable {
     // initialize experiment wide variables (do not change this)
     public int subject = 1;
     public int session = 1;
+	public String theme = StimuliManager.DEFAULT_THEME_NAME;
     public int level = 1;
     public int trial = 0;                                   // == rounds
     public int part = STAGE0;                               // 1 = Stage1, 2 = Stage2, 0 = neither
@@ -87,7 +91,6 @@ public class LevelManager implements Serializable {
     public String trainingmode = TRAININGMODE_ROUNDS;        // time: ends session after a certain amount of time; rounds: ends session after a certain amount of rounds
     public int sessionLength = 300;               // This is the length of the session in seconds (default: 300s)
     public int numberoftrials = 10;               // define how long a training session takes in number of levels
-    public int startlevel = 1;                    // define with which level to start_old  *** changed var name level -> startlevel ***
 
     // default level parameters
     public String leveltrainingmode = "time";     // UNUSED time: ends level after a certain amount of time; trials: ends level after a certain amount of trials
@@ -125,13 +128,13 @@ public class LevelManager implements Serializable {
     public int feedbackgapbetweenimages = 1;    // gap between stimuli in percent in array of choice stimuli
 
     public int stimuliperline = 4;              // number of stimuli per line in choice stimuli
-    public boolean showchoicefeedback = true;   // enable/disable feedback images on the bottom of the screen in the second partff
+    public boolean showchoicefeedback = true;   // enable/disable feedback images on the bottom of the screen in the second part
     public boolean randomlydistribute = true;   // randomly distribute choice stimuli in every trial
     // -------------------------------------------------------------------------------------------
 
     public LevelManager() {
         random = new Random();
-        level = startlevel;
+        level = STARTLEVEL;
         trial = 0;
         part = STAGE0;
         reset();
@@ -186,7 +189,7 @@ public class LevelManager implements Serializable {
         accuracysecondpart.clear();
 
         if (trainingmode.equals(TRAININGMODE_DEMO)) {
-            loadLevel(1);
+            loadLevel(STARTLEVEL);
             numberoftrials = DEMO_MAX_ROUNDS;
         }
         else
@@ -252,12 +255,12 @@ public class LevelManager implements Serializable {
             level = Integer.valueOf(savedLevel);
             Log.i("loadSavedLevel()", "Loaded level " + savedLevel);
         } catch (FileNotFoundException e) {
-            Log.e("loadSavedLevel()", "No save file found, setting to startlevel (level " + startlevel);
-            level = startlevel;
+            Log.e("loadSavedLevel()", "No save file found, setting to startlevel (level " + STARTLEVEL);
+            level = STARTLEVEL;
             e.printStackTrace();
         } catch (IOException e) {
             Log.e("loadSavedLevel()", "Error loading save");
-            level = startlevel;
+            level = STARTLEVEL;
             e.printStackTrace();
         }
 

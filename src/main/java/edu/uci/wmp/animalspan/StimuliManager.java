@@ -4,6 +4,11 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
+
+import com.uci.wmp.animalspan.R;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,11 +27,14 @@ public class StimuliManager {
     public static final int NOANSWER = -1;
     public static final int CORRECT = 1;
     public static final int INCORRECT = 0;
+	public static final String WMP_STIMULI_PATH = "/wmplab/ToyStore/stimuli/";
     public static final String TARGET = "list1/";
     public static final String SEMANTIC = "list2/";
     public static final String PERCEPTUAL = "list3/";
     public static final String DISTRACTOR = "distractors/";
     public static final String MISC = "miscellaneous/";
+	public static final String BACKGROUND_FILENAME = "background.jpeg";
+	public static final String DEFAULT_THEME_NAME = "shapes";
     public static final int MIN_STIMULI_CHOICES = 1;
     public static final int MAX_STIMULI_CHOICES = 12;
 //    public static final int TARGET_STIMULI_CHOICES = 12;
@@ -68,6 +76,73 @@ public class StimuliManager {
         InputStream in = new FileInputStream(imageFile);
         return BitmapFactory.decodeStream(in);
     }
+
+	/**
+	 * Scale down and return bitmap to fit screen, prevent OutOfMemoryError
+	 */
+	public Drawable getBackground() throws IOException {
+		int part = LevelManager.getInstance().part;
+		int reqWidth = LevelManager.getInstance().screen_width;
+		int reqHeight = LevelManager.getInstance().screen_height;
+		Bitmap bitmap;
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true; // First decode with inJustDecodeBounds=true to check dimensions
+		switch (part) {
+			case LevelManager.MAINSCREEN:
+				BitmapFactory.decodeResource(context.getResources(), R.drawable.mainscreen_toystore, options);
+				options = getBitOptionsForDecodingSampleBitmap(options, reqWidth, reqHeight);
+				bitmap =  BitmapFactory.decodeResource(context.getResources(), R.drawable.mainscreen_toystore, options);
+				break;
+//				return ResourcesCompat.getDrawable(context.getResources(), R.drawable.mainscreen_lineup, null);
+			case LevelManager.GETREADY: // GAME
+				String path = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + WMP_STIMULI_PATH + LevelManager.getInstance().theme + "/" + BACKGROUND_FILENAME;
+				File backgroundFile = new File(path);
+				if (backgroundFile.exists()) {
+					BitmapFactory.decodeFile(path, options);
+					options = getBitOptionsForDecodingSampleBitmap(options, reqWidth, reqHeight);
+					bitmap = BitmapFactory.decodeFile(path, options);
+				}
+				else { // some themes may not have background file; in this case, load default background
+					BitmapFactory.decodeResource(context.getResources(), R.drawable.background, options);
+					options = getBitOptionsForDecodingSampleBitmap(options, reqWidth, reqHeight);
+					bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.background, options);
+				}
+				break;
+//				return Drawable.createFromPath(path);
+			default:
+				BitmapFactory.decodeResource(context.getResources(), R.drawable.background, options);
+				options = getBitOptionsForDecodingSampleBitmap(options, reqWidth, reqHeight);
+				bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.background, options);
+//				return ResourcesCompat.getDrawable(context.getResources(), R.drawable.background, null);
+		}
+//		Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+		return new BitmapDrawable(context.getResources(), Bitmap.createScaledBitmap(bitmap, LevelManager.getInstance().screen_width, LevelManager.getInstance().screen_height, true));
+	}
+
+	private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+		// Raw height and width of image
+		final int height = options.outHeight;
+		final int width = options.outWidth;
+		int inSampleSize = 1;
+
+		if (height > reqHeight || width > reqWidth) {
+			final int halfHeight = height / 2;
+			final int halfWidth = width / 2;
+			// Calculate the largest inSampleSize value that is a power of 2 and keeps both
+			// height and width larger than the requested height and width.
+			while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth)
+				inSampleSize *= 2;
+		}
+		return inSampleSize;
+	}
+
+	private BitmapFactory.Options getBitOptionsForDecodingSampleBitmap(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+		// Calculate inSampleSize
+		options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+		// Decode bitmap with inSampleSize set
+		options.inJustDecodeBounds = false;
+		return options;
+	}
 
     public Bitmap getFeedbackAsset(int result) throws IOException {
         AssetManager assetManager = context.getAssets();

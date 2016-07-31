@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.view.View;
 
 import com.uci.wmp.animalspan.R;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -66,4 +68,15 @@ public final class Util {
         final String TIME = new SimpleDateFormat(TIMESTAMP_TIME, Locale.US).format(Calendar.getInstance().getTime());
         return DATE + " " + TIME;
     }
+
+	/**
+	 * Set activity background to match current theme, or reset to default background
+	 */
+	public static void setActivityBackground(Context context) {
+		try {
+			((Activity) context).findViewById(R.id.fragment_container).setBackground(StimuliManager.getInstance().getBackground());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

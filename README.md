@@ -1,5 +1,5 @@
-Working Memory and Plasticity Lab
+#Toy Store project
 
-Toy Store project
+##Working Memory and Plasticity Lab
 
-a.k.a Animal Span
+######a.k.a Animal Span

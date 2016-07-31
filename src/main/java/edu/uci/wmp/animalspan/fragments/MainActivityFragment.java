@@ -16,15 +16,15 @@ import com.uci.wmp.animalspan.R;
 
 import edu.uci.wmp.animalspan.LevelManager;
 import edu.uci.wmp.animalspan.Util;
+import edu.uci.wmp.animalspan.fragments.questions.ReflectionQuestion;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment implements View.OnTouchListener {
 
-    TextView tvAnimalSpan;
-    ImageView ivStart;
-    ImageView ivDemo;
+//    TextView tvAnimalSpan;
+    ImageView ivStart, ivDemo;
     MyRect topLeft, topRight, bottomLeft, bottomRight;
     MyRect[] rects;
     final static int NON_ASSIGNED_ID = 99;
@@ -50,16 +50,20 @@ public class MainActivityFragment extends Fragment implements View.OnTouchListen
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+	    LevelManager.getInstance().part = LevelManager.MAINSCREEN; // call setActivityBackground() here instead of onCreate() to prevent nullpointer exception
+	    Util.setActivityBackground(getActivity());
+
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         view.setOnTouchListener(this);
 
-        tvAnimalSpan = (TextView) view.findViewById(R.id.tvAnimalSpan);
+//        tvAnimalSpan = (TextView) view.findViewById(R.id.tvAnimalSpan);
         ivStart = (ImageView) view.findViewById(R.id.ivStart);
         ivDemo = (ImageView) view.findViewById(R.id.ivDemo);
 
-        // set text font
-        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/azoft-sans.ttf");
-        tvAnimalSpan.setTypeface(tf);
+//        // set text font
+//        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/azoft-sans.ttf");
+//        tvAnimalSpan.setTypeface(tf);
 
         ivStart.setOnClickListener(new View.OnClickListener() {
             @Override

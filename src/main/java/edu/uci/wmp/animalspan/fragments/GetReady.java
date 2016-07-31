@@ -47,6 +47,8 @@ public class GetReady extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+	    LevelManager.getInstance().part = LevelManager.GETREADY;
+	    Util.setActivityBackground(getActivity());
         if (LevelManager.getInstance() != null) {
             LevelManager.getInstance().startRound();
             LevelManager.getInstance().logVariables();
