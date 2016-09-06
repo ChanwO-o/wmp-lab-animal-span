@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ public class Settings extends Fragment {
     public static final String SUBJECT_KEY = "subject_key";
     public static final String SESSION_KEY = "session_key";
     public static final String QUESTIONS_KEY = "questions_key";
+	public static final String CHANGETHEME_KEY = "changetheme_key";
     public static final String DEBUG_KEY = "debug_key";
     public static final String TRAININGMODE_KEY = "trainingmode_key";
     public static final String ROUNDS_KEY = "rounds_key";
@@ -33,8 +35,9 @@ public class Settings extends Fragment {
     private static final String TIME_PROMPT = "Time";
 
     LinearLayout llSettingsWidgets;
-    EditText etSubject, etSession, etRoundsTime;
-    Switch swQuestions, swDebug, swTrainingMode;
+    EditText etSubject, etSession, etChangeTheme, etRoundsTime;
+    Switch swQuestions, swChangeTheme, swDebug, swTrainingMode;
+	RelativeLayout rlChangeTheme;
     TextView tvRTPrompt, tvRTUnit;
     Button bPerformChecks;
     Button bPopulate;
@@ -65,8 +68,11 @@ public class Settings extends Fragment {
         etSubject = (EditText) view.findViewById(R.id.etSubject);
         etSession = (EditText) view.findViewById(R.id.etSession);
         swQuestions = (Switch) view.findViewById(R.id.swQuestions);
+	    swChangeTheme = (Switch) view.findViewById(R.id.swChangeTheme);
+	    etChangeTheme = (EditText) view.findViewById(R.id.etAfterXRounds);
         swDebug = (Switch) view.findViewById(R.id.swDebug);
         swTrainingMode = (Switch) view.findViewById(R.id.swTrainingMode);
+	    rlChangeTheme = (RelativeLayout) view.findViewById(R.id.rlAfterXRounds);
         tvRTPrompt = (TextView) view.findViewById(R.id.tvRTPrompt);
         etRoundsTime = (EditText) view.findViewById(R.id.etRoundsTime);
         tvRTUnit = (TextView) view.findViewById(R.id.tvRTUnit);
@@ -75,20 +81,27 @@ public class Settings extends Fragment {
         bBack = (Button) view.findViewById(R.id.bSettingsBack);
 
         // initial setup
-        swQuestions.setTextOn("On");
-        swQuestions.setTextOff("Off");
-        swDebug.setTextOn("On");
-        swDebug.setTextOff("Off");
+//        swQuestions.setTextOn("On");
+//        swQuestions.setTextOff("Off");
+//        swDebug.setTextOn("On");
+//        swDebug.setTextOff("Off");
         swTrainingMode.setTextOn("Time");
         swTrainingMode.setTextOff("Rounds");
         etSubject.setText(String.valueOf(LevelManager.getInstance().subject));
         etSession.setText(String.valueOf(LevelManager.getInstance().session));
+	    etChangeTheme.setText(String.valueOf(LevelManager.getInstance().changeTheme));
 
         // set default mode of switches
         swQuestions.setChecked(LevelManager.getInstance().questions);
         swDebug.setChecked(LevelManager.getInstance().debug);
         boolean trainingModeIsTime = LevelManager.getInstance().trainingmode.equals(LevelManager.TRAININGMODE_TIME);
-        swTrainingMode.setChecked(trainingModeIsTime);
+	    boolean changeThemeActivated = LevelManager.getInstance().changeTheme != LevelManager.THEME_NOCHANGE;
+	    swChangeTheme.setChecked(changeThemeActivated);
+	    swTrainingMode.setChecked(trainingModeIsTime);
+
+	    // setup ChangeTheme layout
+	    if (!changeThemeActivated)
+		    rlChangeTheme.setVisibility(View.GONE);
 
         // setup RoundsTime input
         if (trainingModeIsTime)
@@ -108,6 +121,16 @@ public class Settings extends Fragment {
                 }
             }
         });
+
+	    swChangeTheme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		    @Override
+		    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+			    if (isChecked)
+				    rlChangeTheme.setVisibility(View.VISIBLE);
+			    else
+				    rlChangeTheme.setVisibility(View.GONE);
+		    }
+	    });
 
         bPerformChecks.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,6 +183,10 @@ public class Settings extends Fragment {
                         LevelManager.getInstance().sessionLength = Integer.valueOf(roundsTime);
 
                     LevelManager.getInstance().questions = swQuestions.isChecked(); // set questions
+	                if (swChangeTheme.isChecked())
+		                LevelManager.getInstance().changeTheme = Integer.valueOf(etChangeTheme.getText().toString());
+	                else
+		                LevelManager.getInstance().changeTheme = LevelManager.THEME_NOCHANGE;
                     LevelManager.getInstance().debug = swDebug.isChecked(); // set debug
                     LevelManager.getInstance().saveSharedPreferences(); // save settings variables to preferences
                     Util.loadFragment(getActivity(), new MainActivityFragment());

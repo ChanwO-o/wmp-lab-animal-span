@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -170,6 +171,8 @@ public class Stage2 extends Fragment {
 
                     // add accuracy: checks if answers in secondpartsequence corespond to correctstimulisequence (which includes Targets only, ignoring distractors etc.)
                     int cur = LevelManager.getInstance().currentStimuliIndex;
+	                Log.d("correct ss", LevelManager.getInstance().correctstimulisequence.get(cur) + "");
+	                Log.d("second s", LevelManager.getInstance().secondpartsequence.get(cur) + "");
                     if (LevelManager.getInstance().correctstimulisequence.get(cur).equals(LevelManager.getInstance().secondpartsequence.get(cur))) {
                         LevelManager.getInstance().accuracysecondpart.add(StimuliManager.CORRECT);
                         LevelManager.getInstance().points += LevelManager.getInstance().level; // points added by current level
@@ -195,11 +198,11 @@ public class Stage2 extends Fragment {
     public int setChoiceStimuliSize(int rows) {
         switch(rows) {
             case 1:
-                return StimuliManager.MIN_CHOICE_STIMULI_SIZE + StimuliManager.CHOICE_STIMULI_SIZE_MULTIPLIER * 4;
+                return StimuliManager.MIN_CHOICE_STIMULI_SIZE + StimuliManager.CHOICE_STIMULI_SIZE_MULTIPLIER * 10;
             case 2:
-                return StimuliManager.MIN_CHOICE_STIMULI_SIZE + StimuliManager.CHOICE_STIMULI_SIZE_MULTIPLIER * 3;
+                return StimuliManager.MIN_CHOICE_STIMULI_SIZE + StimuliManager.CHOICE_STIMULI_SIZE_MULTIPLIER * 6;
             case 3:
-                return StimuliManager.MIN_CHOICE_STIMULI_SIZE + StimuliManager.CHOICE_STIMULI_SIZE_MULTIPLIER * 2;
+                return StimuliManager.MIN_CHOICE_STIMULI_SIZE + StimuliManager.CHOICE_STIMULI_SIZE_MULTIPLIER * 3;
             case 4:
                 return StimuliManager.MIN_CHOICE_STIMULI_SIZE + StimuliManager.CHOICE_STIMULI_SIZE_MULTIPLIER;
             case 5:

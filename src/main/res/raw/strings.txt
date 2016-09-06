@@ -1,0 +1,13 @@
+Get ready for level %!
+Tap a face to continue
+I enjoyed this task very much.
+I think I did pretty well on this task.
+How easy was the task?
+Too easy
+Just right
+Too hard
+How hard did you try to do your best at the task?
+I did not try very hard
+I tried my best
+Great job!
+You earned % points!

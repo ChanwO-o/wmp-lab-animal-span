@@ -16,11 +16,15 @@ import android.widget.TextView;
 import com.uci.wmp.animalspan.R;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Random;
 
+import edu.uci.wmp.animalspan.Checks;
 import edu.uci.wmp.animalspan.LevelManager;
 import edu.uci.wmp.animalspan.StimuliManager;
 import edu.uci.wmp.animalspan.Util;
@@ -172,25 +176,27 @@ public class LevelFeedback extends Fragment implements View.OnClickListener {
      * Iterate down random number of lines in file
      */
     public String getFeedbackPhrase(int next) {
-        int resourceId = 0;
+        String whichFile = "";
         if (next == LEVEL_UP)
-            resourceId = R.raw.roundfeedback_up;
+	        whichFile = "roundfeedback_up.txt";
         else if (next == LEVEL_DOWN)
-            resourceId = R.raw.roundfeedback_down;
+	        whichFile = "roundfeedback_down.txt";
         else if (next == LEVEL_SAME)
-            resourceId = R.raw.roundfeedback_same;
+	        whichFile = "roundfeedback_same.txt";
 
-        InputStream inputStream = getActivity().getResources().openRawResource(resourceId);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        String line = "";
+	    String path = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + Checks.FEEDBACKFOLDER_PATH + whichFile;
+	    String line = "";
+	    File feedbackFile = new File(path);
         try
         {
+	        InputStream in = new FileInputStream(feedbackFile);
+	        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 //            reader.mark(0); // when reset() is called, reader will return to line 0 after reaching last line in file
             int r = new Random().nextInt(200);
             for (int i = 0; i < r; ++i) {
                 if ((line = reader.readLine()) == null) { // reached end of phrases file
-                    inputStream = getActivity().getResources().openRawResource(resourceId); // reset inputstream and reader
-                    reader = new BufferedReader(new InputStreamReader(inputStream));
+	                in = new FileInputStream(feedbackFile); // reset inputstream and reader
+	                reader = new BufferedReader(new InputStreamReader(in));
                     line = reader.readLine();
                 }
 //                Log.d("getFeedbackPhrase()", "Reading line " + line);

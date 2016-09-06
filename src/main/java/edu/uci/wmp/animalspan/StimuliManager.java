@@ -27,14 +27,16 @@ public class StimuliManager {
     public static final int NOANSWER = -1;
     public static final int CORRECT = 1;
     public static final int INCORRECT = 0;
-	public static final String WMP_STIMULI_PATH = "/wmplab/ToyStore/stimuli/";
+	public static final String PNG = ".png";
+	public static final String JPG = ".jpg";
+	public static final String WMP_STIMULI_PATH = "/wmplab/Toy Store/stimuli/";
     public static final String TARGET = "list1/";
     public static final String SEMANTIC = "list2/";
     public static final String PERCEPTUAL = "list3/";
     public static final String DISTRACTOR = "distractors/";
     public static final String MISC = "miscellaneous/";
 	public static final String BACKGROUND_FILENAME = "background.jpeg";
-	public static final String DEFAULT_THEME_NAME = "shapes";
+	public static final String DEFAULT_THEME_NAME = "animals";
     public static final int MIN_STIMULI_CHOICES = 1;
     public static final int MAX_STIMULI_CHOICES = 12;
 //    public static final int TARGET_STIMULI_CHOICES = 12;
@@ -46,10 +48,12 @@ public class StimuliManager {
     public static final int PERCEPTUAL_LABEL = 300;
     public static final int DISTRACTOR_LABEL = 0;       // changed from 400 to 0, watch out for future unexpected errors
     public static final int MIN_CHOICE_STIMULI_SIZE = 100;
-    public static final int CHOICE_STIMULI_SIZE_MULTIPLIER = 25;
+    public static final int CHOICE_STIMULI_SIZE_MULTIPLIER = 10;
     public static final ArrayList<Integer> TEMPLATE = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
 
     private Context context;
+
+	public int numberOfPicturesInCategory;
 
     public StimuliManager() {
 
@@ -158,22 +162,42 @@ public class StimuliManager {
         return "stimuli/" + folder + filename + ".png";
     }
 
+	/**
+	 * Return image path from given label
+	 * Support file types png & jpg
+	 */
     public String getImagePath(int labeledFileName) {
         int folderLabel = labeledFileName - (labeledFileName % 100);
-//        Log.d("getImagePath()", "folderLabel " + folderLabel);
+	    String path;
         switch (folderLabel) {
             case TARGET_LABEL:
-                return "/wmplab/Toy Store/stimuli/" + TARGET + labeledFileName % 100 + ".png";
+	            path = WMP_STIMULI_PATH + LevelManager.getInstance().theme + "/" + TARGET + labeledFileName % 100;
+	            break;
             case SEMANTIC_LABEL:
-                return "/wmplab/Toy Store/stimuli/" + SEMANTIC + labeledFileName % 100 + ".png";
+	            path = WMP_STIMULI_PATH + LevelManager.getInstance().theme + "/" + SEMANTIC + labeledFileName % 100;
+	            break;
             case PERCEPTUAL_LABEL:
-                return "/wmplab/Toy Store/stimuli/" + PERCEPTUAL + labeledFileName % 100 + ".png";
+	            path = WMP_STIMULI_PATH + LevelManager.getInstance().theme + "/" + PERCEPTUAL + labeledFileName % 100;
+	            break;
             case DISTRACTOR_LABEL:
-                return "/wmplab/Toy Store/stimuli/" + DISTRACTOR + labeledFileName % 100 + ".png";
+	            path = WMP_STIMULI_PATH + LevelManager.getInstance().theme + "/" + DISTRACTOR + labeledFileName % 100;
+	            break;
             default:
-                return "error";
+	            path = "error";
+	            break;
         }
+	    if (new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + path + PNG).exists())
+		    return path + PNG;
+//	    Log.wtf("getImagePath()", "png not found! Trying jpg");
+	    return path + JPG;
     }
+
+	public static boolean hasTheme(String theme) {
+		String stimPath = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + WMP_STIMULI_PATH;
+		File themeFolder = new File(stimPath + theme);
+		Log.wtf("hasTheme()", "checking path " + stimPath + theme);
+		return themeFolder.exists();
+	}
 
     public static StimuliManager getInstance() { return INSTANCE; }
 }

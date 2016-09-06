@@ -43,8 +43,7 @@ public class EffortQuestion extends Fragment {
 	final double IMAGE_HEIGHT_PERCENTAGE = 0.50;
 
 	// second question setup
-	final String SECONDQUESTION = "How hard did you try to do your best at the task?";
-	final String[] SECONDQUESTIONLABELS = new String[] {"I did not try very hard", "", "I tried my best"};
+	final String[] SECONDQUESTIONLABELS = new String[] {LevelManager.getInstance().strings.get(9), "", LevelManager.getInstance().strings.get(10)};
 
 	boolean responded;
 	long responseStartTime;
@@ -112,6 +111,16 @@ public class EffortQuestion extends Fragment {
 		fillHiddenViews();
 		setViewsVisible(View.INVISIBLE); // remove flicker
 
+		// set texts
+		String firstQuestion = LevelManager.getInstance().strings.get(4);
+		tvQuestion.setText(firstQuestion);
+		String firstLabel = LevelManager.getInstance().strings.get(5);
+		tvSeekBarFirst.setText(firstLabel);
+		String secondLabel = LevelManager.getInstance().strings.get(6);
+		tvSeekBarSecond.setText(secondLabel);
+		String thirdLabel = LevelManager.getInstance().strings.get(7);
+		tvSeekBarThird.setText(thirdLabel);
+
 //        seekBar.bringToFront();
 //        seekBar.invalidate(); // for drawing seekbar above labels
 		seekBar.getThumb().setAlpha(200); // set transparency value 0-255
@@ -162,7 +171,8 @@ public class EffortQuestion extends Fragment {
 	 * Setup for second effort question
 	 */
 	public void setUpNextQuestion() {
-		tvQuestion.setText(SECONDQUESTION);
+		String secondQuestion = LevelManager.getInstance().strings.get(8);
+		tvQuestion.setText(secondQuestion);
 		ivEffortFirst.setImageResource(R.drawable.tryhard1);
 		ivEffortThird.setImageResource(R.drawable.tryhard2);
 

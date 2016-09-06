@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="edu.uci.wmp.animalspan.fragments.Settings">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".fragments.Settings">
 
     <LinearLayout
         android:id="@+id/llSettingsWidgets"
@@ -21,7 +21,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/gap_medium"
+                android:padding="@dimen/gap_tiny"
                 android:text="Subject"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white" />
@@ -33,7 +33,7 @@
                 android:layout_alignParentEnd="true"
                 android:ems="10"
                 android:inputType="numberSigned"
-                android:padding="@dimen/gap_medium"
+                android:padding="@dimen/gap_tiny"
                 android:textColor="@color/white" />
         </RelativeLayout>
 
@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:padding="@dimen/gap_medium"
+                android:padding="@dimen/gap_tiny"
                 android:text="Session"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white" />
@@ -60,7 +60,7 @@
                 android:layout_gravity="center_horizontal"
                 android:ems="10"
                 android:inputType="numberSigned"
-                android:padding="@dimen/gap_medium"
+                android:padding="@dimen/gap_tiny"
                 android:textColor="@color/white" />
         </RelativeLayout>
 
@@ -74,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:padding="@dimen/gap_medium"
+                android:padding="@dimen/gap_tiny"
                 android:text="Questions"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white" />
@@ -86,7 +86,71 @@
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="center_horizontal"
                 android:checked="true"
-                android:padding="@dimen/gap_medium" />
+                android:padding="@dimen/gap_tiny" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlChangeTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="@dimen/gap_tiny"
+                android:text="Change theme"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white" />
+
+            <Switch
+                android:id="@+id/swChangeTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center_horizontal"
+                android:checked="false"
+                android:padding="@dimen/gap_tiny" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlAfterXRounds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="@dimen/gap_tiny"
+                android:text="Change theme after "
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/etAfterXRounds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/tvAfterXRounds"
+                android:ems="10"
+                android:inputType="numberSigned"
+                android:padding="@dimen/gap_tiny"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@id/tvAfterXRounds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center_horizontal"
+                android:padding="@dimen/gap_tiny"
+                android:text=" rounds"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white" />
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -99,7 +163,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:padding="@dimen/gap_medium"
+                android:padding="@dimen/gap_tiny"
                 android:text="Debug"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white" />
@@ -111,7 +175,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="center_horizontal"
                 android:checked="false"
-                android:padding="@dimen/gap_medium" />
+                android:padding="@dimen/gap_tiny" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -124,7 +188,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:padding="@dimen/gap_medium"
+                android:padding="@dimen/gap_tiny"
                 android:text="Training mode"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white" />
@@ -136,7 +200,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="center_horizontal"
                 android:checked="false"
-                android:padding="@dimen/gap_medium" />
+                android:padding="@dimen/gap_tiny" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -150,7 +214,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:padding="@dimen/gap_medium"
+                android:padding="@dimen/gap_tiny"
                 android:text="Prompt here"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white" />
@@ -163,7 +227,7 @@
                 android:layout_gravity="center_horizontal"
                 android:ems="10"
                 android:inputType="numberSigned"
-                android:padding="@dimen/gap_medium"
+                android:padding="@dimen/gap_tiny"
                 android:textColor="@color/white" />
 
             <TextView
@@ -172,7 +236,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="center_horizontal"
-                android:padding="@dimen/gap_medium"
+                android:padding="@dimen/gap_tiny"
                 android:text="(S)"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white" />

@@ -7,10 +7,12 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -48,7 +50,9 @@ public class LevelManager implements Serializable {
     public static final String TRAININGMODE_DEMO = "demo";
     private static final String SAVE_FOLDER_PATH = "/wmplab/Toy Store/data/";
     public static final String SAVE_LEVEL_FILENAME = "_data.txt";
+	private static final String THEME_ORDER_FILENAME = "/wmplab/Toy Store/theme_order.txt";
     public static final String SHAREDPREF_KEY = "shared_pref";
+	public static final int THEME_NOCHANGE = 0;
 
     private Context context;
     private Random random;
@@ -58,14 +62,20 @@ public class LevelManager implements Serializable {
     public int session = 1;
 	public String theme = StimuliManager.DEFAULT_THEME_NAME;
     public int level = 1;
+	public int roundsPlayed = 0;                            // cumulative number of rounds played; if == sessionLevels: end game
     public int trial = 0;                                   // == rounds
     public int part = STAGE0;                               // 1 = Stage1, 2 = Stage2, 0 = neither
     public int currentStimuliIndex = 0;                     // index of current pic
     public boolean testStarted = false;
     public long sessionStartMills = 0;                      // timer starting at beginning of session, used when mode = "time"
     public boolean questions = true;
+	public int changeTheme = THEME_NOCHANGE;
+	public List<String> themeOrder;
+	public int themeIndex = 0;
+	boolean themeIsLoaded;
     public boolean debug = false;
     public int points = 0;                              // records total points awarded for the session
+	public List<String> strings;
 
     public List<Integer> stimulisequence;              // defines what stimuli has to be shown
     public List<Integer> distincttargets;              // distinct targets that the stimuli sequence is chosen from, use this for displaying image grid in Stage2
@@ -170,6 +180,8 @@ public class LevelManager implements Serializable {
         rtsecondpart = new ArrayList<>();
         accuracyfirstpart = new ArrayList<>();
         accuracysecondpart = new ArrayList<>();
+	    themeOrder = new ArrayList<>();
+	    strings = new ArrayList<>();
     }
 
     /**
@@ -195,10 +207,15 @@ public class LevelManager implements Serializable {
         else
             loadSavedLevel(); // sets level variable if there is a saved instance
 
+	    if (changeTheme != THEME_NOCHANGE)
+		    readThemeOrder();
+
         sessionStartMills = SystemClock.uptimeMillis(); // record session starting time (used for trainingmode = "time")
         trial = 0;
+	    roundsPlayed = 0;
         testStarted = true;
         points = 0; // reset score
+	    loadStrings();
         CSVWriter.getInstance().createCsvFile();
     }
 
@@ -218,6 +235,7 @@ public class LevelManager implements Serializable {
         accuracyfirstpart.clear();
         accuracysecondpart.clear();
         loadLevel(level);
+	    applyTheme();
     }
 
     public void loadLevel(int level) {
@@ -290,12 +308,81 @@ public class LevelManager implements Serializable {
             }
             Log.i("saveLevelToFile()", "Saved on level " + level);
             writer.newLine();
+	        Log.i("saveLevelToFile()", "Saved on theme index " + themeIndex);
+	        writer.write(Integer.toString(themeIndex)); // theme order index
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
+
+	/**
+	 * Fill themeOrder with list of themes specified in theme_order.txt in root wmp directory
+	 */
+	private void readThemeOrder() {
+		try {
+			File root = android.os.Environment.getExternalStorageDirectory();
+			BufferedReader reader = new BufferedReader(new FileReader(root.getAbsolutePath() + THEME_ORDER_FILENAME));
+
+			String line;
+			while ((line = reader.readLine()) != null) {
+				Log.d("readThemeOrder()", line);
+				if (StimuliManager.hasTheme(line))
+					themeOrder.add(line);
+			}
+		} catch (FileNotFoundException e) {
+			Log.e("readThemeOrder()", "No theme order file found");
+			e.printStackTrace();
+		} catch (IOException e) {
+			Log.e("readThemeOrder()", "Error reading theme order file");
+			e.printStackTrace();
+		} finally {
+			if (themeOrder.isEmpty()) {
+				Log.i("readThemeOrder()", "themeOrder empty; adding default");
+				themeOrder.add(StimuliManager.DEFAULT_THEME_NAME);
+			}
+		}
+	}
+
+	/**
+	 * Check if theme exists, set theme to default if not
+	 * If changeTheme is on, calculate theme order index
+	 * Configure number of sets in theme & number of stimuli in each set
+	 * Set activity background image to theme background
+	 */
+	public void applyTheme() {
+		if (changeTheme != THEME_NOCHANGE) {
+			Log.wtf("ct", changeTheme + "");
+			Log.wtf("to size", themeOrder.size() + "");
+			if (!themeIsLoaded) {
+				Log.wtf("calc roundsPlayed", roundsPlayed + "");
+				Log.wtf("calc ct", changeTheme + "");
+				themeIndex = (roundsPlayed / changeTheme) % themeOrder.size(); // calculate index of theme from list
+			}
+			themeIsLoaded = false;
+			theme = themeOrder.get(themeIndex);
+			Log.wtf("theme at index " + themeIndex, "set to " + theme);
+		}
+		String stimPath = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + StimuliManager.WMP_STIMULI_PATH;
+		Log.i("checking theme ", theme);
+		if (!StimuliManager.hasTheme(theme)) {
+			Log.i("theme does not exist", "set to default theme");
+			theme = StimuliManager.DEFAULT_THEME_NAME;
+		}
+
+		// set numberOfPicturesInCategory
+		File temp = new File(stimPath + theme + "/" + StimuliManager.TARGET);
+		StimuliManager.getInstance().numberOfPicturesInCategory = temp.listFiles(new FileFilter() {
+			@Override
+			public boolean accept(File file) {
+				return !file.isDirectory();
+			}
+		}).length;
+		Log.d("numPicturesInCategory", "" + StimuliManager.getInstance().numberOfPicturesInCategory);
+
+		Util.setActivityBackground(context);
+	}
 
     public void setContext(Context context) { this.context = context; }
 
@@ -308,6 +395,7 @@ public class LevelManager implements Serializable {
         editor.putInt(Settings.SUBJECT_KEY, subject);
         editor.putInt(Settings.SESSION_KEY, session);
         editor.putBoolean(Settings.QUESTIONS_KEY, questions);
+	    editor.putInt(Settings.CHANGETHEME_KEY, changeTheme);
         editor.putBoolean(Settings.DEBUG_KEY, debug);
         editor.putString(Settings.TRAININGMODE_KEY, trainingmode);
         editor.putInt(Settings.ROUNDS_KEY, numberoftrials);
@@ -323,6 +411,7 @@ public class LevelManager implements Serializable {
         subject = sharedPref.getInt(Settings.SUBJECT_KEY, 1);
         session = sharedPref.getInt(Settings.SESSION_KEY, 1);
         questions = sharedPref.getBoolean(Settings.QUESTIONS_KEY, true);
+	    changeTheme = sharedPref.getInt(Settings.CHANGETHEME_KEY, LevelManager.THEME_NOCHANGE);
         debug = sharedPref.getBoolean(Settings.DEBUG_KEY, true);
         trainingmode = sharedPref.getString(Settings.TRAININGMODE_KEY, TRAININGMODE_ROUNDS);
         numberoftrials = sharedPref.getInt(Settings.ROUNDS_KEY, 10);
@@ -404,8 +493,9 @@ public class LevelManager implements Serializable {
         List<Integer> temp = new ArrayList<>(StimuliManager.TEMPLATE); // copy values from TEMPLATE
 
         for (int i = 0; i < numberofdistincttargets; i++) {
+	        int randomLabel = 100 * (random.nextInt(3) + 1);
             int randomIndex = random.nextInt(temp.size());
-            int labeledDistinctTarget = temp.get(randomIndex) + StimuliManager.TARGET_LABEL; // add label 100
+            int labeledDistinctTarget = temp.get(randomIndex) + randomLabel; // add label
             distincttargets.add(labeledDistinctTarget);
             temp.remove(randomIndex); // remove to prevent duplicates
         }
@@ -452,11 +542,11 @@ public class LevelManager implements Serializable {
     }
 
     /**
-     * Add only targets to correctstimulisequence by checking for TARGET_LABEL
+     * Add only non-distractors to correctstimulisequence by checking for DISTRACTOR_LABEL
      */
     public void fillCorrectStimuliSequence() {
         for (Integer stimuli : stimulisequence) {
-            if ((stimuli / 100) * 100 == StimuliManager.TARGET_LABEL) // (e.g. 106 >> 1 >> 100)
+            if ((stimuli / 100) * 100 != StimuliManager.DISTRACTOR_LABEL) // (e.g. 106 >> 1 >> 100)
                 correctstimulisequence.add(stimuli);
         }
     }
@@ -467,6 +557,29 @@ public class LevelManager implements Serializable {
         }
     }
 
+	/**
+	 * Reads in strings from external strings.txt file into stringsList
+	 */
+	public void loadStrings() {
+		File root = android.os.Environment.getExternalStorageDirectory();
+		String path = root.getAbsolutePath() + Checks.HOME_PATH + Checks.STRINGS_NAME;
+		File stringsFile = new File(path);
+
+		try {
+			InputStream in = new FileInputStream(stringsFile);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			String line;
+			while ((line = reader.readLine()) != null) {
+				strings.add(line);
+			}
+		} catch (FileNotFoundException e) {
+			Toast.makeText(context, "strings.txt missing", Toast.LENGTH_SHORT).show();
+			e.printStackTrace();
+		} catch (IOException e) {
+			Toast.makeText(context, "Error reading strings.txt", Toast.LENGTH_SHORT).show();
+			e.printStackTrace();
+		}
+	}
 
     /**
      * Displays loaded variables to Logcat for debug purposes

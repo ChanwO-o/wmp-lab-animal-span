@@ -65,13 +65,15 @@ public class GetReady extends Fragment implements View.OnClickListener {
         TextView tvTrialsLeft = (TextView) view.findViewById(R.id.tvTrialsLeft);
         ivReadyNext = (ImageView) view.findViewById(R.id.ivReadyGo);
 
-        String readyPrompt = String.format(Locale.getDefault(), "Get ready for level %d!", LevelManager.getInstance().level);
+        String readyPrompt = LevelManager.getInstance().strings.get(0).replace("%", String.valueOf(LevelManager.getInstance().level));
+	                // String.format(Locale.getDefault(), "Get ready for level %d!", LevelManager.getInstance().level);
         tvGetReady.setText(readyPrompt);
 
         ivReadyNext.setVisibility(View.GONE); // hide button for 1 second
         ivReadyNext.setOnClickListener(this);
 
-        LevelManager.getInstance().trial++; // one trial completed
+        LevelManager.getInstance().trial++; // pre-increment
+	    LevelManager.getInstance().roundsPlayed++; // TODO: Seems to work, but does this belong here? Move to roundfeedback maybe?
 
         Log.wtf("numberoftrials", "" + LevelManager.getInstance().numberoftrials);
         Log.wtf("current trial", "" + LevelManager.getInstance().trial);

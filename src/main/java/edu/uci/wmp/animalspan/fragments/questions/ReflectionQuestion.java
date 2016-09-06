@@ -20,14 +20,12 @@ import edu.uci.wmp.animalspan.Util;
 public class ReflectionQuestion extends Fragment {
 
     int questionNum = 1;
-    TextView tvQuestion;
+    TextView tvQuestion, tvTapFace;
     LinearLayout llFaces;
-    TextView tvTapFace;
     View vLine;
     View[] hiddenViews;
 
-    final int FACESIZE = 150;
-    final String SECONDQUESTION = "I think I did pretty well on this task.";
+    final double FACESIZE = 0.22;
     final int GREEN_TIME = 1000; // face turns green for 1 second
     final int HIDE_TIME = 250; // hide all views
 
@@ -74,10 +72,14 @@ public class ReflectionQuestion extends Fragment {
         llFaces = (LinearLayout) view.findViewById(R.id.llFaces);
         tvTapFace = (TextView) view.findViewById(R.id.tvTapFace);
         vLine = view.findViewById(R.id.vLine);
-        hiddenViews = new View[4];
 
+	    hiddenViews = new View[4];
         fillFaces();
         fillHiddenViews();
+	    String firstQuestion = LevelManager.getInstance().strings.get(2);
+	    tvQuestion.setText(firstQuestion);
+	    String tapFaceText = LevelManager.getInstance().strings.get(1);
+	    tvTapFace.setText(tapFaceText);
         responded = false;
         return view;
     }
@@ -107,7 +109,8 @@ public class ReflectionQuestion extends Fragment {
         final ImageView ivFace = new ImageView(getActivity());
         setFace(ivFace, id);
 
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(FACESIZE, FACESIZE);
+	    int faceSize = Double.valueOf(LevelManager.getInstance().screen_height * FACESIZE).intValue();
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(faceSize, faceSize);
         int margin = (int) LevelManager.getInstance().gapbetweenimages * 10; // margin between each image in grid
         layoutParams.setMargins(margin, margin, margin, margin);
         ivFace.setLayoutParams(layoutParams);
@@ -177,7 +180,8 @@ public class ReflectionQuestion extends Fragment {
         ImageView face = (ImageView) llFaces.getChildAt(faceClickedID);
         setFace(face, (int) face.getTag());
 
-        tvQuestion.setText(SECONDQUESTION);
+	    String secondQuestion = LevelManager.getInstance().strings.get(3);
+        tvQuestion.setText(secondQuestion);
         questionNum++;
         responded = false;
         setViewsVisible(View.VISIBLE);
